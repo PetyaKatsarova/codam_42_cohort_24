@@ -76,42 +76,6 @@ void	print_err_exit(int pid)
 	}
 }
 
-
-
-
-static int	count_tokens(char **arr)
-{
-	int count = 0;
-	while (arr[count])
-		count++;
-	return (count);
-}
-
-// Merge quoted and unquoted parts into final result
-static int	process_split_parts(char **quote_split, char **final_result)
-{
-	char	**space_split;
-	int		i, j, k;
-
-	k = 0;
-	i = -1;
-	while (quote_split[++i])
-	{
-		if (i % 2 == 0)
-		{
-			space_split = ft_split(quote_split[i], ' ');
-			j = -1;
-			while (space_split[++j])
-				final_result[k++] = ft_strdup(space_split[j]);
-			free_dbl_ptr(space_split);
-		}
-		else
-			final_result[k++] = ft_strdup(quote_split[i]);
-	}
-	final_result[k] = NULL;
-	return (1);
-}
-
 // Split command by quotes, then by spaces outside quotes
 // Updated quote handling inside split_command function
 char	**split_command(char *command)
@@ -122,14 +86,14 @@ char	**split_command(char *command)
 
 	if (!ft_strchr(command, '\'') && !ft_strchr(command, '\"'))
 		return (ft_split(command, ' '));
-
-	// First split using both single and double quotes
-	quote_split = ft_split(command, '\"');
+	if (ft_strchr(command, '\"'))
+		quote_split = ft_split(command, '\"');
+	else if (ft_strchr(command, '\''))
+		quote_split = ft_split(command, '\'');
 	i = -1;
 	total_count = 0;
 	while (quote_split[++i])
 	{
-		// If odd index (quoted part), count as 1, otherwise split by spaces
 		total_count += (i % 2 == 0) 
 			? count_tokens(ft_split(quote_split[i], ' ')) 
 			: 1;
@@ -140,7 +104,5 @@ char	**split_command(char *command)
 		return (free_dbl_ptr(quote_split), NULL);
 
 	process_split_parts(quote_split, final_result);
-	free_dbl_ptr(quote_split);
-
-	return (final_result);
+	return (free_dbl_ptr(quote_split), final_result);
 }

@@ -80,7 +80,11 @@ void	exec_command(char **env, char **splitted_command)
 	while (splitted_command[i])
 		i++;
 	args = prepare_command_args(command_path, splitted_command, i);
-	printf("****  %s\n", *args);
+	// for (int j=0; args[j]; j++)
+	// {
+	// 	printf("** args[%d]%s\n", j, args[j]);
+	// }
+	// fflush(stdout); TODO:CLEAN !!!!
 	execve(command_path, args, env);
 	perror("execve failed");
 	free_args(args, i);

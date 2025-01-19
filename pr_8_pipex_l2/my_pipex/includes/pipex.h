@@ -35,4 +35,8 @@ char	*get_command_path(char **env, char *command_no_flag);
 // file_and_pipe.c
 void	exec_command(char **env, char **splitted_command);
 
+//parse_quotes.c
+int     process_split_parts(char **quote_split, char **final_result);
+int     count_tokens(char **arr);
+
 #endif

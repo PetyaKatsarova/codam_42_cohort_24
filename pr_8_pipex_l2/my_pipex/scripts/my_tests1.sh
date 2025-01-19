@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Define test input and output files
-INPUT_FILE="test_input.txt"
-OUTPUT_FILE="test_output.txt"
-SHELL_OUTPUT="shell_output.txt"
+INPUT_FILE="texts/test_input.txt"
+OUTPUT_FILE="texts/test_output.txt"
+SHELL_OUTPUT="texts/shell_output.txt"
 
 # Create a test input file
 echo -e "apple\nbanana\ncat\ndog\nexample\nfish\n" > $INPUT_FILE
@@ -41,14 +41,28 @@ rm -f $OUTPUT_FILE $SHELL_OUTPUT
 # run_test "ls -l | wc -l" "ls -l" "wc -l" $OUTPUT_FILE
 # run_test "grep a | wc -w" "grep a" "wc -w" $OUTPUT_FILE
 # run_test "sort | head -n 3" "sort" "head -n 3" $OUTPUT_FILE
-run_test "pwd --help | cat" "pwd --help" "cat" $OUTPUT_FILE
+# run_test "pwd --help | cat" "pwd --help" "cat" $OUTPUT_FILE
 # run_test "tr a-z A-Z | wc" "tr a-z A-Z" "wc -l" $OUTPUT_FILE
 # run_test "rev | wc -c" "rev" "wc -c" $OUTPUT_FILE
 
 # gives error for END: reads as sep command...
 # run_test "ls | awk {count++} END {print count}" "ls" "'awk {count++} END  {print count}'" $OUTPUT_FILE
 
-run_test "./script.sh | wc" "./script.sh" "wc" $OUTPUT_FILE
+# run_test "./run_script.sh | wc" "./run_script.sh" "wc" $OUTPUT_FILE
+
+
+# gives err: parsing 'arg'
+# run_test "ls | awk '{count++} END {print count}'" "ls" "awk '{count++} END {print count}'" $OUTPUT_FILE
+
+# # works fine
+# run_test 'ls | awk "{count++} END {print count}"' 'ls' 'awk "{count++} END {print count}"' $OUTPUT_FILE
+
+# ./pipex lucky.txt 'sed s/And/But/' 'grep But' outfile_pip.txt
+run_test "'sed s/And/But/' 'grep But'" 'sed s/And/BLA/' 'grep BLA' $OUTPUT_FILE
+
+run_test "sed s/And/BUT/g | grep But" "sed s/And/BUT/g" "grep BUT" $OUTPUT_FILE
+
+run_test "./run_script.sh | wc" "./run_script.sh" "wc" $OUTPUT_FILE
 
 # Clean up
 rm -f $INPUT_FILE $OUTPUT_FILE $SHELL_OUTPUT

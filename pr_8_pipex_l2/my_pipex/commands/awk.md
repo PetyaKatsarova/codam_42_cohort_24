@@ -32,14 +32,31 @@ So '\'' is a way to represent a single quote character (') in C.
 
 ./pipex lucky.txt 'sed s/And/But/' 'grep But' outfile_pip.txt
 
---- original ------------------------------------------------------------
-< lucky.txt 'sed "s/And/But/"' | 'awk "{count++} END {print count}"' > outfile.txt
--bash: sed "s/And/But/": No such file or directory
-awk "{count++} END {print count}": command not found
-------------------------------------------------------------------------
------ pipex ---------------------------
+----- pipex fixed ---------------------------
 ./pipex lucky.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt
-/usr/bin/sed: -e expression #1, char 1: unknown command: `"'
-awk: cmd. line:1: "{count++}
-awk: cmd. line:1: ^ unterminated string
+
+< lucky.txt 'sed "s/And/But/"' | 'awk "{count++} END {print count}"' > outfile.txt
 ----------------------------------------------------------
+
+2 more errors to fix:
+< lucky.txt sed "s/And/But/" | awk '{count++} END {printf "count: %i", count}' > outfile.txt
+
+./pipex lucky.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' outfile_pipe.md
+
+*********** shell: *************
+ < lucky.txt 'sed "s/And/But/"' | 'awk '"'"'{coun
+t++} END {printf "count: %i", count}'"'"'' > outfile_pipe.md
+bash: sed "s/And/But/": No such file or directory
+awk '{count++} END {printf "count: %i", count}': command not found
+-----------------------
+pipex: ***************************
+./pipex lucky.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' outfile_pipe.md
+awk: cmd. line:1: '{count++}
+awk: cmd. line:1: ^ invalid char ''' in expression
+-------------------------------
+
+error 2:
+(7)
+< lucky.txt ./run_script.sh | wc > outfile_shell.txt
+
+./pipex lucky.txt ./run_script.sh wc outfile_pipe.txt

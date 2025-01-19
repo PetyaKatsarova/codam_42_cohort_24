@@ -14,6 +14,7 @@ SOURCES = main.c \
 		parsing_path.c \
 		helpers.c \
 		file_and_pipe.c \
+		parse_quotes.c \
 
 OBJDIR = objects
 OBJECTS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
