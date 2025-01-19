@@ -1,0 +1,7 @@
+Each file descriptor (fd) gets its own buffer:
+buffer_holder[fd] will hold the leftover data after reading from the file associated with file descriptor fd.
+Storing data between calls:
+When reading from a file, if not all data can be processed (e.g., when reading line by line), the remaining data is stored in buffer_holder[fd]. This ensures that on subsequent calls to get_next_line(fd), the function can resume processing from where it left off.
+Handling multiple files:
+    Since the array has OPEN_MAX + 1 elements, the program can handle reading from up to OPEN_MAX file descriptors simultaneously without overwriting data from one file with data from another.
+

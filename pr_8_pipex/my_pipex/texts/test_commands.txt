@@ -1,0 +1,87 @@
+dos2unix script.sh
+
+
+touch empty_lucky.txt
+./pipex empty_lucky.txt "cat" "wc -l" outfile
+
+./pipex non_existent "cat" "wc -l" outfile
+Expected Behavior: Program should print an error message and exit.
+
+chmod 000 lucky.txt
+./pipex lucky.txt "cat" "wc -l" outfile
+
+./pipex lucky.txt "invalid_command" "wc -l" outfile
+
+./pipex lucky.txt.txt './script space.sh' wc outfile.txt
+
+
+# Native command
+< lucky.txt invalid_command | wc > outfile 2> shell_err.log
+
+# Pipex command
+./pipex lucky.txt "invalid_command" "wc" outfile 2> pipex_err.log
+
+# Compare the logs
+diff shell_err.log pipex_err.log
+
+
+
+
+--- to fix ----------------
+Issue: The program timed out after 1 second.
+Reason: Likely caused by incorrect handling of filenames with spaces or improper execution of scripts. It could also indicate an issue in process synchronization (e.g., infinite waiting).
+
+
+
+./pipex lucky.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt
+
+Issue: The command fails (marked KO).
+Reason: Likely due to incorrect parsing or quoting of special characters (e.g., " or {}). The shell expects these to be handled correctly when passed through pipex.
+
+
+
+./pipex lucky.txt 'sed "s/And/But/"' 'awk "{count++} END {printf \"count: %i\", count}"' outfile.txt
+
+Issue: The command fails (marked KO).
+Reason: Double quotes and escape sequences (\") might not be properly managed when passed to execve or split into arguments.
+
+
+./pipex lucky.txt ./script.sh wc outfile.txt
+
+Issue: The script fails to execute (marked KO).
+Reason: Pipex might not correctly handle relative paths or executable permissions for scripts. Ensure the script is marked executable (chmod +x).
+
+
+'NoneType' object has no attribute 'stderr'
+
+Reason: The testing framework expects both stderr and stdout to be correctly handled by pipex. If stderr is not being redirected or captured properly, it results in this error.
+
+
+./pipex lucky.txt './script space.sh' wc outfile.txt
+
+Incorrect Argument Parsing (special characters):
+
+./pipex lucky.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt
+./pipex lucky.txt 'sed "s/And/But/"' 'awk "{count++} END {printf \"count: %i\", count}"' outfile.txt
+
+Script Handling:
+
+./pipex lucky.txt ./script.sh wc outfile.txt
+
+Quoted Arguments (spaces, special characters):
+
+./pipex lucky.txt 'sed    "s/And/But/"' 'grep But' outfile.txt
+
+================================
+
+< lucky.txt sed "s/And/But/" | awk '{count++} END {print count}' > shell_outfile.txt
+
+
+./pipex lucky.txt "sed s/And/But/" "awk {count++} END {print count}" pipex_outfile.txt
+
+diff shell_outfile.txt pipex_outfile.txt
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+errors in paco: 6!!!! for now
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+

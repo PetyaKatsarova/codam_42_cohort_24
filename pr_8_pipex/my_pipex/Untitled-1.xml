@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org
+/soap/envelope/">
+    <soap:Body>
+        <ns3:getDossiersResponse xmlns:ns2="http://www.bodemloketservices.nl/imblk0101/12.0" xmlns:ns3="http://www.bodemloketservices.nl/xsd/osblk/12.0" xmlns:ns4="http://www.opengis.net/gml/3.2" xmlns:ns5="http://www.w3.org/1999/xlink">
+            <ns2:metaInformation>
+                <ns2:version>12.0.0</ns2:version>
+                <ns2:organisation>TNO</ns2:organisation>
+                <ns2:reportDate>2025-01-16+01:00
+                </ns2:reportDate>
+            </ns2:metaInformation>
+            <ns2:dossiers>
+                <ns4:boundedBy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+                <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>6032f724-b40a-4f7f-a3a4-d6201755d20e</ns2:localId>
+                    </ns2:nen3610>
+                </ns2:identification>
+                <ns2:soilLocation>
+                    <ns2:identifica
+                        tion>
+                    <ns2:namespace>SIKB</ns2:namespace>
+                    <ns2:localId>02cb85f7-517c-4df1-99b5-b822941e693c</ns2:localId>
+                    </ns2:identification>
+                    <ns2:name>carre Emmastraat-</ns2:name>
+                    <ns2:area uom="m2"
+                    >23105</ns2:area>
+                    <ns2:geometry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        srsName="urn:ogc:def:crs:EPSG::28992" xsi:type="ns4:PolygonType">
+                        <ns4:exterior>
+                            <ns4:LinearRing>
+                                <ns4:posList srsDimension="2">144904.23 455409.9 145012.32 455326.06
+                                    144972.05 455280.03 144993.42 455259.48 145025.45 455295.81
+                                    145034.7 455293.87 145043.95 455306.04 145108.24 45
+                                    5249.55 145132.59 455272.44 145146.72 455263.67 145176.91
+                                    455296.79 145154.94 455319.07 145132.59 455336.72 145105.8
+                                    455358.64 145086.32 455375.2 145060.51 455390.78 144956.84 4554
+                                    58.4 144904.23 455409.9</ns4:posList>
+                            </ns4:LinearRing>
+                        </ns4:exterior>
+                    </ns2:geometry>
+                    <ns2:statdyn codeSpace="urn:imsikb0101:stat_dyn"><![CDATA[Dynamisch]]></ns2:statdyn>
+                    <ns2:address
+                        es>
+                    <ns2:identification>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>c822f2d3-0233-438c-b051-0c53d38305da</ns2:localId>
+                    </ns2:identification>
+                    <ns2:city>Zeist</ns2:city>
+                    <ns2:distric
+                        tCode codeSpace="urn:imblk0101:cbs_gemeente_code"><![CDATA[[geen waarde]]]>
+                    </ns2:districtCode>
+                    <ns2:numberAddition>--</ns2:numberAddition>
+                    <ns2:publicSpace>Emmaplein</ns2:publicSpace>
+                    <ns2:zipcode>3701DA</ns2:zipcode>
+                    </ns2:addresses>
+                </ns2:soilLocation>
+                <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]>
+                    </ns2:dataAdministrato
+r>
+                    <ns2:covenantOrganisation codeSpace="urn:imsikb0101:convenantpartij"><![CDATA[N.V.T.]]></ns2:covenantOrganisation>
+                    <ns2:dossierIdLocalAuthority>UT035500046
+                    </ns2:dossierIdLocalAuth
+ority>
+                    <ns2:dossierIdNotLocalAuthority>UT035500046</ns2:dossierIdNotLocalAuthority>
+                    <ns2:followUpWBB codeSpace="urn:imsikb0101:vervolg"><![CDATA[voldoende onderzocht. Omschrijving: D
+e resultaten van het uitgevoerde (historische) bodemonderzoek geven aan dat de (voormalige) activiteiten en/of de onderzoekslocatie voldoende zijn onderzocht in het kader van de We
+t bodembescherming.]]></ns2:followUpWBB>
+                    <ns2:landOrWater codeSpace="urn:imsikb0101:landwater"><![CDATA[Landbodem]]></ns2:landOrWater>
+                    <ns2:pollutionStartedBefore1987>true
+                    </ns2:pollu
+tionStartedBefore1987>
+                    <ns2:rapporteurMonitoring codeSpace="urn:imsikb0101:lettercode_bevoegd_gezag"><![CDATA[Provincie Utrecht]]></ns2:rapporteurMonitoring>
+                    <ns2:statusOnBasisOfInve
+                        stigation codeSpace="urn:imsikb0101:status_oord"><![CDATA[Niet ernstig]]>
+                    </ns2:statusOnBasisOfInvestigation>
+                    <ns2:sourceSystems>
+                    <ns2:identification>
+                        <ns2:namespace>SIKB
+                        </ns2:namespac
+e>
+                        <ns2:localId>4ee2a107-74c7-45bd-9252-a95843d01c11</ns2:localId>
+                    </ns2:identification>
+                    <ns2:applicationID>UT035500046</ns2:applicationID>
+                    <ns2:application codeSpace="urn:imsikb0101:a
+pplicatie"><![CDATA[StraBis/Squit Bodem/Squit iBis]]></ns2:application>
+                    <ns2:organisation codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[Provincie Utrecht]]></ns2:organisation>
+                    </ns
+2:sourceSystems>
+                    <ns2:sourceSystems>
+                        <ns2:identification>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>bcdbc8b6-75f8-4676-bdbf-574b3e4a3404</ns2:localId>
+                        </ns2:identification>
+                        <ns2:a
+                            pplicationID>AA035500073
+                        </ns2:applicationID>
+                        <ns2:application codeSpace="urn:imsikb0101:applicatie"><![CDATA[StraBis/Squit Bodem/Squit iBis]]></ns2:application>
+                        <ns2:organisation cod
+                            eSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:organisation>
+                    </ns2:sourceSystems>
+                    <ns2:decisions>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB
+                            </ns2:names
+pace>
+                            <ns2:localId>272d13f5-0a59-47b0-b275-ce8d9acc0033</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:characteristic>463305</ns2:characteristic>
+                    <ns2:dataAdministrator codeSpa
+                        ce="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                    <ns2:decisionType codeSpace="urn:imsikb0101:besluit"><![CDATA[Geen vervolg (geen adm Nazorg)]]>
+                        
+                    </
+ns2:decisionType>
+                    <ns2:startTime>1990-06-28+01:00</ns2:startTime>
+                    <ns2:statusOfDecision codeSpace="urn:imsikb0101:besl_stat"><![CDATA[Definitief]]></ns2:statusOfDecision>
+                    </ns2:decisi
+ons>
+                    <ns2:decisions>
+                        <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>e15f7674-7080-42e5-8f81-ad9ad7af8b59</ns2:localId>
+                        </ns2:nen3610>
+                        </ns2:identifica
+tion>
+                        <ns2:characteristic>467831</ns2:characteristic>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:decisionTy
+                            pe codeSpace="urn:imsikb0101:besluit"><![CDATA[NO uitvoeren]]>
+                        </ns2:decisionType>
+                        <ns2:startTime>1993-12-13+01:00</ns2:startTime>
+                        <ns2:statusOfDecision codeSpace="urn:imsikb0101:besl
+_stat"><![CDATA[Definitief]]></ns2:statusOfDecision>
+                    </ns2:decisions>
+                    <ns2:decisions>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:localId>64cae498-2f07-46
+                                    94-8197-11aeb1199848</ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:characteristic>94460559</ns2:characteristic>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders">
+<![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:decisionType codeSpace="urn:imsikb0101:besluit"><![CDATA[Instemmen met SP]]></ns2:decisionType>
+                        <ns2:startTime>1994-01-25+01:
+                            00</ns2:startTime>
+                        <ns2:statusOfDecision codeSpace="urn:imsikb0101:besl_stat"><![CDATA[Definitief]]></ns2:statusOfDecision>
+                    </ns2:decisions>
+                    <ns2:decisions>
+                    <ns2:identification>
+                        <ns2:ne
+                            n3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>b41a2d34-bd13-424a-a8ce-64f94078ac83</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:characteristic>930010
+                    </ns2:character
+istic>
+                    <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                    <ns2:decisionType codeSpace="urn:imsikb0101:besluit">
+                        <![CDATA
+[Instemmen uitgevoerde sanering]]>
+                    </ns2:decisionType>
+                    <ns2:startTime>1995-01-09+01:00</ns2:startTime>
+                    <ns2:statusOfDecision codeSpace="urn:imsikb0101:besl_stat"><![CDATA[Definitief]]
+></ns2:statusOfDecision></ns2:decisions><ns2:usages><ns2:identification><ns2:nen3610><ns2:namespace>SIKB</ns2:namespace><ns2:localId>076e34b9-2011-413d-812b-4ab3ab306218</ns2:local
+Id></ns2:nen3610></ns2:identification><ns2:landuseType codeSpace="urn:imsikb0101:gebruik"><![CDATA[Infrastructuur/verkeer]]>
+                    </ns2:landuseType>
+                    </ns2:usages>
+                    <ns2:usages>
+                        <ns2:identifi
+                            cation>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>66e28163-6eae-4d41-aabc-dcc3291b2cc4</ns2:localId>
+                        </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:landuseType codeSpace="urn:imsikb0101:gebruik"><![CDATA[Industrie]]></ns2:landuseType>
+                    </ns2:usages>
+                    <ns2:usages>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>f018782f-8
+                                795-4e6d-8be2-c43832e98da8</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:landuseType codeSpace="urn:imsikb0101:gebruik"><![CDATA[Braakliggend]]></ns2:landuseType>
+                    </ns2:usage
+s>
+                    <ns2:activities>
+                    <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>ba8babc9-0813-4113-83ac-79f660ef8d3f</ns2:localId>
+                    </ns2:nen3610>
+                    </ns2:identificat
+ion>
+                    <ns2:contaminated codeSpace="urn:imsikb0101:verontreinigd"><![CDATA[Onbekend]]></ns2:contaminated>
+                    <ns2:startTime>1924+01:00</ns2:startTime>
+                    <ns2:endTime>9999+01:00</ns2:endTime>
+                    <ns2:appointed codeSpace="urn:imsikb0101:benoemd"><![CDATA[Nee]]></ns2:appointed>
+                    <ns2:investigated codeSpace="urn:imsikb0101:ubi_onderzocht"><![CDATA[Onbekend]]></ns2:investigated>
+                    <ns2:UBI codeSpace="urn:imsikb0101:ubicode"><![CDATA[band, -vlecht, passement- en kantfabrieken (175401)]]></ns2:UBI>
+                    <ns2:expired codeSpace="urn:imsikb0101:vervallen"><![CDATA[Nee]
+]></ns2:expired></ns2:activities><ns2:contaminationInfos><ns2:identification><ns2:nen3610><ns2:namespace>SIKB</ns2:namespace><ns2:localId>2d9674c4-0120-4a43-a3ed-1cd2dca739d6</ns2:
+localId></ns2:nen3610></ns2:identification><ns2:startTime>2019-02-03+01:00</ns2:startTime><ns2:lowerDepth/><ns2:upperDepth/><ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhou
+ders"><![CDATA[RUD Utrecht 2.0]]>
+                </ns2:dataAdministrator>
+                <ns2:contourType codeSpace="urn:imsikb0101:contour"><![CDATA[Grond]]></ns2:contourType>
+                <ns2:exceededClass codeSpace="urn:im
+sikb0101:overschrijding"><![CDATA[I]]></ns2:exceededClass>
+                <ns2:natures>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>d8b57518-1e06-4a0b-bb4a-6d66
+                                5e003bdb</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                </ns2:natures>
+                <ns2:natures>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>56c08601-0a25-411d-9f31-a96924940f63</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                </ns2:natures>
+                <ns2:natures>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:names
+                                pace>SIKB
+                            </ns2:namespace>
+                            <ns2:localId>d2fceebc-37db-4c08-a588-215440356977</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcompon
+ent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                </ns2:natures>
+                <ns2:natures>
+                <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>e6f3c0c1-de22-4910-
+                            a418-f5adc01e15a0</ns2:localId>
+                    </ns2:nen3610>
+                </ns2:identification>
+                <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                </ns
+2:natures>
+                <ns2:natures>
+                    <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>83e88361-78e2-435a-b63c-d3c9aac8ae63</ns2:localId>
+                    </ns2:nen3610>
+                    </ns2:identi
+fication>
+                    <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                </ns2:natures>
+                </ns2:contaminationInfos>
+                <ns2:contaminationInfo
+                    s>
+                <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>834b8de9-5bd8-4215-a1b3-1502f112a703</ns2:localId>
+                    </ns2:nen3610>
+                </ns2:identification>
+                <ns2:startTi
+                    me>2019-02-03+01:00
+                </ns2:startTime>
+                <ns2:lowerDepth />
+                <ns2:upperDepth />
+                <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]>
+                    </ns2:dataAdministrato
+r>
+                    <ns2:contourType codeSpace="urn:imsikb0101:contour"><![CDATA[Grondwater]]></ns2:contourType>
+                    <ns2:natures>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:
+                                    localId>d1d4a0e7-667e-46ea-ba40-23242c63b8cf
+                                </ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]>
+</ns2:physicalProperty>
+                    </ns2:natures>
+                    <ns2:natures>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:localId>a0f012c3-97f6-4295-8f71-b58d7a66d6b2</ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:physicalProperty codeSpace="urn:imsikb0101:lovcomponent"><![CDATA[[geen waarde]]]></ns2:physicalProperty>
+                    </ns2:natures>
+                    </ns2:contaminationI
+nfos>
+                    <ns2:remediations>
+                        <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>6dbb7d0d-3135-45bb-984b-52e0812d2977</ns2:localId>
+                        </ns2:nen3610>
+                        </ns2:identi
+fication>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:contourType codeSpace="urn:imsikb0101:contour">
+                            <![CDA
+TA[Grond]]>
+                        </ns2:contourType>
+                        <ns2:lowerDepth />
+                        <ns2:upperDepth />
+                        <ns2:agreementDate>1995-01-09+01:00</ns2:agreementDate>
+                        <ns2:geometry xmlns:xsi="http://www.w3.org/2001/XMLSchema-inst
+ance"
+                            srsName="urn:ogc:def:crs:EPSG::28992" xsi:type="ns4:PolygonType">
+                            <ns4:exterior>
+                                <ns4:LinearRing>
+                                    <ns4:posList srsDimension="2">144956.02 455423.3 144959.55
+                                        455418.35 145015.37
+                                        455374.19 145044.33 455350.17 145036.21 455338.87 145021.73
+                                        455351.58 145009.01 455361.12 145001.59 455351.23 144995.94
+                                        455355.12 144987.81 455345.22 145011.83 455326.5 144972.97 4
+                                        55279.87 144995.58 455262.21 145013.6 455283.76 145014.66
+                                        455282.34 145024.9 455295.41 145034.44 455293.29 145045.39
+                                        455306.72 145110.04 455249.49 145133.01 455275.28 145145.37
+                                        455
+                                        264.33 145147.84 455267.51 145144.66 455269.62 145155.26
+                                        455282.7 145158.44 455280.58 145169.75 455294.35 145167.98
+                                        455295.06 145169.39 455296.47 145172.57 455300.01 145152.79
+                                        4553
+                                        18.38 145140.07 455330.74 145129.47 455338.16 145127.0
+                                        455336.75 145109.69 455350.52 145106.51 455355.82 145087.43
+                                        455371.37 145074.72 455380.55 145065.53 455382.67 145063.06
+                                        45538
+                                        1.61 145044.33 455398.22 145026.67 455410.58 145004.41
+                                        455425.06 144998.76 455423.65 144992.4 455424.36 144986.04
+                                        455428.6 144982.51 455428.95 144964.85 455426.12 144956.02
+                                        455423.
+                                        3</ns4:posList>
+                                </ns4:LinearRing>
+                            </ns4:exterior>
+                        </ns2:geometry>
+                        <ns2:realizedVariationSubsoil codeSpace="urn:imsikb0101:san_ondergrond"><![CDATA[stabiel, kl.restver./pas.zorg, geen m
+on]]></ns2:realizedVariationSubsoil>
+                        <ns2:realizedVariationTopsoil codeSpace="urn:imsikb0101:san_bovengrond"><![CDATA[voll. verw., aanvulgrond BGW]]></ns2:realizedVariationTopsoil>
+                        <
+ns2:remarks>grondwatersaneringscontour is niet bekend</ns2:remarks>
+                    </ns2:remediations>
+                    <ns2:projects>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:localId>0d8f0c13-cd76-453d-8a7a-8569c7209804</ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:name>carre Emmastraat-</ns2:name>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhou
+ders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[Indicatief onderzoek]]></ns2:projectType>
+                        <ns2:reportAuthor>Ta
+                            uw</ns2:reportAuthor>
+                        <ns2:reportDate>1985-10-01+01:00</ns2:reportDate>
+                        <ns2:reportNumber>51351.47</ns2:reportNumber>
+                    </ns2:projects>
+                    <ns2:projects>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns
+                                2:namespace>SIKB
+                            </ns2:namespace>
+                            <ns2:localId>fe2e6b33-183b-4fbe-a8ca-b7eff1ad8881</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:name>carre Emmastraat-</ns2:name>
+                    <ns2:dataAdm
+                        inistrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]>
+                </ns2:dataAdministrator>
+                <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[avr (aanvullend r
+apport)]]></ns2:projectType>
+                <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                <ns2:reportDate>1986-05-01+01:00</ns2:reportDate>
+                <ns2:reportNumber>51351.56</ns2:reportNumber>
+                </ns2:projects>
+                <n
+                    s2:projects>
+                <ns2:identification>
+                    <ns2:nen3610>
+                        <ns2:namespace>SIKB</ns2:namespace>
+                        <ns2:localId>2759d6b1-ff71-45e3-b454-615f555be8a7</ns2:localId>
+                    </ns2:nen3610>
+                </ns2:identification>
+                <n
+                    s2:name>carre Emmastraat-</ns2:name><ns2:dataAdministrator
+                        codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator><ns2:projectType
+                        codeSpace="urn
+:imsikb0101:ond_type"><![CDATA[Orienterend bodemonderzoek]]></ns2:projectType><ns2:reportAuthor>
+                    Tauw</ns2:reportAuthor><ns2:reportDate>1990-05-01+01:00</ns2:reportDate><ns2:reportN
+                        umber>
+                    3138062</ns2:reportNumber></ns2:projects><ns2:projects>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:localId>f9b01aa9-125a-459b-99d6-9d136cc2430b</
+ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:name>carre Emmastraat-</ns2:name>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]>
+                        </ns2:
+dataAdministrator>
+                        <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[avr (aanvullend rapport)]]></ns2:projectType>
+                        <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                        <ns2:reportDat
+                            e>1991-09-01+01:00
+                        </ns2:reportDate>
+                        <ns2:reportNumber>3182339</ns2:reportNumber>
+                    </ns2:projects><ns2:projects>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2
+                                    :localId>8b99cfc5-e677-4429-87a7-2c0f25c38c22
+                                </ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:name>carre Emmastraat-</ns2:name>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101
+:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[Saneringsplan]]></ns2:projectType>
+                        <ns2:reportAuthor>T
+                            auw</ns2:reportAuthor>
+                        <ns2:reportDate>1993-02-01+01:00</ns2:reportDate>
+                        <ns2:reportNumber>3266451</ns2:reportNumber>
+                    </ns2:projects><ns2:projects>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns
+                                    2:namespace>SIKB
+                                </ns2:namespace>
+                                <ns2:localId>486bacea-f668-4892-bcbe-c6622557eca2</ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:name>carre Emmastraat-</ns2:name>
+                        <ns2:dataAdm
+                            inistrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]>
+                        </ns2:dataAdministrator>
+                        <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[brf (briefrapport
+)]]></ns2:projectType>
+                        <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                        <ns2:reportDate>1993-11-18+01:00</ns2:reportDate>
+                        <ns2:reportNumber>R3309711.101/MHD</ns2:reportNumber>
+                    </ns2:projects>
+<ns2:projects>
+                        <ns2:identification>
+                            <ns2:nen3610>
+                                <ns2:namespace>SIKB</ns2:namespace>
+                                <ns2:localId>4b0682a1-bdc5-4565-8ebb-aa4c999ea097</ns2:localId>
+                            </ns2:nen3610>
+                        </ns2:identification>
+                        <ns2:name>carre Emmastraat-</ns2:name>
+                        <ns2:dataAdministrator codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                        <ns2:projectType codeSpace="u
+rn:imsikb0101:ond_type"><![CDATA[brf (briefrapport)]]></ns2:projectType>
+                        <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                        <ns2:reportDate>1994-02-16+01:00</ns2:reportDate>
+                        <ns2:reportNumber>
+                            B3329615.101/jat</ns2:reportNumber>
+                    </ns2:projects><ns2:projects><ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB</ns2:namespace>
+                            <ns2:localId>73db9e22-35cc-47a5-bd73-e56fd7fddfd
+                                a</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification><ns2:name>carre
+                    Emmastraat-</ns2:name><ns2:dataAdministrator
+                        codeSpace="urn:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></n
+s2:dataAdministrator>
+                <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[Evaluatieverslag saneren]]></ns2:projectType>
+                <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                <ns2:report
+                    Date>1994-06-01+01:00
+                </ns2:reportDate>
+                <ns2:reportNumber>R3336271.R02/EAZ</ns2:reportNumber>
+                </ns2:projects>
+                <ns2:projects>
+                    <ns2:identification>
+                        <ns2:nen3610>
+                            <ns2:namespace>SIKB
+                            </ns2:na
+mespace>
+                            <ns2:localId>ee1aede3-b6cb-4d5e-ab2b-737860935ca3</ns2:localId>
+                        </ns2:nen3610>
+                    </ns2:identification>
+                    <ns2:name>carre Emmastraat-</ns2:name>
+                    <ns2:dataAdministrator codeSpace="ur
+n:imsikb0101:Bronhouders"><![CDATA[RUD Utrecht 2.0]]></ns2:dataAdministrator>
+                    <ns2:projectType codeSpace="urn:imsikb0101:ond_type"><![CDATA[avr (aanvullend rapport)]]>
+                    </ns2:projectT
+ype>
+                    <ns2:reportAuthor>Tauw</ns2:reportAuthor>
+                    <ns2:reportDate>1986-01-01+01:00</ns2:reportDate>
+                    <ns2:reportNumber>51351.53</ns2:reportNumber>
+                </ns2:projects>
+            </ns2:dossiers>
+        </ns3:getDossiersResponse>
+    </soap:Body>
+    <contact>
+        <gegevensbeheerder><![CDATA[<b>RUD Utrecht 2.0</b><br/>
+<a href="mailto:bodemloket@rudutrecht.nl">bodemloket@rudutrecht.nl</a>]]></gegevensbeheerder>
+    </contact>
+</soap:Envelope>

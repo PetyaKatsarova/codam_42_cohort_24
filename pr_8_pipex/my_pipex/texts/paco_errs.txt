@@ -1,0 +1,68 @@
+
+Output of the tests in: /home/pekatsar/francinette/temp/pipex/pipex-tester/outs
+Explanation of the files here: https://github.com/vfurmane/pipex-tester
+
+2025-01-17 18:57:29,869 - base - INFO - Copying from /home/pekatsar/francinette/tests/pipex/pipexMedic to /home/pekatsar/francinette/temp/pipex/pipexMedic
+2025-01-17 18:57:29,871 - base_exec - INFO - on dir /home/pekatsar/francinette/temp/pipex/pipexMedic
+ℹ Executing tests: pipexMedic (https://github.com/gmarcha/pipexMedic)
+2025-01-17 18:57:29,912 - base_exec - INFO - CompletedProcess(args='cd ..; make all', returncode=0, stdout="make[1]: Entering directory '/home/pekatsar/francinette/temp/pipex/libft'\nmake[1]: 'libft.a' is up to date.\nmake[1]: Leaving directory '/home/pekatsar/francinette/temp/pipex/libft'\ncc -Wall -Wextra -Werror -g -o pipex objects/main.o objects/parsing_path.o objects/helpers.o objects/file_and_pipe.o ./libft/libft.a\n", stderr='')
+2025-01-17 18:57:29,913 - base_exec - INFO - on dir /home/pekatsar/francinette/temp/pipex/pipexMedic
+/usr/bin/ld: /tmp/test-c2fcda.o:(.bss+0x0): multiple definition of `testDone'; /tmp/main-789747.o:(.bss+0x0): first defined here
+/usr/bin/ld: /tmp/runTest-8ca6e1.o:(.bss+0x0): multiple definition of `testDone'; /tmp/main-789747.o:(.bss+0x0): first defined here
+/usr/bin/ld: /tmp/utils-debd74.o:(.bss+0x0): multiple definition of `testDone'; /tmp/main-789747.o:(.bss+0x0): first defined here
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+2025-01-17 18:57:30,338 - base - INFO - Copying from /home/pekatsar/francinette/tests/pipex/fsoares to /home/pekatsar/francinette/temp/pipex/fsoares
+2025-01-17 18:57:30,340 - base_exec - INFO - on dir /home/pekatsar/francinette/temp/pipex/fsoares
+ℹ Executing tests: fsoares (my own tests)
+2025-01-17 18:57:31,492 - base_exec - INFO - CompletedProcess(args='cd ..; make fclean all', returncode=0, stdout="make[1]: Entering directory '/home/pekatsar/francinette/temp/pipex/libft'\nrm -f ft_isalpha.o ft_isdigit.o ft_isascii.o ft_isalnum.o ft_isprint.o ft_strlen.o ft_bzero.o ft_memset.o ft_memcpy.o ft_memmove.o ft_memchr.o ft_memcmp.o ft_toupper.o ft_tolower.o ft_strchr.o ft_strlcpy.o ft_strlcat.o ft_strrchr.o ft_strncmp.o ft_strnstr.o ft_strdup.o ft_strmapi.o ft_striteri.o ft_atoi.o ft_itoa.o ft_calloc.o ft_substr.o ft_strjoin.o ft_strtrim.o ft_split.o ft_putnbr_fd.o ft_putchar_fd.o ft_putstr_fd.o ft_putendl_fd.o ft_lstnew.o ft_lstadd_front.o ft_lstsize.o ft_lstlast.o ft_lstadd_back.o ft_lstdelone.o ft_lstiter.o ft_lstmap.o ft_lstclear.o\nmake[1]: Leaving directory '/home/pekatsar/francinette/temp/pipex/libft'\nrm -f objects/main.o objects/parsing_path.o objects/helpers.o objects/file_and_pipe.o\nmake[1]: Entering directory '/home/pekatsar/francinette/temp/pipex/libft'\nrm -f ft_isalpha.o ft_isdigit.o ft_isascii.o ft_isalnum.o ft_isprint.o ft_strlen.o ft_bzero.o ft_memset.o ft_memcpy.o ft_memmove.o ft_memchr.o ft_memcmp.o ft_toupper.o ft_tolower.o ft_strchr.o ft_strlcpy.o ft_strlcat.o ft_strrchr.o ft_strncmp.o ft_strnstr.o ft_strdup.o ft_strmapi.o ft_striteri.o ft_atoi.o ft_itoa.o ft_calloc.o ft_substr.o ft_strjoin.o ft_strtrim.o ft_split.o ft_putnbr_fd.o ft_putchar_fd.o ft_putstr_fd.o ft_putendl_fd.o ft_lstnew.o ft_lstadd_front.o ft_lstsize.o ft_lstlast.o ft_lstadd_back.o ft_lstdelone.o ft_lstiter.o ft_lstmap.o ft_lstclear.o\nrm -f libft.a\nmake[1]: Leaving directory '/home/pekatsar/francinette/temp/pipex/libft'\nrm -f pipex\nmake[1]: Entering directory '/home/pekatsar/francinette/temp/pipex/libft'\ncc -Wall -Wextra -Werror -c ft_isalpha.c -o ft_isalpha.o\ncc -Wall -Wextra -Werror -c ft_isdigit.c -o ft_isdigit.o\ncc -Wall -Wextra -Werror -c ft_isascii.c -o ft_isascii.o\ncc -Wall -Wextra -Werror -c ft_isalnum.c -o ft_isalnum.o\ncc -Wall -Wextra -Werror -c ft_isprint.c -o ft_isprint.o\ncc -Wall -Wextra -Werror -c ft_strlen.c -o ft_strlen.o\ncc -Wall -Wextra -Werror -c ft_bzero.c -o ft_bzero.o\ncc -Wall -Wextra -Werror -c ft_memset.c -o ft_memset.o\ncc -Wall -Wextra -Werror -c ft_memcpy.c -o ft_memcpy.o\ncc -Wall -Wextra -Werror -c ft_memmove.c -o ft_memmove.o\ncc -Wall -Wextra -Werror -c ft_memchr.c -o ft_memchr.o\ncc -Wall -Wextra -Werror -c ft_memcmp.c -o ft_memcmp.o\ncc -Wall -Wextra -Werror -c ft_toupper.c -o ft_toupper.o\ncc -Wall -Wextra -Werror -c ft_tolower.c -o ft_tolower.o\ncc -Wall -Wextra -Werror -c ft_strchr.c -o ft_strchr.o\ncc -Wall -Wextra -Werror -c ft_strlcpy.c -o ft_strlcpy.o\ncc -Wall -Wextra -Werror -c ft_strlcat.c -o ft_strlcat.o\ncc -Wall -Wextra -Werror -c ft_strrchr.c -o ft_strrchr.o\ncc -Wall -Wextra -Werror -c ft_strncmp.c -o ft_strncmp.o\ncc -Wall -Wextra -Werror -c ft_strnstr.c -o ft_strnstr.o\ncc -Wall -Wextra -Werror -c ft_strdup.c -o ft_strdup.o\ncc -Wall -Wextra -Werror -c ft_strmapi.c -o ft_strmapi.o\ncc -Wall -Wextra -Werror -c ft_striteri.c -o ft_striteri.o\ncc -Wall -Wextra -Werror -c ft_atoi.c -o ft_atoi.o\ncc -Wall -Wextra -Werror -c ft_itoa.c -o ft_itoa.o\ncc -Wall -Wextra -Werror -c ft_calloc.c -o ft_calloc.o\ncc -Wall -Wextra -Werror -c ft_substr.c -o ft_substr.o\ncc -Wall -Wextra -Werror -c ft_strjoin.c -o ft_strjoin.o\ncc -Wall -Wextra -Werror -c ft_strtrim.c -o ft_strtrim.o\ncc -Wall -Wextra -Werror -c ft_split.c -o ft_split.o\ncc -Wall -Wextra -Werror -c ft_putnbr_fd.c -o ft_putnbr_fd.o\ncc -Wall -Wextra -Werror -c ft_putchar_fd.c -o ft_putchar_fd.o\ncc -Wall -Wextra -Werror -c ft_putstr_fd.c -o ft_putstr_fd.o\ncc -Wall -Wextra -Werror -c ft_putendl_fd.c -o ft_putendl_fd.o\nar rcs libft.a ft_isalpha.o ft_isdigit.o ft_isascii.o ft_isalnum.o ft_isprint.o ft_strlen.o ft_bzero.o ft_memset.o ft_memcpy.o ft_memmove.o ft_memchr.o ft_memcmp.o ft_toupper.o ft_tolower.o ft_strchr.o ft_strlcpy.o ft_strlcat.o ft_strrchr.o ft_strncmp.o ft_strnstr.o ft_strdup.o ft_strmapi.o ft_striteri.o ft_atoi.o ft_itoa.o ft_calloc.o ft_substr.o ft_strjoin.o ft_strtrim.o ft_split.o ft_putnbr_fd.o ft_putchar_fd.o ft_putstr_fd.o ft_putendl_fd.o\nmake[1]: Leaving directory '/home/pekatsar/francinette/temp/pipex/libft'\ncc -Wall -Wextra -Werror -g -c main.c -o objects/main.o -I ./libft\ncc -Wall -Wextra -Werror -g -c parsing_path.c -o objects/parsing_path.o -I ./libft\ncc -Wall -Wextra -Werror -g -c helpers.c -o objects/helpers.o -I ./libft\ncc -Wall -Wextra -Werror -g -c file_and_pipe.c -o objects/file_and_pipe.o -I ./libft\ncc -Wall -Wextra -Werror -g -o pipex objects/main.o objects/parsing_path.o objects/helpers.o objects/file_and_pipe.o ./libft/libft.a\n", stderr='')
+2025-01-17 18:57:31,493 - pipex-fso - INFO - command: native: "< infile.txt cat | wc > outfile.txt", pipex: "./pipex infile.txt cat wc outfile.txt"
+1.OK 2025-01-17 18:57:31,537 - pipex-fso - INFO - command: native: "< infile.txt cat | wc > inexistent.txt", pipex: "./pipex infile.txt cat wc inexistent.txt"
+2.OK 2025-01-17 18:57:31,594 - pipex-fso - INFO - command: native: "< infile.txt sed    "s/And/But/" | grep But > outfile.txt", pipex: "./pipex infile.txt 'sed    "s/And/But/"' 'grep But' outfile.txt"
+3.KO 2025-01-17 18:57:31,648 - pipex-fso - INFO - command: native: "< infile.txt sed "s/And/But/" | awk '{count++} END {print count}' > outfile.txt", pipex: "./pipex infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {print count}'"'"'' outfile.txt"
+4.KO 2025-01-17 18:57:31,679 - pipex-fso - INFO - command: native: "< infile.txt sed "s/And/But/" | awk "{count++} END {print count}" > outfile.txt", pipex: "./pipex infile.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt"
+5.KO 2025-01-17 18:57:31,695 - pipex-fso - INFO - command: native: "< infile.txt sed "s/And/But/" | awk "{count++} END {printf \"count: %i\" , count}" > outfile.txt", pipex: "./pipex infile.txt 'sed "s/And/But/"' 'awk "{count++} END {printf \"count: %i\" , count}"' outfile.txt"
+6.KO 2025-01-17 18:57:31,713 - pipex-fso - INFO - command: native: "< infile.txt sed "s/And/But/" | awk '{count++} END {printf "count: %i", count}' > outfile.txt", pipex: "./pipex infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' outfile.txt"
+7.KO 2025-01-17 18:57:31,729 - pipex-fso - INFO - command: native: "< infile.txt ./script.sh | wc > outfile.txt", pipex: "./pipex infile.txt ./script.sh wc outfile.txt"
+8.KO 2025-01-17 18:57:31,745 - pipex-fso - INFO - command: native: "< infile.txt ./script space.sh | wc > outfile.txt", pipex: "./pipex infile.txt './script space.sh' wc outfile.txt"
+2025-01-17 18:57:32,769 - pipex-fso - ERROR - Command './pipex infile.txt './script space.sh' wc outfile.txt' timed out after 1 seconds
+'NoneType' object has no attribute 'stderr'
+2025-01-17 18:57:32,769 - base - ERROR - 'NoneType' object has no attribute 'stderr'
+Traceback (most recent call last):
+  File "/home/pekatsar/francinette/testers/BaseTester.py", line 183, in test_using
+    return (tester.name, tx.execute())
+  File "/home/pekatsar/francinette/testers/pipex/Fsoares.py", line 107, in execute
+    res_m = self.execute_batch()
+  File "/home/pekatsar/francinette/testers/pipex/Fsoares.py", line 187, in execute_batch
+    res = self.execute_test(test)
+  File "/home/pekatsar/francinette/testers/pipex/Fsoares.py", line 255, in execute_test
+    return self.compare_output(test, native, native_outfile, pipex, pipex_outfile)
+  File "/home/pekatsar/francinette/testers/pipex/Fsoares.py", line 285, in compare_output
+    if diff_stderr(native.stderr, pipex.stderr):
+AttributeError: 'NoneType' object has no attribute 'stderr'
+
+Summary: no bonus
+2025-01-17 18:57:32,770 - base - WARNING - norminette errors: []
+2025-01-17 18:57:32,770 - base - WARNING - missing functions: []
+2025-01-17 18:57:32,770 - base - WARNING - errors in functions: [('pipex-tester', ['pipex-tester']), ('pipexMedic', []), ('fsoares', ['fsoares'])]
+
+Failed tests: pipex-tester, fsoares
+
+
+
+< infile.txt sed "s/And/But/" | awk '{count++} END {print count}' > outfile.txt", pipex: "./pipex infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {print count}'"'"'' outfile.txt
+
+
+< lucky.txt sed "s/And/But/" | awk '{count++} END {print count}' > outfile.txt
+
+    < infile.txt: Redirects the content of infile.txt as input to the first command (sed).
+    sed "s/And/But/": Replaces the first occurrence of the word And with But on each line of the input.
+    |: Pipes the output of sed to the next command (awk).
+    awk '{count++} END {print count}': Processes each line of input and:
+        Increments a counter (count) for every line.
+        At the end (END block), prints the total number of lines.
+    > outfile.txt: Redirects the final output of awk to outfile.txt.
+
+    ./pipex lucky.txt "sed 's/And/But/'" "awk '{count++} END {print count}'" outfile.txt
+
+
