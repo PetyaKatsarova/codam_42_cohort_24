@@ -80,7 +80,7 @@ void	print_err_exit(int pid)
 // Updated quote handling inside split_command function
 char	**split_command(char *command)
 {
-	char	**quote_split;
+	char	**quote_split = NULL;
 	char	**final_result;
 	int		total_count, i;
 

@@ -66,7 +66,7 @@ static char	**prepare_command_args(char *command_path, char **splitted_command,
  */
 void	exec_command(char **env, char **splitted_command)
 {
-	char	*command_path;
+	char	*command_path = NULL;
 	char	**args;
 	int		i;
 
