@@ -5,3 +5,6 @@ wc outputs from file: 22 134
 Lines: 22
 Words: 134
 Characters: 811
+
+< lucky.txt ./run_script.sh | wc > outfile.txt
+./pipex lucky.txt ./run_script.sh wc outfile.txt

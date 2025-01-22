@@ -54,6 +54,7 @@ pipex: ***************************
 awk: cmd. line:1: '{count++}
 awk: cmd. line:1: ^ invalid char ''' in expression
 -------------------------------
+< lucky.txt 'sed "s/And/But/"' | 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' > outfile_pipe.md
 
 error 2:
 (7)
