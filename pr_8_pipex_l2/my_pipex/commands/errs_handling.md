@@ -42,14 +42,15 @@ zsh: permission denied:
 
 < lucky.txt echo 'Hello & Goodbye' | cat > outfile_sh
 
----------------------------------
+--------------------------------- works ---------------------------
 ./pipex lucky.txt "invalid_cmd" "cat" outfile
 
 < lucky.txt "invalid_cmd" | "cat" > outfile_sg
+============================================
 
+./pipex lucky.txt "/bin/ls" "wc -l" outfile
 
-
- 
+< lucky.txt /bin/ls | wc -l > outfile_sh
 
 
 

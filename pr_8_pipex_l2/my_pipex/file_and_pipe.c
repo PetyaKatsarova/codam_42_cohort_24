@@ -65,8 +65,8 @@ static void msg(char *name, char *message)
 {
 
 	ft_putstr_fd("pipex: ", 2);
-	ft_putstr_fd(name, 2);
-	ft_putendl_fd(message, 2);
+	ft_putstr_fd(message, 2);
+	ft_putendl_fd(name, 2);
 	exit(127);
 }
 
