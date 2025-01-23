@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parsing_path.c                                     :+:    :+:            */
+/*   parse_path.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/14 14:55:18 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/01/17 16:19:47 by pekatsar      ########   odam.nl         */
+/*   Created: 2025/01/23 19:14:14 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/01/23 19:14:14 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	**split_path(char **env)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while (env[i])
@@ -28,7 +28,7 @@ static char	**split_path(char **env)
 
 static char	**split_and_validate_paths(char **env)
 {
-	char		**paths;
+	char	**paths;
 
 	paths = split_path(env);
 	if (!paths)
@@ -41,8 +41,8 @@ static char	**split_and_validate_paths(char **env)
 
 static char	*build_full_command_path(char *path, char *command_no_flag)
 {
-	char		*with_line;
-	char		*full_path;
+	char	*with_line;
+	char	*full_path;
 
 	with_line = ft_strjoin(path, "/");
 	if (!with_line)
@@ -64,7 +64,6 @@ char	*get_full_path(char **paths, char *command_no_flag, int *found)
 
 	full_path = NULL;
 	i = 0;
-
 	while (paths[i])
 	{
 		full_path = build_full_command_path(paths[i], command_no_flag);
@@ -82,27 +81,27 @@ char	*get_full_path(char **paths, char *command_no_flag, int *found)
 	return (NULL);
 }
 
-char	*get_command_path(char **env, char *command_no_flag)
+char	*get_command_path(char **env, char *cmd_no_flag)
 {
 	char	**paths;
 	char	*full_path;
 	int		found;
 
-	if (ft_strlen(command_no_flag) == 0)
+	if (ft_strlen(cmd_no_flag) == 0)
 		return (NULL);
-	if ((command_no_flag[0] == '.' && command_no_flag[1] == '/') || command_no_flag[0] == '/')
-	 {
-		if (is_valid_read_file(command_no_flag, 'x'))
-			return ft_strdup(command_no_flag);
+	if ((cmd_no_flag[0] == '.' && cmd_no_flag[1] == '/')
+		|| cmd_no_flag[0] == '/')
+	{
+		if (is_valid_read_file(cmd_no_flag, 'x'))
+			return (ft_strdup(cmd_no_flag));
 		else
 			return (NULL);
-	 }
-
+	}
 	paths = split_and_validate_paths(env);
 	if (!paths)
 		return (NULL);
 	found = 0;
-	full_path = get_full_path(paths, command_no_flag, &found);
+	full_path = get_full_path(paths, cmd_no_flag, &found);
 	free_dbl_ptr(paths);
 	if (found)
 		return (full_path);

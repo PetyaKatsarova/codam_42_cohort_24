@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/10 18:20:49 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/01/17 18:25:28 by pekatsar      ########   odam.nl         */
+/*   Created: 2025/01/23 19:15:40 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/01/23 19:15:40 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 int		is_valid_read_file(char *file_name, char mode);
 void	free_dbl_ptr(char **ptr);
 void	print_err_exit(int pid);
-void    free_cmd2(char **cmd1, char **cmd2);
-void    perr_exit();
+void	free_cmd2(char **cmd1, char **cmd2);
+void	perr_exit(void);
 
 // parsing_path.c
 char	*get_command_path(char **env, char *command_no_flag);
@@ -35,7 +35,7 @@ char	*get_command_path(char **env, char *command_no_flag);
 // file_and_pipe.c
 void	exec_command(char **env, char **splitted_command);
 
-//parse_command.c
+// parse_command.c
 char	**split_command(char *command);
 
 #endif

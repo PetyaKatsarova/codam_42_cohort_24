@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 10:08:38 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/01/23 15:50:47 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/01/23 19:13:09 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	**split_command(char *command)
 {
 	char	**result;
-	
+
 	result = ft_split(command, ' ');
 	if (!result)
 	{
@@ -24,4 +24,3 @@ char	**split_command(char *command)
 	}
 	return (result);
 }
-
