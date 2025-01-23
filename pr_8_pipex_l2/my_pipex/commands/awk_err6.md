@@ -11,23 +11,40 @@ The END block runs after all lines in the input have been processed.
 It prints the value of count, which contains the total number of lines.
 
 
-----------------------------------------------------------------------------------------
+** To fix: **
+'awk "{count++} END {printf "count: %i" , count}"'
+needs to rmv initial ''(first last), keeps the rest, but initial are not used
+
+---------------------------------------- WORKS ------------------------------------------------
 < texts/infile.txt sed "s/And/But/" | awk '{count++} END {print count}' > outfile_pipe.txt // works
 ./pipex texts/infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {print count}'"'"'' outfile.txt
-
-
 -----------------------------------------------------------------------------
 
-
-"< texts/infile.txt sed "s/And/But/" | awk "{count++} END {print count}" > outfile.txt", pipex: "./pipex texts/
-./pipex infile.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt"
-
-
-"< texts/infile.txt sed "s/And/But/" | awk "{count++} END {printf \"count: %i\" , count}" > outfile.txt", pipex: "./pipex texts/infile.txt 'sed "s/And/But/"' 'awk "{count++} END {printf \"count: %i\" , count}"' outfile.txt
+--------------------------- works ------------------------------------
+< texts/infile.txt sed "s/And/But/" | awk "{count++} END {print count}" > outfile.txt
+./pipex texts/infile.txt 'sed "s/And/But/"' 'awk "{count++} END {print count}"' outfile.txt
 
 
- "< texts/infile.txt sed "s/And/But/" | awk '{count++} END {printf "count: %i", count}' > outfile.txt", pipex: "./pipex texts/infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' outfile.txt
+---------------- ERR TO FIX ----------------------- esc: \" ------------------------
+< texts/infile.txt sed "s/And/But/" | awk "{count++} END {printf \"count: %i\" , count}" > outfile.txt
+./pipex texts/infile.txt 'sed "s/And/But/"' 'awk "{count++} END {printf \"count: %i\" , count}"' outfile.txt
+-----------------------------------------------------------
 
+------------------ similar outcome: ok-ish --------------------------------
+< texts/infile.txt sed "s/And/But/" | awk "{count++} END {printf "count: %i" , count}" > outfile.txt
+./pipex texts/infile.txt 'sed "s/And/But/"' 'awk "{count++} END {printf "count: %i" , count}"' outfile.txt
+-----------------------------------------------------------------------------
 
- < texts/infile.txt ./script.sh | wc > outfile.txt", pipex: "./pipex texts/infile.txt ./script.sh wc outfile.txt
+---------------------- err to fix: multiple quotes -------------------------------
+ < texts/infile.txt sed "s/And/But/" | awk '{count++} END {printf "count: %i", count}' > outfile.txt
+ ./pipex texts/infile.txt 'sed "s/And/But/"' 'awk '"'"'{count++} END {printf "count: %i", count}'"'"'' outfile.txt
+ texts/infile.txt sed "s/And/But/" | awk '{count++} END {printf "count: %i", count}' > outfile.txt
+ ---------------------------------------------------------------------------------------------
+
+./pipex texts/infile.txt 'sed "s/And/But/"' 'awk "{count++} END {printf 'count: %i', count}'"' outfile.txt
+
+-------------------- works -------------------------------------------------
+< texts/infile.txt ./scripts/script.sh | wc > outfile_shell.txt
+./pipex texts/infile.txt ./scripts/script.sh wc outfile.txt
+-----------------------------------------------------------------
 

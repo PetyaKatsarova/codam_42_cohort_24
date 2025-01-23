@@ -64,6 +64,7 @@ char	*get_full_path(char **paths, char *command_no_flag, int *found)
 
 	full_path = NULL;
 	i = 0;
+
 	while (paths[i])
 	{
 		full_path = build_full_command_path(paths[i], command_no_flag);
@@ -87,11 +88,14 @@ char	*get_command_path(char **env, char *command_no_flag)
 	char	*full_path;
 	int		found;
 
-	 if (command_no_flag[0] == '.' && command_no_flag[1] == '/')
+	if (ft_strlen(command_no_flag) == 0)
+		return (NULL);
+	if (command_no_flag[0] == '.' && command_no_flag[1] == '/')
 	 {
 		if (is_valid_read_file(command_no_flag, 'x'))
 			return ft_strdup(command_no_flag);
-		return (NULL);
+		else
+			return (NULL);
 	 }
 
 	paths = split_and_validate_paths(env);

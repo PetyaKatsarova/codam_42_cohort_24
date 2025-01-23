@@ -25,9 +25,9 @@
 // helpers.c
 int		is_valid_read_file(char *file_name, char mode);
 void	free_dbl_ptr(char **ptr);
-char	**split_command(char *command);
 void	print_err_exit(int pid);
 void    free_cmd2(char **cmd1, char **cmd2);
+void    perr_exit();
 
 // parsing_path.c
 char	*get_command_path(char **env, char *command_no_flag);
@@ -35,8 +35,7 @@ char	*get_command_path(char **env, char *command_no_flag);
 // file_and_pipe.c
 void	exec_command(char **env, char **splitted_command);
 
-//parse_quotes.c
-int     process_split_parts(char **quote_split, char **final_result);
-int     count_tokens(char **arr);
+//parse_command.c
+char	**split_command(char *command);
 
 #endif

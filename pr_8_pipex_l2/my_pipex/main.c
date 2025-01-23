@@ -18,7 +18,7 @@ static void	execute_first_child(char **env, char **cmd1, char *infile,
 	int	input_fd;
 
 	if (infile)
-	{
+	{	is_valid_read_file(infile, 'r');
 		input_fd = open(infile, O_RDONLY);
 		if (input_fd == -1)
 		{
@@ -56,7 +56,7 @@ static void	execute_second_child(char **env, char **cmd2, char *outfile,
 	exec_command(env, cmd2);
 }
 
-static void	pipe_it(char **env, char **cmd1, char **cmd2, char **argv)
+static int	pipe_it(char **env, char **cmd1, char **cmd2, char **argv)
 {
 	int	pipe_fd[2];
 	int	pid1;
@@ -77,31 +77,34 @@ static void	pipe_it(char **env, char **cmd1, char **cmd2, char **argv)
 		execute_second_child(env, cmd2, argv[4], pipe_fd);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+	int status = 0;
 	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	waitpid(pid2, &status, 0);
+	return (WEXITSTATUS(status));
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	**cmd1;
 	char	**cmd2;
+	int		status;
 
-	if (argc == 5 && is_valid_read_file(argv[1], 'r'))
+	if (argc != 5)
 	{
-		cmd1 = split_command(argv[2]);
-		if (!cmd1)
-		{
-			perror("split_command failed");
-			return (-1);
-		}
-		cmd2 = split_command(argv[3]);
-		free_cmd2(cmd1, cmd2);
-		pipe_it(env, cmd1, cmd2, argv);
-		free_dbl_ptr(cmd1);
-		free_dbl_ptr(cmd2);
-	} else {
-		perror("arguments count wrong");
-		exit(EXIT_FAILURE);
+		ft_putendl_fd("Not correct number of args(need 5): ./pipex infile cmd1 cmd2 outfile", 2);
+        return (EXIT_FAILURE);
+    }
+
+	cmd1 = split_command(argv[2]);
+	if (!cmd1)
+	{
+		perror("split_command failed");
+		return (-1);
 	}
-	return (0);
+	cmd2 = split_command(argv[3]);
+	free_cmd2(cmd1, cmd2);
+	status = pipe_it(env, cmd1, cmd2, argv);
+	free_dbl_ptr(cmd1);
+	free_dbl_ptr(cmd2);
+	return (status);
 }

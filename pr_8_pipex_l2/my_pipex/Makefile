@@ -10,11 +10,11 @@ CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 LIB = ar rcs
 
-SOURCES = main.c \
-		parsing_path.c \
-		helpers.c \
+SOURCES = helpers.c \
+		parse_path.c \
+		parse_command.c \
 		file_and_pipe.c \
-		parse_quotes.c \
+		main.c \
 
 OBJDIR = objects
 OBJECTS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

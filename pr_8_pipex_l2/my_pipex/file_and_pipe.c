@@ -64,30 +64,60 @@ static char	**prepare_command_args(char *command_path, char **splitted_command,
 /**
  * Executes a command with more than two arguments.
  */
-void	exec_command(char **env, char **splitted_command)
-{
-	char	*command_path = NULL;
-	char	**args;
-	int		i;
+// void	exec_command(char **env, char **splitted_command)
+// {
+// 	char	*command_path;
+// 	char	**args;
+// 	int		i;
 
-	command_path = get_command_path(env, splitted_command[0]);
-	if (!command_path)
-	{
-		perror(splitted_command[0]);
-		exit(EXIT_FAILURE);
-	}
-	i = 0;
-	while (splitted_command[i])
-		i++;
-	args = prepare_command_args(command_path, splitted_command, i);
-	// for (int j=0; args[j]; j++)
-	// {
-	// 	printf("** args[%d]%s\n", j, args[j]);
-	// }
-	// fflush(stdout); TODO:CLEAN !!!!
-	execve(command_path, args, env);
-	perror("execve failed");
-	free_args(args, i);
-	free(command_path);
-	exit(EXIT_FAILURE);
+// 	command_path = NULL;
+// 	if (ft_strlen(splitted_command[0]) == 0)
+// 		command_path = get_command_path(env, NULL);
+// 	else
+// 		command_path = get_command_path(env, splitted_command[0]);
+// 	if (!command_path)
+// 	{
+// 		perror(splitted_command[0]);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	i = 0;
+// 	while (splitted_command[i])
+// 		i++;
+// 	args = prepare_command_args(command_path, splitted_command, i);
+// 	execve(command_path, args, env);
+// 	perror("execve failed");
+// 	free_args(args, i);
+// 	free(command_path);
+// 	exit(EXIT_FAILURE);
+// }
+
+
+void    exec_command(char **env, char **splitted_command)
+{
+    char    *command_path;
+    char    **args;
+    int     i;
+
+    if (!splitted_command[0] || splitted_command[0][0] == '\0')
+    {
+        ft_putendl_fd("pipex: permission denied:", 2);
+        exit(127);
+    }
+
+    command_path = get_command_path(env, splitted_command[0]);
+    if (!command_path)
+    {
+        perror(splitted_command[0]);
+        exit(127);
+    }
+
+    i = 0;
+    while (splitted_command[i])
+        i++;
+    args = prepare_command_args(command_path, splitted_command, i);
+    execve(command_path, args, env);
+    perror("execve failed");
+    free_args(args, i);
+    free(command_path);
+    exit(EXIT_FAILURE);
 }
