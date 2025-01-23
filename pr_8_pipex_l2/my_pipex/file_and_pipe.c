@@ -61,7 +61,7 @@ static char	**prepare_command_args(char *command_path, char **splitted_command,
 	return (args[arg_count] = NULL, args);
 }
 
-void msg(char *name, char *message)
+static void msg(char *name, char *message)
 {
 
 	ft_putstr_fd("pipex: ", 2);
