@@ -61,36 +61,14 @@ static char	**prepare_command_args(char *command_path, char **splitted_command,
 	return (args[arg_count] = NULL, args);
 }
 
-/**
- * Executes a command with more than two arguments.
- */
-// void	exec_command(char **env, char **splitted_command)
-// {
-// 	char	*command_path;
-// 	char	**args;
-// 	int		i;
+void msg(char *name, char *message)
+{
 
-// 	command_path = NULL;
-// 	if (ft_strlen(splitted_command[0]) == 0)
-// 		command_path = get_command_path(env, NULL);
-// 	else
-// 		command_path = get_command_path(env, splitted_command[0]);
-// 	if (!command_path)
-// 	{
-// 		perror(splitted_command[0]);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	i = 0;
-// 	while (splitted_command[i])
-// 		i++;
-// 	args = prepare_command_args(command_path, splitted_command, i);
-// 	execve(command_path, args, env);
-// 	perror("execve failed");
-// 	free_args(args, i);
-// 	free(command_path);
-// 	exit(EXIT_FAILURE);
-// }
-
+	ft_putstr_fd("pipex: ", 2);
+	ft_putstr_fd(name, 2);
+	ft_putendl_fd(message, 2);
+	exit(127);
+}
 
 void    exec_command(char **env, char **splitted_command)
 {
@@ -106,11 +84,7 @@ void    exec_command(char **env, char **splitted_command)
 
     command_path = get_command_path(env, splitted_command[0]);
     if (!command_path)
-    {
-        perror(splitted_command[0]);
-        exit(127);
-    }
-
+		msg(splitted_command[0], ": command not found");
     i = 0;
     while (splitted_command[i])
         i++;

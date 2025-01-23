@@ -32,9 +32,20 @@ zsh: permission denied:
 
 ** 3 handle empty file **
 ./pipex /dev/null "ls" "wc -l" outfile
-< /dev/null ls | wc -l > outfile
+< /dev/null ls | wc -l > outfile_shell
 
+./pipex /dev/null "cat" "wc -l" outfile
+< /dev/null cat | wc -l > outfile
+------------------------------------------------
 
+./pipex lucky.txt "echo 'Hello & Goodbye'" "cat" outfile
+
+< lucky.txt echo 'Hello & Goodbye' | cat > outfile_sh
+
+---------------------------------
+./pipex lucky.txt "invalid_cmd" "cat" outfile
+
+< lucky.txt "invalid_cmd" | "cat" > outfile_sg
 
 
 
