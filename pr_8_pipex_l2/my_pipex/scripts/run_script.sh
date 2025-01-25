@@ -1,3 +1,0 @@
-#!/bin/bash
-
-echo "HELLO WORLD! WE R UNSTOPPABLY UNSTOOPABLE";

@@ -1,48 +1,58 @@
-NAME = pipex
-LIBFT = libft.a
-LIBFT_PATH = ./libft
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
+#                                                    +#+                       #
+#    Created: 2025/01/25 18:02:36 by pekatsar      #+#    #+#                  #
+#    Updated: 2025/01/25 18:02:36 by pekatsar      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
 
-CC = cc
-# valgrind --leak-check=full ./pipex lucky.txt "ls -l" 2 2
-# valgrind --leak-check=full --track-origins=yes ./pipex lucky.txt "ls -l" 2 2
-
-CFLAGS = -Wall -Wextra -Werror -g
-RM = rm -f
-LIB = ar rcs
-
-SOURCES = helpers.c \
+SRC = helpers.c \
 		parse_path.c \
 		parse_command.c \
 		file_and_pipe.c \
 		main.c \
+		ft_split.c\
+		ft_strjoin.c\
+		ft_strlen.c\
+		ft_strdup.c\
+		ft_strnstr.c\
+		ft_substr.c\
+		ft_putstr_fd.c\
+		ft_calloc.c\
+		ft_strlcpy.c\
+		ft_memset.c\
+		ft_putendl_fd.c\
 
-OBJDIR = objects
-OBJECTS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
+OBJ = $(SRC:.c=.o)
+INC = -I ./includes/
+NAME = pipex
 
-# Rule to compile source files into the objects directory
-$(OBJDIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(LIBFT_PATH)
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+RM = rm -f
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
 all: $(NAME)
 
-$(LIBFT):
-	@make -C $(LIBFT_PATH)
-
-$(NAME): $(LIBFT) $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(LIBFT_PATH)/$(LIBFT)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
 clean:
-	@make clean -C $(LIBFT_PATH)
-	$(RM) $(OBJECTS)
+	$(RM) $(OBJ)
 
 fclean: clean
-	@make fclean -C $(LIBFT_PATH)
 	$(RM) $(NAME)
 
-re: fclean all
+re: fclean $(NAME)
 
 .PHONY: all clean fclean re
-# TODO: MAKE always runs gcc even if already all built and no changes..
+
 
 test1: pipex scripts/my_tests1.sh
 	@chmod +x scripts/my_tests1.sh

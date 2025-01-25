@@ -38,25 +38,13 @@ run_test() {
 # Clean up old files
 rm -f $OUTPUT_FILE $SHELL_OUTPUT
 
-# run_test "ls -l | wc -l" "ls -l" "wc -l" $OUTPUT_FILE
-# run_test "grep a | wc -w" "grep a" "wc -w" $OUTPUT_FILE
-# run_test "sort | head -n 3" "sort" "head -n 3" $OUTPUT_FILE
-# run_test "pwd --help | cat" "pwd --help" "cat" $OUTPUT_FILE
-# run_test "tr a-z A-Z | wc" "tr a-z A-Z" "wc -l" $OUTPUT_FILE
-# run_test "rev | wc -c" "rev" "wc -c" $OUTPUT_FILE
-
-# gives error for END: reads as sep command...
-# run_test "ls | awk {count++} END {print count}" "ls" "'awk {count++} END  {print count}'" $OUTPUT_FILE
-
-# run_test "./run_script.sh | wc" "./run_script.sh" "wc" $OUTPUT_FILE
-
-
-# gives err: parsing 'arg'
-# run_test "ls | awk '{count++} END {print count}'" "ls" "awk '{count++} END {print count}'" $OUTPUT_FILE
-
-# # works fine
-# run_test 'ls | awk "{count++} END {print count}"' 'ls' 'awk "{count++} END {print count}"' $OUTPUT_FILE
-
+run_test "ls -l | wc -l" "ls -l" "wc -l" $OUTPUT_FILE
+run_test "grep a | wc -w" "grep a" "wc -w" $OUTPUT_FILE
+run_test "sort | head -n 3" "sort" "head -n 3" $OUTPUT_FILE
+run_test "pwd --help | cat" "pwd --help" "cat" $OUTPUT_FILE
+run_test "tr a-z A-Z | wc" "tr a-z A-Z" "wc -l" $OUTPUT_FILE
+run_test "rev | wc -c" "rev" "wc -c" $OUTPUT_FILE
+run_test "./run_script.sh | wc" "./run_script.sh" "wc" $OUTPUT_FILE
 # ./pipex lucky.txt 'sed s/And/But/' 'grep But' outfile_pip.txt
 run_test "'sed s/And/But/' 'grep But'" 'sed s/And/BLA/' 'grep BLA' $OUTPUT_FILE
 
