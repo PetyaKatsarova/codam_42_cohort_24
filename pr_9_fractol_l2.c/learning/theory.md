@@ -26,3 +26,15 @@ If it never escapes after many calculations, the pixel is part of the Mandelbrot
 
 Pixels that "escape" (where ∣𝑧∣>2∣z∣>2) are not part of the fractal and are colored differently (e.g., white).
 Pixels that never escape are part of the Mandelbrot Set and are colored black (or other colors)
+
+------------------------- SIN COS -----------------------------------------------
+sin(x) and cos(x): Trigonometric functions
+
+    What they do: Measure the relationship between angles and sides in a triangle or wave patterns.
+        sin(x): Gives the "height" of a point on a circle at angle xx.
+        cos(x): Gives the "width" of a point on a circle at angle xx.
+    Input: xx is in radians (not degrees—180∘=π radians180∘=π radians).
+    Example:
+        sin(0) → 0 (height is 0 at the starting point of a circle).
+        cos(0) → 1 (width is 1 at the starting point).
+    Why they're useful: Used in creating circular or wave-like patterns, like rotating shapes or oscillations.
