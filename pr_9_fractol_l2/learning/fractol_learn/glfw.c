@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main2.c                                            :+:    :+:            */
+/*   glfw.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 19:05:05 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/01/30 19:21:11 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/01/31 11:20:14 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 /*
 run the GLWF lightweight graphical framework for display of window, catch events(close, mouse up etc)
 
-    gcc main2.c -lglfw && ./a.out
+    gcc glfw.c -lglfw && ./a.out
 */
 int main() {
     if (!glfwInit()) {
