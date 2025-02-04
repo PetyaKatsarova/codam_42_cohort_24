@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   fast_smooth_move_circle.c                          :+:    :+:            */
+/*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/04 15:21:59 by pekatsar      ########   odam.nl         */
+/*   Created: 2025/02/04 11:30:07 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/04 12:18:55 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../lib/MLX42/include/MLX42/MLX42.h"
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
+#include "../include/fract-ol.h"
 
 #define WIDTH 1200
 #define HEIGHT 1000
@@ -29,19 +26,19 @@ int         radius = 50;
 int         speed = BASE_SPEED;
 
 /*
-gcc fast_smooth_move_circle.c ../../lib/MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
+gcc fast_smooth_move_circle.c ../../../MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
  */
 
 /*
 GLFW: graphics library framework: connection between my software and the display, loads too OpenGL func pointers, compiling the shaders
 */
-void put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
+static void put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 {
     if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
         mlx_put_pixel(img, x, y, color);
 }
 
-void draw_circle()
+static void draw_circle(uint32_t color)
 {
     mlx_delete_image(mlx, img); // del prev img
     img = mlx_new_image(mlx, WIDTH, HEIGHT);
@@ -56,14 +53,14 @@ void draw_circle()
         for (int x = -radius; x <= radius; x++)
         {
             if (x * x + y * y <= radius * radius)
-                put_pixel(img, cx + x, cy + y, 0x800080FF);
+                put_pixel(img, cx + x, cy + y, color);
         }
     }
     // render updated img
     mlx_image_to_window(mlx, img, 0, 0); // WHY 0 0?
 }
 
-void move_circle()
+static void move_circle()
 {
     if (mlx_is_key_down(mlx, MLX_KEY_LEFT) && (cx - speed - radius) >= 0)
         cx -= speed;
@@ -84,10 +81,10 @@ void move_circle()
     else
         speed = BASE_SPEED;
 
-    draw_circle();
+    draw_circle(0x800080FF);
 }
 
-void key_hook(mlx_key_data_t keydata, void *param)
+static void key_hook(mlx_key_data_t keydata, void *param)
 {
     (void)param;
     if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)
@@ -100,7 +97,7 @@ int main()
     if (!mlx)
     {
         printf("MLX initialization failed!\n");
-        return EXIT_FAILURE;
+        exit(-1);
     }
 
     img = mlx_new_image(mlx, WIDTH, HEIGHT);
@@ -108,17 +105,15 @@ int main()
     {
         printf("Image creation failed!\n");
         mlx_terminate(mlx);
-        return EXIT_FAILURE;
+        exit(-1);
     }
 
-    draw_circle(img, radius, 0x800080FF);
+    draw_circle(0x800080FF);
     mlx_key_hook(mlx, key_hook, NULL);
     mlx_loop_hook(mlx, move_circle, NULL);
     mlx_loop(mlx);
 
     mlx_delete_image(mlx, img);
     mlx_terminate(mlx);
-    return (EXIT_SUCCESS);
+    return (0);
 }
-
-

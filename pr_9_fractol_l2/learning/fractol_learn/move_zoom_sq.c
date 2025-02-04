@@ -6,13 +6,13 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:20:38 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/01/31 17:40:39 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/04 13:47:29 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "/home/pekatsar/Desktop/unstoppable/MLX42/include/MLX42/MLX42.h"
+#include "../../lib/MLX42/include/MLX42/MLX42.h"
 
 #define WIDTH 900
 #define HEIGHT 600
