@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 11:31:52 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/05 16:00:31 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/05 16:16:26 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,7 @@
 # define    WIDTH 1200
 # define    HEIGHT 900
 #define     STEP 42  
-
-// based on macOS MiniLibX key mappings.
-//You should replace your key codes with GLFW key constants to ensure cross-platform compatibility.
-// MLX42 relies on GLFW key codes, so using MLX_KEY_* ensures compatibility across platforms (Windows, Linux, macOS).
-// // Hardcoding numbers (like 53 for ESC) will break on non-macOS systems.
-// # define ESC 53
-// # define UP 126
-// # define DOWN 125
-// # define LEFT 123
-// # define RIGHT 124
-// # define R 15
-// # define C 8
-// # define H 4
-// # define J 38
-// # define P 35
-// # define M 46
-
+#define     BLACK 0x000000
 // mousecodes
 #ifdef __linux__
     # define SCROLL_UP 4
@@ -81,7 +65,7 @@ typedef struct fractal
 }               t_fractal;
 
 // utils.c
-void        put_color_to_pixel(t_fractal *fractal, int x, int y, int colour);
+void        put_color_to_px(t_fractal *fractal, int x, int y, int colour);
 void        exit_fr(void *param);
 
 // src/init.c
@@ -92,6 +76,9 @@ void        init_mlx(t_fractal *fr);
 void        key_hook(mlx_key_data_t keydata, void *param);
 void        zoom(t_fractal *fr, int x, int y, int zoom);
 // void        scroll_hook(int mouse_code, int x, int y, t_fractal *fr);
+
+// src/mandelbrot.c
+void        calculate_mandelbrot(t_fractal *fr);
 
 // src/main.c
 int         draw_fr(t_fractal *fr, char *query);
