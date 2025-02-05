@@ -6,29 +6,36 @@
 #    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/04 16:26:29 by pekatsar      ########   odam.nl          #
+#    Updated: 2025/02/05 16:05:28 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	:= fract-ol
-CC		:= cc
-CFLAGS	:= -Wextra -Wall -Werror -Wunreachable-code -Ofast
-LIBMLX	:= lib/MLX42
+NAME     := fract-ol
+CC       := cc
+CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -Ofast
 
-# Correct MLX42 header path
-HEADERS	:= -I ./include -I $(LIBMLX)/includes
+# Paths to MLX42 and libft
+LIBMLX   := lib/MLX42
+LIBFT    := lib/LIBFT
 
-# Correct MLX42 library path
-LIBS	:= -L$(LIBMLX)/build -lmlx42 -ldl -lglfw -pthread -lm
+# Include paths
+HEADERS  := -I ./include -I $(LIBMLX)/include -I $(LIBFT)
+
+# Libraries to link
+LIBS     := -L$(LIBMLX)/build -lmlx42 -L$(LIBFT) -lft -ldl -lglfw -pthread -lm
 
 # Source and Object directories
-SRCS	:= $(shell find ./src -iname "*.c")
-OBJDIR	:= obj
-OBJS	:= $(patsubst ./src/%.c, $(OBJDIR)/%.o, $(SRCS))
+SRCS     := $(shell find ./src -iname "*.c")
+OBJDIR   := obj
+OBJS     := $(patsubst ./src/%.c, $(OBJDIR)/%.o, $(SRCS))
 
-all: libmlx $(NAME)
+all: libmlx libft $(NAME)
 
-# Build MLX42 Library
+# Build libft
+libft:
+	@make -C $(LIBFT)
+
+# Build MLX42
 libmlx:
 	@if [ ! -d "$(LIBMLX)" ]; then echo "Error: MLX42 not found at $(LIBMLX)"; exit 1; fi
 	@cmake -B $(LIBMLX)/build -S $(LIBMLX) && make -C $(LIBMLX)/build -j4
@@ -43,17 +50,19 @@ $(OBJDIR):
 
 # Build final executable
 $(NAME): $(OBJS)
-	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) && echo "✅ Build successful!"
 
 # Clean object files
 clean:
 	@rm -rf $(OBJDIR)
+	@make -C $(LIBFT) clean
 
 # Full cleanup
 fclean: clean
 	@rm -rf $(NAME) $(LIBMLX)/build
+	@make -C $(LIBFT) fclean
 
 # Rebuild everything
 re: fclean all
 
-.PHONY: all clean fclean re libmlx
+.PHONY: all clean fclean re libmlx libft

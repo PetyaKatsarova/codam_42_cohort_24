@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 11:31:52 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/05 15:03:42 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/05 16:00:31 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ void        init_mlx(t_fractal *fr);
 // src/scroll_and_keys.c
 void        key_hook(mlx_key_data_t keydata, void *param);
 void        zoom(t_fractal *fr, int x, int y, int zoom);
-void        scroll_hook(int mouse_code, int x, int y, t_fractal *fr);
+// void        scroll_hook(int mouse_code, int x, int y, t_fractal *fr);
+
+// src/main.c
+int         draw_fr(t_fractal *fr, char *query);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:12:56 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/05 15:30:22 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/05 16:00:57 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../include/fract-ol.h"
 #include <stdio.h>
 
-static int draw_fr(t_fractal *fr, char *query)
+int draw_fr(t_fractal *fr, char *query)
 {
     if (ft_strncmp(query, "mandelbrot", 11) == 0)
         printf("wtf\n");
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     init_fr(fr);
     init_mlx(fr);
     mlx_key_hook(fr->mlx, key_hook, (void *)fr);
-    mlx_scroll_hook(fr->mlx, scroll_hook, fr);
+    // mlx_scroll_hook(fr->mlx, scroll_hook, fr);
     // handling the window close event on click exit button (the "X" in the window corner):
     mlx_close_hook(fr->mlx, exit_fr, fr);
     draw_fr(fr, argv[1]);
