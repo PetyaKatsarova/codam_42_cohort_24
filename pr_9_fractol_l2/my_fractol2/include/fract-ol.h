@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 11:31:52 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 15:00:10 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/06 16:26:18 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,20 @@ typedef struct fractal
     int         max_iterations;
 }               t_fractal;
 
-// utils.c
-// void        put_color_to_px(t_fractal *fractal, int x, int y, int colour);
-void        exit_fr(t_fractal *fr);
-
 // src/init.c
 void        init_fr(t_fractal *fr);
 void        init_mlx(t_fractal *fr);
 
-// src/scroll_and_keys.c
-// void        key_hook(mlx_key_data_t keydata, void *param);
-// void        zoom(t_fractal *fr, int x, int y, int zoom);
-// void        scroll_hook(int mouse_code, int x, int y, t_fractal *fr);
-
 // src/mandel.c
 void            *draw_mandel(void *fr_void);
 
+// src/hooks.c
+void            key_hook(mlx_key_data_t keydata, void *param);
+void            scroll_hook(double xdelta, double ydelta, void *param);
+void            close_hook(void *param);
+
 // src/main.c
-// int         draw_fr(t_fractal *fr, char *query);
+// int             draw_fr(t_fractal *fr, char *name);
 
 #endif
 

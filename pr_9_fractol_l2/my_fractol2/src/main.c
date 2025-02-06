@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 15:01:54 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/06 16:24:06 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,42 +16,29 @@
 GLFW: graphics library framework: connection between my software and the display, loads too OpenGL func pointers, compiling the shaders
 */
 
-void close_hook(void *param)
-{
-    t_fractal *fr = (t_fractal *)param;
-    mlx_terminate(fr->mlx);
-    free(fr);
-    exit(EXIT_SUCCESS);
-}
-
-// static void draw_circle(void *param)
-// {
-//     t_fractal *fr = (t_fractal *)param;
-    
-//     for (int y = -50; y <= 50; y++)
-//     {
-//         for (int x = -50; x <= 50; x++)
-//         {
-//             if (x * x + y * y <= 50 * 50)
-//                 mlx_put_pixel(fr->img, 400 + x, 300 + y, 0x800080FF);
-//         }
-//     }
-//     // render updated img
-//     mlx_image_to_window(fr->mlx, fr->img, 0, 0); // WHY 0 0?
-// }
-
-void key_hook2(mlx_key_data_t keydata, void *param)
-{  
-    if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)
-    {
-        close_hook(param);
-    }
-}
 // gcc fast_smooth_move_circle.c ../../lib/MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
 
 // valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./fract-ol
 
 // valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./fract-ol
+
+// valgrind --suppressions=mlx42.supp ./fract-ol
+
+// int draw_fr(t_fractal *fr, char *name)
+// {
+//     if (ft_strncmp(name, "mandelbrot", 11) == 0)
+//     {
+//         fr->name = "mandelbrot";
+//         draw_mandel(fr);
+//     }
+//     else
+//     {
+//         ft_putendl_fd("Choose from: mandelbrot, julia", 1);
+//         close_hook((void *)fr);
+//     }
+//     mlx_image_to_window(fr->mlx, fr->img, 0, 0);
+//     return (0);
+// }
 
 int main()
 {
@@ -59,9 +46,9 @@ int main()
     init_fr(fr);
     init_mlx(fr);
 
-    // draw_circle(fr);
     draw_mandel((void *)fr);
-    mlx_key_hook(fr->mlx, key_hook2, fr);  
+    mlx_scroll_hook(fr->mlx, scroll_hook, fr);
+    mlx_key_hook(fr->mlx, key_hook, fr);  
     mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
     mlx_loop(fr->mlx);  
 

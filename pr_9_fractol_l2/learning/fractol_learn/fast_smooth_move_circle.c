@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/04 15:21:59 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/06 14:14:32 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int         radius = 50;
 int         speed = BASE_SPEED;
 
 /*
-gcc fast_smooth_move_circle.c ../../lib/MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
+gcc fast_smooth_move_circle.c ../../../MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
+
+gcc -g fast_smooth_move_circle.c ../../../MLX42/build/libmlx42.a -I ../../../MLX42/include/MLX42 -ldl -lglfw -pthread  -Ofast -lm && valgrind --leak-check=full --track-origins-yes ./a.out
  */
 
 /*
