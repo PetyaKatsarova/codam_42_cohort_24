@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 16:24:06 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/06 17:24:50 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,35 @@ GLFW: graphics library framework: connection between my software and the display
 
 // valgrind --suppressions=mlx42.supp ./fract-ol
 
-// int draw_fr(t_fractal *fr, char *name)
-// {
-//     if (ft_strncmp(name, "mandelbrot", 11) == 0)
-//     {
-//         fr->name = "mandelbrot";
-//         draw_mandel(fr);
-//     }
-//     else
-//     {
-//         ft_putendl_fd("Choose from: mandelbrot, julia", 1);
-//         close_hook((void *)fr);
-//     }
-//     mlx_image_to_window(fr->mlx, fr->img, 0, 0);
-//     return (0);
-// }
-
-int main()
+int draw_fr(t_fractal *fr, char *name)
 {
+    if (ft_strncmp(name, "mandelbrot", 11) == 0)
+    {
+        fr->name = "mandelbrot";
+        draw_mandel(fr);
+    }
+    else
+    {
+        ft_putendl_fd("Choose from: mandelbrot, julia", 1);
+        close_hook((void *)fr);
+    }
+    mlx_image_to_window(fr->mlx, fr->img, 0, 0);
+    return (0);
+}
+
+int main(int argc, char **argv)
+{
+    (void) argc;
     t_fractal *fr = malloc(sizeof(t_fractal));
     init_fr(fr);
     init_mlx(fr);
 
-    draw_mandel((void *)fr);
     mlx_scroll_hook(fr->mlx, scroll_hook, fr);
     mlx_key_hook(fr->mlx, key_hook, fr);  
     mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
-    mlx_loop(fr->mlx);  
+    // draw_mandel((void *)fr);
+    draw_fr(fr, argv[1]);
+    mlx_loop(fr->mlx);
 
     return (EXIT_SUCCESS); // Cleanup handled inside hooks
 }

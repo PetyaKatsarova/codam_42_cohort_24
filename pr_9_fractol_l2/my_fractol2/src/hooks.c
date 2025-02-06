@@ -6,13 +6,16 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 15:22:55 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 16:27:30 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/06 16:47:34 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fract-ol.h"
 #include <stdio.h>
 
+/*
+    frees resources and exits: for closing btns
+ */
 void close_hook(void *param)
 {
     t_fractal *fr = (t_fractal *)param;
@@ -44,9 +47,7 @@ void key_hook(mlx_key_data_t keydata, void *param)
 {
     t_fractal *fr = (t_fractal *)param;
 
-    if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-        close_hook((void *)fr);
-    else if (keydata.key == MLX_KEY_LEFT)
+    if (keydata.key == MLX_KEY_LEFT)
         fr->offset_x -= STEP / fr->zoom;
     else if (keydata.key == MLX_KEY_RIGHT)
         fr->offset_x += STEP / fr->zoom;
@@ -74,25 +75,16 @@ void scroll_hook(double xdelta, double ydelta, void *param)
     int x, y;
 
     mlx_get_mouse_pos(fr->mlx, &x, &y);
-
-    printf("\n--- BEFORE ZOOM ---\n");
-    printf("Mouse Pos: x=%d, y=%d\n", x, y);
-    printf("Offset X: %lf, Offset Y: %lf\n", fr->offset_x, fr->offset_y);
-    printf("Zoom: %lf\n", fr->zoom);
-    printf("Fractal Name: %s\n", fr->name);
-    printf("-------------------\n");
-    fflush(stdout);
-
     if (ydelta != 0)
         zoom(fr, x, y, ydelta);
 
-    printf("\n--- AFTER ZOOM ---\n");
-    printf("Mouse Pos: x=%d, y=%d\n", x, y);
-    printf("Offset X: %lf, Offset Y: %lf\n", fr->offset_x, fr->offset_y);
-    printf("Zoom: %lf\n", fr->zoom);
-    printf("Fractal Name: %s\n", fr->name);
-    printf("-------------------\n");
-    fflush(stdout);
+    // printf("\n--- AFTER ZOOM ---\n");
+    // printf("Mouse Pos: x=%d, y=%d\n", x, y);
+    // printf("Offset X: %lf, Offset Y: %lf\n", fr->offset_x, fr->offset_y);
+    // printf("Zoom: %lf\n", fr->zoom);
+    // printf("Fractal Name: %s\n", fr->name);
+    // printf("-------------------\n");
+    // fflush(stdout);
 
     draw_mandel(fr);
 }
