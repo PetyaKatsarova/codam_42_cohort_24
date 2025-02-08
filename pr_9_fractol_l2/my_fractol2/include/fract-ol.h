@@ -17,6 +17,7 @@
 # include "../lib/MLX42/include/MLX42/MLX42.h"
 # include <math.h>
 # include <pthread.h>
+# include <stdlib.h>
 
 # define    SIZE 900
 # define    THREAD_WIDTH 7
@@ -57,20 +58,27 @@ typedef struct fractal
     // int         bpp; // bits per pixel
     // int         bytes_per_row; // bytes per row = size_line
     // int         endian; //Determines how colors are stored (little-endian vs big-endian) for working with diff architecture: old and new computers
-    double      zx; // complex num
+    double      zx;
     double      zy;
-    double      cx; // imaginary part?
+    double      cx;
     double      cy;
     int         color;
-    double      offset_x; // curr position or start?
+    double      offset_x;
     double      offset_y;
     double      zoom;
     int         max_iterations;
 }               t_fractal;
 
+// src/util.c
+double          str_to_double(char *str);
+int             is_double(char *str);
+
 // src/init.c
-void        init_fr(t_fractal *fr);
-void        init_mlx(t_fractal *fr);
+void            init_fr(t_fractal *fr);
+void            init_mlx(t_fractal *fr);
+
+// src/input_check.c
+int             is_valid_input(int argc, char **argv);
 
 // src/mandel.c
 void            draw_mandel(void *fr_void);

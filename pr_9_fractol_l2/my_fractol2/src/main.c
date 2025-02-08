@@ -52,19 +52,23 @@ int draw_fr(t_fractal *fr, char *name)
 
 int main(int argc, char **argv)
 {
-    (void) argc;
-    t_fractal *fr = malloc(sizeof(t_fractal));
-    init_fr(fr);
-    init_mlx(fr);
+    int is_valid_i;
 
-    mlx_scroll_hook(fr->mlx, scroll_hook, fr);
-    mlx_key_hook(fr->mlx, key_hook, fr);  
-    mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
-    // draw_mandel((void *)fr);
-    draw_fr(fr, argv[1]);
-    mlx_loop(fr->mlx);
+    is_valid_i = is_valid_input(argc, argv);
+    if (is_valid_i == 1)
+    {
+        t_fractal *fr = malloc(sizeof(t_fractal));
+        init_fr(fr);
+        init_mlx(fr);
 
-    return (EXIT_SUCCESS); // Cleanup handled inside hooks
+        mlx_scroll_hook(fr->mlx, scroll_hook, fr);
+        mlx_key_hook(fr->mlx, key_hook, fr);  
+        mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
+        draw_fr(fr, argv[1]);
+        mlx_loop(fr->mlx);
+
+        return (EXIT_SUCCESS); // Cleanup handled inside hooks
+    }
 }
 
 
