@@ -9,7 +9,7 @@ static void calculate_pinecone(t_fractal *fr, int x_center, int y_center, double
         int y = y_center + radius * sin(angle);
 
         // Draw pixel at the calculated position
-        mlx_put_pixel(fr->buffer_img, x, y, fr->color);
+        mlx_put_pixel(fr->img, x, y, fr->color);
 
         // Recursively draw smaller branches
         calculate_pinecone(fr, x_center, y_center, angle + M_PI / 6, radius * 0.9, depth - 1);  // Adjust angle and reduce radius
@@ -30,4 +30,5 @@ void draw_pinecone(void *fr_void)
 
     // Start drawing the pine cone fractal
     calculate_pinecone(fr, x_center, y_center, 0, initial_radius, max_depth);
+    mlx_image_to_window(fr->mlx, fr->img, 0, 0);
 }

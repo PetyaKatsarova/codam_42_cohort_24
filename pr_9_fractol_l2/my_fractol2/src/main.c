@@ -37,19 +37,20 @@ int draw_fr(t_fractal *fr, char *name)
         if (!fr->cx && !fr->cy)
 		{
             /*0.285, 0.01; -0.8 0.156*/
-			fr->cx = -0.70176;
-			fr->cy = 0.3842;
+			fr->cx = -0.8;
+			fr->cy = 0.156;
 		}
         draw_julia(fr);
     }
-    if (ft_strncmp(name, "pinecone", 8) == 0)
+    else if (ft_strncmp(name, "pine", 4) == 0)
     {
-        fr->name = "pinecone";
+        write(1, "wtf", 3);
+        fr->name = "pine";
         draw_pinecone(fr);
     }
     else
     {
-        ft_putendl_fd("Choose from: mandelbrot, julia or pinecone", 1);
+        ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
         close_hook((void *)fr);
     }
     mlx_image_to_window(fr->mlx, fr->img, 0, 0);

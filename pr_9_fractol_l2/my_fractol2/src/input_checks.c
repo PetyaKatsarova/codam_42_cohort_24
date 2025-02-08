@@ -10,7 +10,7 @@ static int  is_in_range(double d)
 static void print_menu()
 {
     ft_putendl_fd("Invalid args.", 1);
-    ft_putendl_fd("You can choose from: mandelbrot or julia. You can add 2 values for julia between -2 and 2", 1);
+    ft_putendl_fd("You can choose from: mandelbrot, julia or pine. You can add 2 values for julia between -2 and 2", 1);
 }
 
 int is_valid_input(int argc, char **argv)
@@ -21,6 +21,8 @@ int is_valid_input(int argc, char **argv)
     num1 = -4.2;
     num2 = -4.2;
     if (argc == 2 && ft_strncmp(argv[1], "mandelbrot", 10) == 0)
+        return (1); // true
+    else if (argc == 2 && ft_strncmp(argv[1], "pine", 4) == 0)
         return (1); // true
     else if ((argc == 2  || argc == 4) && ft_strncmp(argv[1], "julia", 5) == 0)
     {
