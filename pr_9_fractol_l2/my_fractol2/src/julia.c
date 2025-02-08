@@ -17,9 +17,9 @@ static void calculate_julia(t_fractal *fr)
             break;
     }
     if (i == fr->max_iterations)
-        mlx_put_pixel(fr->img, fr->x, fr->y, 0x000000);
+        mlx_put_pixel(fr->buffer_img, fr->x, fr->y, 0x000000);
     else
-        mlx_put_pixel(fr->img, fr->x, fr->y, fr->color*(i % 255));
+        mlx_put_pixel(fr->buffer_img, fr->x, fr->y, fr->color*(i % 255));
 }
 
 void	draw_julia(void *fr_void)
@@ -39,5 +39,5 @@ void	draw_julia(void *fr_void)
 		fr->x++;
 		fr->y = 0;
 	}
-    mlx_image_to_window(fr->mlx, fr->img, 0, 0);
+    mlx_image_to_window(fr->mlx, fr->buffer_img, 0, 0);
 }

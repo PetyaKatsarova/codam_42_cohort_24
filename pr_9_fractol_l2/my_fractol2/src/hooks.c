@@ -28,7 +28,7 @@ static void zoom(t_fractal *fr, int x, int y, double zoom_factor)
 {
     double zoom_level;
 
-    zoom_level = 1.42;
+    zoom_level = 1.1; //1.42;
     if (zoom_factor > 0) 
     {
         fr->offset_x = (x / fr->zoom + fr->offset_x) - (x / (fr->zoom * zoom_level));
@@ -41,6 +41,7 @@ static void zoom(t_fractal *fr, int x, int y, double zoom_factor)
         fr->offset_y = (y / fr->zoom + fr->offset_y) - (y / (fr->zoom / zoom_level));
         fr->zoom /= zoom_level;
     }
+    draw_fr(fr, fr->name);
 }
 
 void key_hook(mlx_key_data_t keydata, void *param)

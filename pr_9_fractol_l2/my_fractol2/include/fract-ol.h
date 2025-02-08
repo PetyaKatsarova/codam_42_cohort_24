@@ -54,6 +54,7 @@ typedef struct fractal
     void        *mlx;
     void        *window;
     void        *img;
+    void        *buffer_img; // off screen buffer
     // void        *pointer_to_img;
     // int         bpp; // bits per pixel
     // int         bytes_per_row; // bytes per row = size_line

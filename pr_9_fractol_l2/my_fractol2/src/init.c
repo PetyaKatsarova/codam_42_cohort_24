@@ -34,7 +34,7 @@ void init_mlx(t_fractal *fr)
     }
 
     fr->img = mlx_new_image(fr->mlx, SIZE, SIZE); // too
-    fr->img = mlx_new_image(fr->mlx, SIZE, SIZE);
+    fr->buffer_img = mlx_new_image(fr->mlx, SIZE, SIZE);  // Off-screen buffer
     if (!fr->img)
     {
         mlx_terminate(fr->mlx);
