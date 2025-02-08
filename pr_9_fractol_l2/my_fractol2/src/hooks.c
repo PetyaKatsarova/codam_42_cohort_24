@@ -64,8 +64,7 @@ void key_hook(mlx_key_data_t keydata, void *param)
     // else if (keydata.key == MLX_KEY_M || keydata.key == MLX_KEY_P)
 //         // change_iterations(fr, key_code);
 
-    // Redraw fractal after any change
-    draw_mandel(fr);
+    draw_fr(fr, fr->name);
 }
 
 void scroll_hook(double xdelta, double ydelta, void *param)
@@ -86,7 +85,8 @@ void scroll_hook(double xdelta, double ydelta, void *param)
     // printf("-------------------\n");
     // fflush(stdout);
 
-    draw_mandel(fr);
+    // draw_mandel(fr);
+    draw_fr(fr, fr->name);
 }
 
 

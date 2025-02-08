@@ -73,7 +73,8 @@ void        init_fr(t_fractal *fr);
 void        init_mlx(t_fractal *fr);
 
 // src/mandel.c
-void           draw_mandel(void *fr_void);
+void            draw_mandel(void *fr_void);
+void	        draw_julia(void *fr_void);
 
 // src/hooks.c
 void            key_hook(mlx_key_data_t keydata, void *param);
@@ -82,6 +83,6 @@ void            close_hook(void *param);
 
 // src/main.c
 // int             draw_fr(t_fractal *fr, char *name);
-
+int             draw_fr(t_fractal *fr, char *name);
 #endif
 

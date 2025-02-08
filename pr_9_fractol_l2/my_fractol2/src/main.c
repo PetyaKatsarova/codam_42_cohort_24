@@ -31,6 +31,16 @@ int draw_fr(t_fractal *fr, char *name)
         fr->name = "mandelbrot";
         draw_mandel(fr);
     }
+    else if (ft_strncmp(name, "julia", 5) == 0)
+    {
+        fr->name = "julia";
+        if (!fr->cx && !fr->cy)
+		{
+			fr->cx = -0.745429;
+			fr->cy = 0.05;
+		}
+        draw_julia(fr);
+    }
     else
     {
         ft_putendl_fd("Choose from: mandelbrot, julia", 1);
