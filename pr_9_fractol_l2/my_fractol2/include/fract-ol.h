@@ -85,6 +85,10 @@ int             is_valid_input(int argc, char **argv);
 void            draw_mandel(void *fr_void);
 void	        draw_julia(void *fr_void);
 
+// src/pinecone.c
+void            draw_pinecone(void *fr_void);
+
+
 // src/hooks.c
 void            key_hook(mlx_key_data_t keydata, void *param);
 void            scroll_hook(double xdelta, double ydelta, void *param);

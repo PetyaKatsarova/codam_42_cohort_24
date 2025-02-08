@@ -42,9 +42,14 @@ int draw_fr(t_fractal *fr, char *name)
 		}
         draw_julia(fr);
     }
+    if (ft_strncmp(name, "pinecone", 8) == 0)
+    {
+        fr->name = "pinecone";
+        draw_pinecone(fr);
+    }
     else
     {
-        ft_putendl_fd("Choose from: mandelbrot, julia", 1);
+        ft_putendl_fd("Choose from: mandelbrot, julia or pinecone", 1);
         close_hook((void *)fr);
     }
     mlx_image_to_window(fr->mlx, fr->img, 0, 0);
@@ -67,10 +72,13 @@ int main(int argc, char **argv)
         mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
         if (argc == 4)
         {
-            draw_fr(fr, argv[1]);
+            double d1 = str_to_double(argv[2]);
+            double d2 = str_to_double(argv[3]);
+            fr->cx = d1;
+            fr->cy = d2;
         }
-        else
-            draw_fr(fr, argv[1]);
+        // else
+        draw_fr(fr, argv[1]);
         mlx_loop(fr->mlx);
 
         return (EXIT_SUCCESS); // Cleanup handled inside hooks
