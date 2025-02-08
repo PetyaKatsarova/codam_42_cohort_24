@@ -10,10 +10,10 @@ static void calculate_julia(t_fractal *fr)
     i = 0;
     while (++i < fr->max_iterations)
     {
-        temp = fr->x;
+        temp = fr->zx;
         fr->zx = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
         fr->zy = 2 * fr->zy * temp + fr->cy;
-        if (fr->zx * fr->zx + fr->zy * fr->zy >= __DBL_MAX__)
+        if (fr->zx * fr->zx + fr->zy * fr->zy >= 4)
             break;
     }
     if (i == fr->max_iterations)
