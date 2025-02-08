@@ -24,8 +24,13 @@ GLFW: graphics library framework: connection between my software and the display
 
 // valgrind --suppressions=mlx42.supp ./fract-ol
 
-int draw_fr(t_fractal *fr, char *name)
+int draw_fr(t_fractal *fr, char *name, char *arg2, char *arg3)
 {
+    double num1;
+    double num2;
+
+    num1 = 0.0;
+    num2 = 0.0;
     if (ft_strncmp(name, "mandelbrot", 11) == 0)
     {
         fr->name = "mandelbrot";
@@ -34,11 +39,18 @@ int draw_fr(t_fractal *fr, char *name)
     else if (ft_strncmp(name, "julia", 5) == 0)
     {
         fr->name = "julia";
-        if (!fr->cx && !fr->cy)
+        if (!arg2 && !arg3)
 		{
 			fr->cx = -0.745429;
 			fr->cy = 0.05;
 		}
+        else
+        {
+            num1 = str_to_double(arg2);
+            num2 = str_to_double(arg3);
+            fr->cx = num1;
+            fr->cy = num2;
+        }
         draw_julia(fr);
     }
     else
@@ -64,7 +76,12 @@ int main(int argc, char **argv)
         mlx_scroll_hook(fr->mlx, scroll_hook, fr);
         mlx_key_hook(fr->mlx, key_hook, fr);  
         mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
-        draw_fr(fr, argv[1]);
+        if (argc == 4)
+        {
+            draw_fr(fr, argv[1], argv[2], argv[3]);
+        }
+        else
+            draw_fr(fr, argv[1], NULL, NULL);
         mlx_loop(fr->mlx);
 
         return (EXIT_SUCCESS); // Cleanup handled inside hooks
