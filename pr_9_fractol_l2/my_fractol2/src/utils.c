@@ -64,13 +64,14 @@ int is_double(char *str)
     i = 0;
     if (str[i] == '-' || str[i] == '+')
         i++;
-    while (str[i] >= 0 && str[i] <= 9)
+    while (str[i] >= '0' && str[i] <= '9')
         i++;
     if (str[i] == '.' || str[i] == ',')
+    {
         i++;
-    while (str[i] >= 0 && str[i] <= 9)
-        i++;
-    if (ft_strlen(str) == (i+1))
-        return (1); // is true
+        while (str[i] >= '0' && str[i] <= '9')
+            i++;
+    }
+    return (str[i] == '\0'); // Ensure no extra characters after the number
     return (0);
 }
