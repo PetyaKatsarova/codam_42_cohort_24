@@ -39,8 +39,9 @@ int draw_fr(t_fractal *fr, char *name)
             /*0.285, 0.01; -0.8 0.156*/
 			// fr->cx = -0.8;
 			// fr->cy = 0.156;
-            fr->cx=-0.70176;
-            fr->cy=0.3842;
+            // fr->cx=-0.70176;
+            fr->cx=-0.8;
+            fr->cy=0.156;
 		}
         draw_julia(fr);
     }
