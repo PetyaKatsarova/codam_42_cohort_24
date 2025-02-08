@@ -76,16 +76,6 @@ void scroll_hook(double xdelta, double ydelta, void *param)
     mlx_get_mouse_pos(fr->mlx, &x, &y);
     if (ydelta != 0)
         zoom(fr, x, y, ydelta);
-
-    // printf("\n--- AFTER ZOOM ---\n");
-    // printf("Mouse Pos: x=%d, y=%d\n", x, y);
-    // printf("Offset X: %lf, Offset Y: %lf\n", fr->offset_x, fr->offset_y);
-    // printf("Zoom: %lf\n", fr->zoom);
-    // printf("Fractal Name: %s\n", fr->name);
-    // printf("-------------------\n");
-    // fflush(stdout);
-
-    // draw_mandel(fr);
     draw_fr(fr, fr->name);
 }
 

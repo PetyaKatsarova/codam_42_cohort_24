@@ -91,6 +91,6 @@ void            close_hook(void *param);
 
 // src/main.c
 // int             draw_fr(t_fractal *fr, char *name);
-int             draw_fr(t_fractal *fr, char *name, char *arg1, char *arg2);
+int             draw_fr(t_fractal *fr, char *name);
 #endif
 

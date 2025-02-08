@@ -26,7 +26,7 @@ void    init_fr(t_fractal *fr)
 
 void init_mlx(t_fractal *fr)
 {
-    fr->mlx = mlx_init(SIZE, SIZE, "Hellow W", true);
+    fr->mlx = mlx_init(SIZE, SIZE, "Fractals", true);
     if (!fr->mlx)
     {
         free(fr);

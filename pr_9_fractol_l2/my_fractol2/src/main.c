@@ -24,14 +24,9 @@ GLFW: graphics library framework: connection between my software and the display
 
 // valgrind --suppressions=mlx42.supp ./fract-ol
 
-int draw_fr(t_fractal *fr, char *name, char *arg2, char *arg3)
+int draw_fr(t_fractal *fr, char *name)
 {
-    double num1;
-    double num2;
-
-    num1 = 0.0;
-    num2 = 0.0;
-    if (ft_strncmp(name, "mandelbrot", 11) == 0)
+    if (ft_strncmp(name, "mandelbrot", 10) == 0)
     {
         fr->name = "mandelbrot";
         draw_mandel(fr);
@@ -39,18 +34,12 @@ int draw_fr(t_fractal *fr, char *name, char *arg2, char *arg3)
     else if (ft_strncmp(name, "julia", 5) == 0)
     {
         fr->name = "julia";
-        if (!arg2 && !arg3)
+        if (!fr->cx && !fr->cy)
 		{
-			fr->cx = -0.745429;
-			fr->cy = 0.05;
+            /*0.285, 0.01; -0.8 0.156*/
+			fr->cx = -0.70176;
+			fr->cy = 0.3842;
 		}
-        else
-        {
-            num1 = str_to_double(arg2);
-            num2 = str_to_double(arg3);
-            fr->cx = num1;
-            fr->cy = num2;
-        }
         draw_julia(fr);
     }
     else
@@ -78,10 +67,10 @@ int main(int argc, char **argv)
         mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
         if (argc == 4)
         {
-            draw_fr(fr, argv[1], argv[2], argv[3]);
+            draw_fr(fr, argv[1]);
         }
         else
-            draw_fr(fr, argv[1], NULL, NULL);
+            draw_fr(fr, argv[1]);
         mlx_loop(fr->mlx);
 
         return (EXIT_SUCCESS); // Cleanup handled inside hooks
