@@ -17,7 +17,7 @@ static void calc_mandel(t_fractal *fr)
     int		i;
 	double	x_temp;
 
-	fr->name = "mandel";
+	fr->name = "mandelbrot";
 	i = 0;
 	fr->zx = 0.0;
 	fr->zy = 0.0;
