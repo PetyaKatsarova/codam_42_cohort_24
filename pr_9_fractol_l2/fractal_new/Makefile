@@ -36,8 +36,8 @@ OBJ		= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 # compiler
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g
-
+# CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS = -fPIE
 
 # mlx library
 ifeq ($(OS), Linux)

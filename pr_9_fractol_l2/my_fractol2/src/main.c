@@ -37,8 +37,10 @@ int draw_fr(t_fractal *fr, char *name)
         if (!fr->cx && !fr->cy)
 		{
             /*0.285, 0.01; -0.8 0.156*/
-			fr->cx = -0.8;
-			fr->cy = 0.156;
+			// fr->cx = -0.8;
+			// fr->cy = 0.156;
+            fr->cx=-0.70176;
+            fr->cy=0.3842;
 		}
         draw_julia(fr);
     }
@@ -56,7 +58,7 @@ int draw_fr(t_fractal *fr, char *name)
     mlx_image_to_window(fr->mlx, fr->img, 0, 0);
     return (0);
 }
-
+// julia: cx=-0.70176, cy=0.3842
 int main(int argc, char **argv)
 {
     int is_valid_i;
