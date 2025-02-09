@@ -30,9 +30,13 @@ RESET	:= \033[0m
 
 all: mlx libft $(NAME)
 
+# $(NAME): $(OBJ)
+# 	@ gcc $(FLAGS) $(OBJ) $(LIBFT) $(MLX) -lglfw -L $(BREW) -o $(NAME) $(LDFLAGS)
+# 	@ echo "\n\t\t$(GREEN)$(BOLD)----Fract'ol compiled----\n"
 $(NAME): $(OBJ)
-	@ gcc $(FLAGS) $(OBJ) $(LIBFT) $(MLX) -lglfw -L $(BREW) -o $(NAME) $(LDFLAGS)
-	@ echo "\n\t\t$(GREEN)$(BOLD)----Fract'ol compiled----\n"
+	@ gcc $(FLAGS) $(OBJ) $(LIBFT) $(MLX) -lglfw -L $(BREW) -o $(NAME) $(LDFLAGS) -ldl
+
+
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@ mkdir -p  $(OBJ_PATH)

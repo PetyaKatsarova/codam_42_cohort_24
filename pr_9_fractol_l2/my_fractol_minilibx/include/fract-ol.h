@@ -14,7 +14,8 @@
 # define FRACTOL_H
 
 # include "../lib/LIBFT/libft.h"
-# include "../lib/MLX42/include/MLX42/MLX42.h"
+// # include "../lib/MLX42/include/MLX42/MLX42.h"
+# include "../lib/minilibx-linux/mlx.h"
 # include <math.h>
 # include <pthread.h>
 # include <stdlib.h>
@@ -29,6 +30,18 @@
 #define BASE_SPEED 10
 #define BOOST_SPEED 25
 #define ZOOM_SPEED 5
+
+# define ESC 53
+# define UP 126
+# define DOWN 125
+# define LEFT 123
+# define RIGHT 124
+# define R 15
+# define C 8
+# define H 4
+# define J 38
+# define P 35
+# define M 46
 
 // mousecodes
 #ifdef __linux__
@@ -52,8 +65,12 @@ typedef struct fractal
     unsigned int y;
     char        *name;
     void        *mlx;
-    // void        *window;
+    void        *window;
     void        *img;
+    void        *pointer_to_image;
+	int		    bits_per_pixel;
+	int		    size_line;
+	int		    endian;
     double      zx;
     double      zy;
     double      cx;
@@ -85,12 +102,13 @@ void            draw_pinecone(void *fr_void);
 
 
 // src/hooks.c
-void            key_hook(mlx_key_data_t keydata, void *param);
+int	key_hook(int key_code, t_fractal *fractal);
+// void            key_hook(mlx_key_data_t keydata, void *param);
 void            scroll_hook(double xdelta, double ydelta, void *param);
 void            close_hook(void *param);
 
 // src/utils.c
-// void            put_color_to_pixel(mlx_image_t *image, int x, int y, uint32_t color);
+void	        put_color_to_pixel(t_fractal *fractal, int x, int y, int color);
 
 // src/main.c
 // int             draw_fr(t_fractal *fr, char *name);

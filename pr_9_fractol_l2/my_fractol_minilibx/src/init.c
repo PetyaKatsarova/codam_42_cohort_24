@@ -24,23 +24,13 @@ void    init_fr(t_fractal *fr)
     fr->max_iterations = 42;
 }
 
-void init_mlx(t_fractal *fr)
+void	init_mlx(t_fractal *fractal)
 {
-    fr->mlx = mlx_init(SIZE, SIZE, "Fract-ol", true);
-    if (!fr->mlx)
-    {
-        free(fr);
-        return;
-    }
-
-    fr->img = mlx_new_image(fr->mlx, SIZE, SIZE); // too
-    // fr->buffer_img = mlx_new_image(fr->mlx, SIZE, SIZE);  // Off-screen buffer
-    if (!fr->img)
-    {
-        mlx_terminate(fr->mlx);
-        free(fr);
-        return;
-    }
-	// fr->window = mlx_new_window(fr->mlx, SIZE, SIZE, "Fract-ol");
-    // do we need protection here?
+	fractal->mlx = mlx_init();
+	fractal->window = mlx_new_window(fractal->mlx, SIZE, SIZE, "Fract-ol");
+	fractal->img = mlx_new_image(fractal->mlx, SIZE, SIZE);
+	fractal->pointer_to_image = mlx_get_data_addr(fractal->img,
+			&fractal->bits_per_pixel,
+			&fractal->size_line,
+			&fractal->endian);
 }

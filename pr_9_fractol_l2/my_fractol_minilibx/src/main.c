@@ -55,7 +55,7 @@ int draw_fr(t_fractal *fr, char *name)
         ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
         close_hook((void *)fr);
     }
-    mlx_image_to_window(fr->mlx, fr->img, 0, 0);
+    mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
     return (0);
 }
 // julia: cx=-0.70176, cy=0.3842
@@ -70,9 +70,10 @@ int main(int argc, char **argv)
         init_fr(fr);
         init_mlx(fr);
 
-        mlx_scroll_hook(fr->mlx, scroll_hook, fr);
+        
+        // mlx_scroll_hook(fr->mlx, scroll_hook, fr);
         mlx_key_hook(fr->mlx, key_hook, fr);  
-        mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
+        // mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
         if (argc == 4)
         {
             double d1 = str_to_double(argv[2]);

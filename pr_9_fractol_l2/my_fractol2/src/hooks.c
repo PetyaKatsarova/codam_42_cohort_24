@@ -42,7 +42,7 @@ static void zoom(t_fractal *fr, int x, int y, double zoom_factor)
         fr->zoom /= zoom_level;
     }
     draw_fr(fr, fr->name);
-    mlx_image_to_window(fr->mlx, fr->buffer_img, 0, 0);
+    mlx_image_to_window(fr->mlx, fr->img, 0, 0);
 }
 
 void key_hook(mlx_key_data_t keydata, void *param)
