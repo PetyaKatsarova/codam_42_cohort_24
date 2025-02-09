@@ -45,15 +45,10 @@ int draw_fr(t_fractal *fr, char *name)
 		}
         draw_julia(fr);
     }
-    else if (ft_strncmp(name, "pine", 4) == 0)
-    {
-        fr->name = "pine";
-        draw_pinecone(fr);
-    }
     else
     {
         ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
-        close_hook((void *)fr);
+        // close_hook((void *)fr);
     }
     mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
     return (0);

@@ -15,7 +15,7 @@ CC       := cc
 CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -Ofast -g
 
 # Paths to MLX42 and libft
-LIBMLX   := lib/minilibx
+LIBMLX   := lib/minilibx-linux
 LIBFT    := lib/LIBFT
 
 # Include paths
@@ -39,10 +39,11 @@ all: libmlx libft $(NAME)
 libft:
 	@make -C $(LIBFT)
 
-# Build MLX42
+# Build minilibx
 libmlx:
 	@if [ ! -d "$(LIBMLX)" ]; then echo "Error: minilibx not found at $(LIBMLX)"; exit 1; fi
-	@cmake -B $(LIBMLX)/build -S $(LIBMLX) && make -C $(LIBMLX)/build -j4
+	@make -C $(LIBMLX)
+
 
 # Compile object files
 $(OBJDIR)/%.o: ./src/%.c | $(OBJDIR)
