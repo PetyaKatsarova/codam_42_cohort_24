@@ -38,7 +38,7 @@ int is_valid_input(int argc, char **argv)
         }
     }
     else if (argc == 2 && (ft_strncmp(argv[1], "tricorn", 7) == 0
-    || ft_strncmp(argv[1], "3", 1)))
+    || ft_strncmp(argv[1], "3", 1) == 0))
         return (1); // true
     print_menu();
     exit(EXIT_FAILURE);

@@ -19,27 +19,27 @@
 // 	*cy = generate_random_c();
 // }
 
-int	key_hook(int key_code, t_fractal *fractal)
+int	key_hook(int key_code, t_fractal *fr)
 {
 	if (key_code == ESC)
 		exit(1);
 	else if (key_code == LEFT)
-		fractal->offset_x -= 42 / fractal->zoom;
+		fr->offset_x -= 42 / fr->zoom;
 	else if (key_code == RIGHT)
-		fractal->offset_x += 42 / fractal->zoom;
+		fr->offset_x += 42 / fr->zoom;
 	else if (key_code == UP)
-		fractal->offset_y -= 42 / fractal->zoom;
+		fr->offset_y -= 42 / fr->zoom;
 	else if (key_code == DOWN)
-		fractal->offset_y += 42 / fractal->zoom;
+		fr->offset_y += 42 / fr->zoom;
 	else if (key_code == R)
-		init_fr(fractal);
+		init_fr(fr);
 	else if (key_code == C)
-		fractal->color += (255 * 255 * 255) / 100;
+		fr->color += (255 * 255 * 255) / 100;
 	// else if (key_code == J)
-		// set_random_julia(&fractal->cx, &fractal->cx);
+		// set_random_julia(&fr->cx, &fr->cx);
 	// else if (key_code == M || key_code == P)
-		// change_iterations(fractal, key_code);
-	draw_fr(fractal, fractal->name);
+		// change_iterations(fr, key_code);
+	draw_fr(fr, fr->name);
 	return (0);
 }
 

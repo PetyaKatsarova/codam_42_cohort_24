@@ -84,6 +84,7 @@ void            init_mlx(t_fractal *fr);
 // src/mandel.c
 void            draw_mandel(void *fr_void);
 void	        draw_julia(void *fr_void);
+void            draw_tricorn(void *fr_void);
 
 // src/hooks.c
 void	zoom(t_fractal *fr, int x, int y, int zoom);
