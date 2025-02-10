@@ -26,12 +26,14 @@ GLFW: graphics library framework: connection between my software and the display
 
 int draw_fr(t_fractal *fr, char *name)
 {
-    if (ft_strncmp(name, "mandelbrot", 10) == 0)
+    if (ft_strncmp(name, "mandelbrot", 10) == 0
+    || ft_strncmp(name, "1", 1) == 0)
     {
         fr->name = "mandelbrot";
         draw_mandel(fr);
     }
-    else if (ft_strncmp(name, "julia", 5) == 0)
+    else if (ft_strncmp(name, "julia", 5) == 0
+    || ft_strncmp(name, "2", 1) == 0)
     {
         fr->name = "julia";
         if (!fr->cx && !fr->cy)
@@ -48,12 +50,11 @@ int draw_fr(t_fractal *fr, char *name)
     else
     {
         ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
-        // close_hook((void *)fr);
     }
     mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
     return (0);
 }
-// julia: cx=-0.70176, cy=0.3842
+// julia: .355 1.01
 int main(int argc, char **argv)
 {
     int is_valid_i;
