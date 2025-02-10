@@ -20,11 +20,11 @@ int is_valid_input(int argc, char **argv)
 
     num1 = -4.2;
     num2 = -4.2;
-    if (argc == 2 && ft_strncmp(argv[1], "mandelbrot", 10) == 0)
+    if (argc == 2 && (ft_strncmp(argv[1], "mandelbrot", 10) == 0
+        || ft_strncmp(argv[1], "1", 1) == 0))
         return (1); // true
-    else if (argc == 2 && ft_strncmp(argv[1], "pine", 4) == 0)
-        return (1); // true
-    else if ((argc == 2  || argc == 4) && ft_strncmp(argv[1], "julia", 5) == 0)
+    else if ((argc == 2  || argc == 4) && (ft_strncmp(argv[1], "julia", 5) == 0
+    || ft_strncmp(argv[1], "2", 1) == 0))
     {
         // -2.0 <= a <= 2.0
         if (argc == 2)
@@ -37,6 +37,9 @@ int is_valid_input(int argc, char **argv)
                 return (1); // true
         }
     }
+    else if (argc == 2 && (ft_strncmp(argv[1], "tricorn", 7) == 0
+    || ft_strncmp(argv[1], "3", 1)))
+        return (1); // true
     print_menu();
     exit(EXIT_FAILURE);
 }

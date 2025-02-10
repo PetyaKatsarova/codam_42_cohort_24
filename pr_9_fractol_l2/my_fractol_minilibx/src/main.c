@@ -65,10 +65,9 @@ int main(int argc, char **argv)
         init_fr(fr);
         init_mlx(fr);
 
-        
-        // mlx_scroll_hook(fr->mlx, scroll_hook, fr);
-        mlx_key_hook(fr->mlx, key_hook, fr);  
-        // mlx_close_hook(fr->mlx, close_hook, fr);  // Handle `X` button
+        mlx_key_hook(fr->window, key_hook, fr);
+	    mlx_mouse_hook(fr->window, mouse_hook, fr);
+	    mlx_hook(fr->window, 17, 0L, exit_fr, fr);
         if (argc == 4)
         {
             double d1 = str_to_double(argv[2]);

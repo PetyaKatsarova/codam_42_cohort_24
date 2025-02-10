@@ -14,34 +14,18 @@
 # define FRACTOL_H
 
 # include "../lib/LIBFT/libft.h"
-// # include "../lib/MLX42/include/MLX42/MLX42.h"
 # include "../lib/minilibx-linux/mlx.h"
 # include <math.h>
-# include <pthread.h>
 # include <stdlib.h>
 
 # define    SIZE 900
-// # define    THREAD_WIDTH 7
-// # define    THREAD_NUMBER 100
-#define     STEP 42  
-#define     BLACK 0x000000
+# define    STEP 42  
+# define    BLACK 0x000000
 
 //to del
 #define BASE_SPEED 10
 #define BOOST_SPEED 25
 #define ZOOM_SPEED 5
-
-# define ESC 53
-# define UP 126
-# define DOWN 125
-# define LEFT 123
-# define RIGHT 124
-# define R 15
-# define C 8
-# define H 4
-# define J 38
-# define P 35
-# define M 46
 
 // mousecodes
 #ifdef __linux__
@@ -55,9 +39,12 @@
     # define SCROLL_DOWN 0x1000
 #endif
 
-// MLX42 does not use mlx_new_window separately. mlx_init() already creates a window.
-// mlx_get_data_addr() is not needed in MLX42. Instead, access the image buffer using fr->img->pixels.
-// Removed pointer_to_img, bpp, bytes_per_row, and endian as MLX42 handles these internally.
+// diff key nums per OS
+#ifdef __APPLE__
+#include "key_macos.h"
+#elif __linux__
+#include "key_linux.h"
+#endif
 
 typedef struct fractal
 {
@@ -82,36 +69,32 @@ typedef struct fractal
     int         max_iterations;
 }               t_fractal;
 
-// src/util.c
+// src/input_utils.c
 double          str_to_double(char *str);
 int             is_double(char *str);
+
+// src/input_check.c
+int             is_valid_input(int argc, char **argv);
+
 
 // src/init.c
 void            init_fr(t_fractal *fr);
 void            init_mlx(t_fractal *fr);
 
-// src/input_check.c
-int             is_valid_input(int argc, char **argv);
-
 // src/mandel.c
 void            draw_mandel(void *fr_void);
 void	        draw_julia(void *fr_void);
 
-// src/pinecone.c
-void            draw_pinecone(void *fr_void);
-
-
 // src/hooks.c
-int	key_hook(int key_code, t_fractal *fractal);
-// void            key_hook(mlx_key_data_t keydata, void *param);
-void            scroll_hook(double xdelta, double ydelta, void *param);
-void            close_hook(void *param);
+void	zoom(t_fractal *fr, int x, int y, int zoom);
+int	    key_hook(int key_code, t_fractal *fractal);
+int	    mouse_hook(int mouse_code, int x, int y, t_fractal *fractal);
 
 // src/utils.c
 void	        put_color_to_pixel(t_fractal *fractal, int x, int y, int color);
+int	            exit_fr(t_fractal *fractal);
 
 // src/main.c
-// int             draw_fr(t_fractal *fr, char *name);
 int             draw_fr(t_fractal *fr, char *name);
 #endif
 

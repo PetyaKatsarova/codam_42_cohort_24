@@ -13,64 +13,11 @@
 #include "../include/fract-ol.h"
 #include <stdio.h>
 
-/*
-    frees resources and exits: for closing btns
- */
-// void close_hook(void *param)
+// void	set_random_julia(double *cx, double *cy)
 // {
-//     t_fractal *fr = (t_fractal *)param;
-//     mlx_terminate(fr->mlx);
-//     free(fr);
-//     exit(EXIT_SUCCESS);
+// 	*cx = generate_random_c();
+// 	*cy = generate_random_c();
 // }
-
-// static void zoom(t_fractal *fr, int x, int y, double zoom_factor)
-// {
-//     double zoom_level;
-
-//     zoom_level = 1.1; //1.42;
-//     if (zoom_factor > 0) 
-//     {
-//         fr->offset_x = (x / fr->zoom + fr->offset_x) - (x / (fr->zoom * zoom_level));
-//         fr->offset_y = (y / fr->zoom + fr->offset_y) - (y / (fr->zoom * zoom_level));
-//         fr->zoom *= zoom_level;
-//     }
-//     else if (zoom_factor < 0)  // Scroll down (zoom out)
-//     {
-//         fr->offset_x = (x / fr->zoom + fr->offset_x) - (x / (fr->zoom / zoom_level));
-//         fr->offset_y = (y / fr->zoom + fr->offset_y) - (y / (fr->zoom / zoom_level));
-//         fr->zoom /= zoom_level;
-//     }
-//     draw_fr(fr, fr->name);
-//     mlx_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
-// }
-
-// void key_hook(mlx_key_data_t keydata, void *param)
-// {
-//     t_fractal *fr = (t_fractal *)param;
-
-//     if (keydata.key == MLX_KEY_LEFT)
-//         fr->offset_x -= STEP / fr->zoom;
-//     else if (keydata.key == MLX_KEY_RIGHT)
-//         fr->offset_x += STEP / fr->zoom;
-//     else if (keydata.key == MLX_KEY_UP)
-//         fr->offset_y -= STEP / fr->zoom;
-//     else if (keydata.key == MLX_KEY_DOWN)
-//         fr->offset_y += STEP / fr->zoom;
-//     else if (keydata.key == MLX_KEY_C)
-//         fr->color += (255 * 255 * 255) / 100; // Color adjustment
-//     else if (keydata.key == MLX_KEY_R)
-//         init_fr(fr);
-//     if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)
-//         close_hook(param);
-//     // else if (keydata.key == MLX_KEY_M || keydata.key == MLX_KEY_P)
-// //         // change_iterations(fr, key_code);
-
-//     draw_fr(fr, fr->name);
-// }
-
-
-
 
 int	key_hook(int key_code, t_fractal *fractal)
 {
@@ -89,26 +36,44 @@ int	key_hook(int key_code, t_fractal *fractal)
 	else if (key_code == C)
 		fractal->color += (255 * 255 * 255) / 100;
 	// else if (key_code == J)
-	// 	set_random_julia(&fractal->cx, &fractal->cx);
+		// set_random_julia(&fractal->cx, &fractal->cx);
 	// else if (key_code == M || key_code == P)
 		// change_iterations(fractal, key_code);
 	draw_fr(fractal, fractal->name);
 	return (0);
 }
 
+void	zoom(t_fractal *fr, int x, int y, int zoom)
+{
+	double	zoom_level;
 
+	zoom_level = 1.42;
+	if (zoom == 1)
+	{
+		fr->offset_x = (x / fr->zoom + fr->offset_x) - (x
+				/ (fr->zoom * zoom_level));
+		fr->offset_y = (y / fr->zoom + fr->offset_y) - (y
+				/ (fr->zoom * zoom_level));
+		fr->zoom *= zoom_level;
+	}
+	else if (zoom == -1)
+	{
+		fr->offset_x = (x / fr->zoom + fr->offset_x) - (x
+				/ (fr->zoom / zoom_level));
+		fr->offset_y = (y / fr->zoom + fr->offset_y) - (y
+				/ (fr->zoom / zoom_level));
+		fr->zoom /= zoom_level;
+	}
+	else
+		return ;
+}
 
-// void scroll_hook(double xdelta, double ydelta, void *param)
-// {
-//     (void)xdelta;
-//     t_fractal *fr = (t_fractal *)param;
-//     int x, y;
-
-//     mlx_get_mouse_pos(fr->mlx, &x, &y);
-//     if (ydelta != 0)
-//         zoom(fr, x, y, ydelta);
-//     draw_fr(fr, fr->name);
-// }
-
-
-
+int	mouse_hook(int mouse_code, int x, int y, t_fractal *fr)
+{
+	if (mouse_code == SCROLL_UP)
+		zoom(fr, x, y, 1);
+	else if (mouse_code == SCROLL_DOWN)
+		zoom(fr, x, y, -1);
+	draw_fr(fr, fr->name);
+	return (0);
+}
