@@ -38,10 +38,6 @@ int draw_fr(t_fractal *fr, char *name)
         fr->name = "julia";
         if (!fr->cx && !fr->cy)
 		{
-            /*0.285, 0.01; -0.8 0.156*/
-			// fr->cx = -0.8;
-			// fr->cy = 0.156;
-            // fr->cx=-0.70176;
             fr->cx=-0.8;
             fr->cy=0.156;
 		}
@@ -56,6 +52,7 @@ int draw_fr(t_fractal *fr, char *name)
     else
     {
         ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
+        exit_fr(fr);
     }
     mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
     return (0);
@@ -87,7 +84,7 @@ int main(int argc, char **argv)
         mlx_loop(fr->mlx);
 
     }
-    return (EXIT_SUCCESS); // Cleanup handled inside hooks
+    return (0);
 }
 
 

@@ -13,6 +13,9 @@ static void print_menu()
     ft_putendl_fd("You can choose from: mandelbrot, julia, tricorn or phoenix. You can add 2 values for julia between -2 and 2", 1);
 }
 
+/*
+    If not valid input: prints message for wrong args.
+*/
 int is_valid_input(int argc, char **argv)
 {
     double num1;
@@ -44,5 +47,5 @@ int is_valid_input(int argc, char **argv)
         || ft_strncmp(argv[1], "4", 1) == 0))
             return (1); // true
     print_menu();
-    exit(EXIT_FAILURE);
+    return (0);
 }

@@ -78,8 +78,8 @@ int             is_valid_input(int argc, char **argv);
 
 
 // src/utils.c
-void	        put_color_to_pixel(t_fractal *fractal, int x, int y, int color);
-int	            exit_fr(t_fractal *fractal);
+void	        put_color_to_pixel(t_fractal *fr, int x, int y, int color);
+int	            exit_fr(t_fractal *fr);
 
 // src/init.c
 void            init_fr(t_fractal *fr);
@@ -99,4 +99,3 @@ void    change_iterations(t_fractal *, int key_code);
 // src/main.c
 int             draw_fr(t_fractal *fr, char *name);
 #endif
-
