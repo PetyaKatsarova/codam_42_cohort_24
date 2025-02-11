@@ -1,13 +1,11 @@
 #include "../include/fract-ol.h"
 
-
-
-
 static void calc_tricorn(t_fractal *fr)
 {
     int     i;
     double  x_temp;
 
+    fr->name = "tricorn";
     fr->zx = 0.0;
     fr->zy = 0.0;
     fr->cx = (fr->x / fr->zoom) + fr->offset_x;
