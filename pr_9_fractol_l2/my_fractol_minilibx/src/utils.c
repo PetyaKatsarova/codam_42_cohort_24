@@ -18,23 +18,6 @@ int	exit_fr(t_fractal *fractal)
 	return (0);
 }
 
-/**
- * @brief    Generates a random double between -1.5 and 1.5.
- *
- * @return   double    The random double.
- */
-double	generate_random_c(void)
-{
-	return (((double)rand() / RAND_MAX) * 3.0 - 1.5);
-}
-
-/**
- * @brief    Increases or decreases the number of iterations.
- * The lower the number of iterations is, the faster the fractal is generated.
- *
- * @param    fractal
- * @param    key_code
- */
 void	change_iterations(t_fractal *fractal, int key_code)
 {
 	if (key_code == M)

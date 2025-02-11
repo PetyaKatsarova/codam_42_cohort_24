@@ -13,12 +13,6 @@
 #include "../include/fract-ol.h"
 #include <stdio.h>
 
-// void	set_random_julia(double *cx, double *cy)
-// {
-// 	*cx = generate_random_c();
-// 	*cy = generate_random_c();
-// }
-
 int	key_hook(int key_code, t_fractal *fr)
 {
 	if (key_code == ESC)
@@ -35,10 +29,8 @@ int	key_hook(int key_code, t_fractal *fr)
 		init_fr(fr);
 	else if (key_code == C)
 		fr->color += (255 * 255 * 255) / 100;
-	// else if (key_code == J)
-		// set_random_julia(&fr->cx, &fr->cx);
-	// else if (key_code == M || key_code == P)
-		// change_iterations(fr, key_code);
+	else if (key_code == M || key_code == P)
+		change_iterations(fr, key_code);
 	draw_fr(fr, fr->name);
 	return (0);
 }

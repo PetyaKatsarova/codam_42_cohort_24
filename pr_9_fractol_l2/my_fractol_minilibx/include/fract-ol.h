@@ -20,7 +20,7 @@
 
 # define    SIZE 900
 # define    STEP 42  
-# define    BLACK 0x000000
+// # define    BLACK 0x000000
 
 //to del
 #define BASE_SPEED 10
@@ -77,6 +77,10 @@ int             is_double(char *str);
 int             is_valid_input(int argc, char **argv);
 
 
+// src/utils.c
+void	        put_color_to_pixel(t_fractal *fractal, int x, int y, int color);
+int	            exit_fr(t_fractal *fractal);
+
 // src/init.c
 void            init_fr(t_fractal *fr);
 void            init_mlx(t_fractal *fr);
@@ -90,10 +94,7 @@ void	        draw_phoenix(void *fr_void);
 void	zoom(t_fractal *fr, int x, int y, int zoom);
 int	    key_hook(int key_code, t_fractal *fractal);
 int	    mouse_hook(int mouse_code, int x, int y, t_fractal *fractal);
-
-// src/utils.c
-void	        put_color_to_pixel(t_fractal *fractal, int x, int y, int color);
-int	            exit_fr(t_fractal *fractal);
+void    change_iterations(t_fractal *, int key_code);
 
 // src/main.c
 int             draw_fr(t_fractal *fr, char *name);
