@@ -11,19 +11,19 @@
 *.elf
 
 # Linker output
-*.ilk
-*.map
-*.exp
+# *.ilk
+# *.map
+# *.exp
 
 # Precompiled Headers
 *.gch
 *.pch
 
 # Libraries
-*.lib
+# *.lib
 *.a
-*.la
-*.lo
+# *.la
+# *.lo
 
 # Shared objects (inc. Windows DLLs)
 *.dll

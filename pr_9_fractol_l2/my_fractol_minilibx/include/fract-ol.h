@@ -81,10 +81,10 @@ int             is_valid_input(int argc, char **argv);
 void            init_fr(t_fractal *fr);
 void            init_mlx(t_fractal *fr);
 
-// src/mandel.c
 void            draw_mandel(void *fr_void);
 void	        draw_julia(void *fr_void);
 void            draw_tricorn(void *fr_void);
+void	        draw_phoenix(void *fr_void);
 
 // src/hooks.c
 void	zoom(t_fractal *fr, int x, int y, int zoom);

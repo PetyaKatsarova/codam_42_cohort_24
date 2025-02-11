@@ -50,6 +50,9 @@ int draw_fr(t_fractal *fr, char *name)
     else if (ft_strncmp(name, "tricorn", 7) == 0
     || ft_strncmp(name, "3", 1) == 0)
         draw_tricorn(fr);
+    else if (ft_strncmp(name, "phoenix", 7) == 0
+        || ft_strncmp(name, "4", 1) == 0)
+            draw_phoenix(fr);
     else
     {
         ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
