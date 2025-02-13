@@ -252,6 +252,17 @@ Final Result
 Other color components (Red & Green) are zeroed out.
 It works because 0xFF is 1111 1111, meaning it keeps only the lowest 8 bits.
 
+Example Calculation (grayscale = 128):
+
+    128 << 16 → 0x800000 (Red channel)
+    128 << 8 → 0x008000 (Green channel)
+    128 → 0x000080 (Blue channel)
+    0x800000 | 0x008000 | 0x000080 = 0x808080 (Final RGB color)
+
+Final Result:
+
+This creates an RGB color where red, green, and blue values are equal, forming a grayscale shade.
+
 
 
 

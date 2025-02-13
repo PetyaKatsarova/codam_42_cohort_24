@@ -1,43 +1,92 @@
-#include "../include/fract-ol.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   julia.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/13 14:50:00 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/13 17:38:06 by pekatsar      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void calculate_julia(t_fractal *fr)
+#include "../include/fract_ol.h"
+
+static double	get_main_part(char *str)
 {
-    int i;
-    double temp;
-    fr->name = "julia";
-    fr->zx = fr->x / fr->zoom + fr->offset_x;
-    fr->zy = fr->y / fr->zoom + fr->offset_y;
-    i = 0;
-    while (++i < fr->max_iterations)
-    {
-        temp = fr->zx;
-        fr->zx = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
-        fr->zy = 2 * fr->zy * temp + fr->cy;
-        if (fr->zx * fr->zx + fr->zy * fr->zy >= 4)
-            break;
-    }
-    if (i == fr->max_iterations)
-        put_color_to_pixel(fr, fr->x, fr->y, 0x000000);    
-    else
-        put_color_to_pixel(fr, fr->x, fr->y, fr->color*(i % 255));
+	int		i;
+	double	main;
+	double	factor;
+
+	i = 0;
+	factor = 1.0;
+	main = 0.0;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			factor = -1.0;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		main = main * 10.0 + (str[i] - '0');
+		i++;
+	}
+	return (main * factor);
 }
 
-void	draw_julia(void *fr_void)
+static int	main_len(char *str)
 {
-	t_fractal	*fr;
+	int	i;
 
-	fr = (t_fractal *)fr_void;
-	fr->x = 0;
-	fr->y = 0;
-	while (fr->x < SIZE)
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] >= '0' && str[i] <= '9')
+		i++;
+	return (i);
+}
+
+double	str_to_double(char *str)
+{
+	double	result;
+	int		i;
+	double	decimal_place;
+
+	result = get_main_part(str);
+	i = main_len(str);
+	if (str[i] == '.' || str[i] == ',')
 	{
-		while (fr->y < SIZE)
+		i++;
+		decimal_place = 0.1;
+		while (str[i] >= '0' && str[i] <= '9')
 		{
-			calculate_julia(fr);
-			fr->y++;
+			result += (str[i] - '0') * decimal_place;
+			decimal_place /= 10.0;
+			i++;
 		}
-		fr->x++;
-		fr->y = 0;
 	}
-    mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
+	return (result);
+}
+
+int	is_double(char *str)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (str[i] < '0' || str[i] > '9')
+		return (EXIT_FAILURE);
+	while (str[i] >= '0' && str[i] <= '9')
+		i++;
+	if (str[i] == '.' || str[i] == ',')
+	{
+		i++;
+		while (str[i] >= '0' && str[i] <= '9')
+			i++;
+	}
+	if (str[i] == '\0')
+		return (1);
+	return (0);
 }

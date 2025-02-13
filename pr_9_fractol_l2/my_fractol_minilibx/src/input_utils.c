@@ -1,4 +1,4 @@
-#include "../include/fract-ol.h"
+#include "../include/fract_ol.h"
 
 static double get_main_part(char *str)
 {
@@ -65,8 +65,8 @@ int is_double(char *str)
     i = 0;
     if (str[i] == '-' || str[i] == '+')
         i++;
-    if (str[i] < '0' && str[i] > '9')
-        return (EXIT_FAILURE); // CHECK if correct handling.
+    if (str[i] < '0' || str[i] > '9')
+        return (EXIT_FAILURE);
     while (str[i] >= '0' && str[i] <= '9')
         i++;
     if (str[i] == '.' || str[i] == ',')

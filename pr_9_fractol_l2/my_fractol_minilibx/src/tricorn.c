@@ -1,4 +1,4 @@
-#include "../include/fract-ol.h"
+#include "../include/fract_ol.h"
 
 static void calc_tricorn(t_fractal *fr)
 {
@@ -25,7 +25,7 @@ static void calc_tricorn(t_fractal *fr)
         put_color_to_pixel(fr, fr->x, fr->y, (fr->color * i));
 }
 
-void draw_tricorn(void *fr_void)
+void populate_px_tricorn(void *fr_void)
 {
     t_fractal   *fr;
 

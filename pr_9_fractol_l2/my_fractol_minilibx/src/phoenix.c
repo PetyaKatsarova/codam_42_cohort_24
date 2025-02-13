@@ -6,11 +6,11 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/11 16:00:00 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/11 16:15:00 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/13 17:20:54 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/fract-ol.h"
+#include "../include/fract_ol.h"
 
 static void	calc_phoenix(t_fractal *fr)
 {
@@ -41,7 +41,7 @@ static void	calc_phoenix(t_fractal *fr)
 		put_color_to_pixel(fr, fr->x, fr->y, (fr->color * i));
 }
 
-void	draw_phoenix(void *fr_void)
+void	populate_px_phoenix(void *fr_void)
 {
 	t_fractal	*fr;
 
@@ -58,5 +58,4 @@ void	draw_phoenix(void *fr_void)
 		fr->x++;
 		fr->y = 0;
 	}
-	mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
 }

@@ -3,25 +3,24 @@
 /*                                                        ::::::::            */
 /*   hooks.c                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/06 15:22:55 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/13 12:23:41 by pekatsar      ########   odam.nl         */
+/*   Created: 2025/02/13 13:56:59 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/13 17:25:05 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/fract-ol.h"
-#include <stdio.h>
+#include "../include/fract_ol.h"
 
-static void rename_fr(t_fractal *fr, int key_code)
+static void	rename_fr(t_fractal *fr, int key_code)
 {
 	if (key_code == KEY_1)
 		fr->name = "mandelbrot";
 	else if (key_code == KEY_2)
 	{
 		fr->name = "julia";
-		fr->cx=-0.8;
-        fr->cy=0.156;
+		fr->cx = -0.8;
+		fr->cy = 0.156;
 	}
 	else if (key_code == KEY_3)
 		fr->name = "tricorn";
@@ -29,11 +28,13 @@ static void rename_fr(t_fractal *fr, int key_code)
 		fr->name = "phoenix";
 }
 
-static void grey_scale(t_fractal *fr)
+static void	grey_scale(t_fractal *fr)
 {
+	int	grayscale;
+
 	fr->color += (255 * 255 * 255) / 100;
-	int grayscale = (fr->color & 0xFF); // Extract lowest byte, removes red and green, keeps only blue lowest byte
-    fr->color = (grayscale << 16) | (grayscale << 8) | grayscale;
+	grayscale = (fr->color & 0xFF);
+	fr->color = (grayscale << 16) | (grayscale << 8) | grayscale;
 }
 
 int	key_hook(int key_code, t_fractal *fr)
@@ -54,10 +55,11 @@ int	key_hook(int key_code, t_fractal *fr)
 		fr->color += (255 * 255 * 255) / 100;
 	else if (key_code == B)
 		grey_scale(fr);
-	else if (key_code == KEY_1 || key_code == KEY_2 || key_code == KEY_3 || key_code == KEY_4)
+	else if (key_code == KEY_1 || key_code == KEY_2
+		|| key_code == KEY_3 || key_code == KEY_4)
 		rename_fr(fr, key_code);
 	else if (key_code == M || key_code == P)
-		change_iterations(fr, key_code);
+		change_precision(fr, key_code);
 	draw_fr(fr, fr->name);
 	return (0);
 }
@@ -69,30 +71,28 @@ void	zoom(t_fractal *fr, int x, int y, int zoom)
 	zoom_level = 1.42;
 	if (zoom == 1)
 	{
-		fr->offset_x = (x / fr->zoom + fr->offset_x) - (x
-				/ (fr->zoom * zoom_level));
-		fr->offset_y = (y / fr->zoom + fr->offset_y) - (y
-				/ (fr->zoom * zoom_level));
+		fr->offset_x = (x / fr->zoom + fr->offset_x)
+			- (x / (fr->zoom * zoom_level));
+		fr->offset_y = (y / fr->zoom + fr->offset_y)
+			- (y / (fr->zoom * zoom_level));
 		fr->zoom *= zoom_level;
 	}
 	else if (zoom == -1)
 	{
-		fr->offset_x = (x / fr->zoom + fr->offset_x) - (x
-				/ (fr->zoom / zoom_level));
-		fr->offset_y = (y / fr->zoom + fr->offset_y) - (y
-				/ (fr->zoom / zoom_level));
+		fr->offset_x = (x / fr->zoom + fr->offset_x)
+			- (x / (fr->zoom / zoom_level));
+		fr->offset_y = (y / fr->zoom + fr->offset_y)
+			- (y / (fr->zoom / zoom_level));
 		fr->zoom /= zoom_level;
 	}
-	else
-		return ;
 }
 
 int	mouse_hook(int mouse_code, int x, int y, t_fractal *fr)
 {
 	if (mouse_code == SCROLL_UP)
-		zoom(fr, x, y, 1);
-	else if (mouse_code == SCROLL_DOWN)
 		zoom(fr, x, y, -1);
+	else if (mouse_code == SCROLL_DOWN)
+		zoom(fr, x, y, 1);
 	draw_fr(fr, fr->name);
 	return (0);
 }
