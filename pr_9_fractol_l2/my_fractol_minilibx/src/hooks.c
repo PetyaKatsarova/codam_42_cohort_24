@@ -1,40 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 15:22:55 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/02/12 18:26:59 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   hooks.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/06 15:22:55 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/13 12:23:41 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fract-ol.h"
 #include <stdio.h>
 
+static void rename_fr(t_fractal *fr, int key_code)
+{
+	if (key_code == KEY_1)
+		fr->name = "mandelbrot";
+	else if (key_code == KEY_2)
+	{
+		fr->name = "julia";
+		fr->cx=-0.8;
+        fr->cy=0.156;
+	}
+	else if (key_code == KEY_3)
+		fr->name = "tricorn";
+	else if (key_code == KEY_4)
+		fr->name = "phoenix";
+}
+
+static void grey_scale(t_fractal *fr)
+{
+	fr->color += (255 * 255 * 255) / 100;
+	int grayscale = (fr->color & 0xFF); // Extract lowest byte, removes red and green, keeps only blue lowest byte
+    fr->color = (grayscale << 16) | (grayscale << 8) | grayscale;
+}
+
 int	key_hook(int key_code, t_fractal *fr)
 {
 	if (key_code == ESC)
-		exit(1);
+		exit_fr(fr);
 	else if (key_code == LEFT)
-		fr->offset_x -= 42 / fr->zoom;
-	else if (key_code == RIGHT)
 		fr->offset_x += 42 / fr->zoom;
+	else if (key_code == RIGHT)
+		fr->offset_x -= 42 / fr->zoom;
 	else if (key_code == UP)
-		fr->offset_y -= 42 / fr->zoom;
-	else if (key_code == DOWN)
 		fr->offset_y += 42 / fr->zoom;
+	else if (key_code == DOWN)
+		fr->offset_y -= 42 / fr->zoom;
 	else if (key_code == R)
 		init_fr(fr);
 	else if (key_code == C)
 		fr->color += (255 * 255 * 255) / 100;
 	else if (key_code == B)
-	{
-		fr->color += (255 * 255 * 255) / 100;
-		int grayscale = (fr->color & 0xFF); // Extract lowest byte
-    	fr->color = (grayscale << 16) | (grayscale << 8) | grayscale;
-	}
+		grey_scale(fr);
+	else if (key_code == KEY_1 || key_code == KEY_2 || key_code == KEY_3 || key_code == KEY_4)
+		rename_fr(fr, key_code);
 	else if (key_code == M || key_code == P)
 		change_iterations(fr, key_code);
 	draw_fr(fr, fr->name);

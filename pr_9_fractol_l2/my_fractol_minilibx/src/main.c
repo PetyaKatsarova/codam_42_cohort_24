@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 17:24:50 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/13 11:56:16 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int main(int argc, char **argv)
         t_fractal *fr = malloc(sizeof(t_fractal));
         init_fr(fr);
         init_mlx(fr);
-
         mlx_key_hook(fr->window, key_hook, fr);
 	    mlx_mouse_hook(fr->window, mouse_hook, fr);
 	    mlx_hook(fr->window, 17, 0L, exit_fr, fr);
@@ -82,7 +81,6 @@ int main(int argc, char **argv)
         // else
         draw_fr(fr, argv[1]);
         mlx_loop(fr->mlx);
-
     }
     return (0);
 }

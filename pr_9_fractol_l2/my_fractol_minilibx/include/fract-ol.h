@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 11:31:52 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 17:15:02 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/13 10:22:42 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <math.h>
 # include <stdlib.h>
 
-# define    SIZE 900
+# define    SIZE 1500
 # define    STEP 42  
 // # define    BLACK 0x000000
 
@@ -34,9 +34,6 @@
 #elif __APPLE__
     # define SCROLL_UP 3
     # define SCROLL_DOWN 4
-#elif _WIN32
-    # define SCROLL_UP 0x0800
-    # define SCROLL_DOWN 0x1000
 #endif
 
 // diff key nums per OS

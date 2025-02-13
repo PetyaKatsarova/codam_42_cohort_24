@@ -6,7 +6,7 @@
 #    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/13 09:23:13 by pekatsar      ########   odam.nl          #
+#    Updated: 2025/02/13 10:18:34 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,7 @@ LIBFT    := lib/LIBFT
 # Include paths
 HEADERS  := -I ./include -I $(LIBMLX)/include -I $(LIBFT)
 
-# Libraries to link
-# LIBS = -L/path/to/minilibx -lmlx -lXext -lX11
-
 LIBS     := -L$(LIBMLX) -lmlx -L$(LIBFT) -lft -lXext -lX11 -lm -pthread
-
-# LIBS     := -L$(LIBMLX)/build -lmlx42 -L$(LIBFT) -lft -ldl -lglfw -pthread -lm 
 
 SRCS     := $(shell find ./src -iname "*.c")
 OBJDIR   := obj

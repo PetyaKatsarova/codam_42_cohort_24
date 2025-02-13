@@ -10,3 +10,8 @@
 #define P 35
 #define M 46
 #define B 11
+#define KEY_1 18
+#define KEY_2 19
+#define KEY_3 20
+#define KEY_4 21
+

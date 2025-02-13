@@ -6,21 +6,21 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:04:12 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 16:46:19 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/13 12:39:15 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fract-ol.h"
 
-
 void    init_fr(t_fractal *fr)
 {
     fr->x = 0;
     fr->y = 0;
-    fr->color = 0x800080FF;
+    fr->color = 0xFFD3D3D3;
     fr->zoom = 300;
-    fr->offset_x = -1.21;
-    fr->offset_y = -1.21;
+    // put in center of window
+    fr->offset_x = -2.42;
+    fr->offset_y = -2.42;
     fr->max_iterations = 42;
 }
 
