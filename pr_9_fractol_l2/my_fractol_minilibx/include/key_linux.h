@@ -9,3 +9,4 @@
 #define J 106
 #define P 112
 #define M 109
+#define B 98

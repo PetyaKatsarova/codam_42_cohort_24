@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   hooks.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/02/06 15:22:55 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 16:47:34 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/06 15:22:55 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/02/12 18:26:59 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ int	key_hook(int key_code, t_fractal *fr)
 		init_fr(fr);
 	else if (key_code == C)
 		fr->color += (255 * 255 * 255) / 100;
+	else if (key_code == B)
+	{
+		fr->color += (255 * 255 * 255) / 100;
+		int grayscale = (fr->color & 0xFF); // Extract lowest byte
+    	fr->color = (grayscale << 16) | (grayscale << 8) | grayscale;
+	}
 	else if (key_code == M || key_code == P)
 		change_iterations(fr, key_code);
 	draw_fr(fr, fr->name);
