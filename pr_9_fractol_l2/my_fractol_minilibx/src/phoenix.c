@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/11 16:00:00 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/13 17:20:54 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/14 14:15:44 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	calc_phoenix(t_fractal *fr)
 	zy_prev = 0.0;
 	fr->cx = (fr->x / fr->zoom) + fr->offset_x;
 	fr->cy = (fr->y / fr->zoom) + fr->offset_y;
-
 	while (++i < fr->max_iterations)
 	{
 		x_temp = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;

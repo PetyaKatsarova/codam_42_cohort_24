@@ -14,14 +14,15 @@
 
 static int	is_in_range(double d)
 {
-	return (d >= -2.0 && d <= 2);
+	return (d >= -2.0 && d <= 2.0);
 }
 
 static void	print_menu(void)
 {
-	ft_putendl_fd("Invalid args.", 1);
-	ft_putendl_fd("Choose: mandelbrot, julia, tricorn, or phoenix.", 1);
-	ft_putendl_fd("Julia: add 2 values between -2 and 2.", 1);
+	ft_putendl_fd("** Invalid args.", 1);
+	ft_putendl_fd("** Type: mandelbrot, julia, tricorn, or phoenix.", 1);
+	ft_putendl_fd("** For julia set, you have the option to add", 1);
+	ft_putendl_fd("** 2 values between -2 and 2.", 1);
 }
 
 static int	check_julia(int argc, char **argv)
@@ -37,6 +38,7 @@ static int	check_julia(int argc, char **argv)
 		num2 = str_to_double(argv[3]);
 		if (is_in_range(num1) && is_in_range(num2))
 			return (1);
+		print_menu();
 	}
 	return (0);
 }

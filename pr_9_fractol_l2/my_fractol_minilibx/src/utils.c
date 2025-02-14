@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   utils.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/14 14:09:42 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/14 18:23:23 by pekatsar      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/fract_ol.h"
 
 void	put_color_to_pixel(t_fractal *fr, int x, int y, int color)
@@ -8,24 +20,30 @@ void	put_color_to_pixel(t_fractal *fr, int x, int y, int color)
 	buffer[(y * fr->size_line / 4) + x] = color;
 }
 /**
- * check all t_fractol fields: cleans only the existing ones & prints exit msg
+ * check all t_fractol fields: cleans only the existing ones & prints
+ *  exit msg
+ * mlx_destroy_display(fr->mlx); needed only for linux
 */
 
 int	exit_fr(t_fractal *fr)
 {
-	if (fr->mlx && fr->img)
+	if (fr->img)
 		mlx_destroy_image(fr->mlx, fr->img);
-	if (fr->mlx && fr->window)
+	if (fr->window)
 		mlx_destroy_window(fr->mlx, fr->window);
 	if (fr->mlx)
+		mlx_destroy_display(fr->mlx);
+	if (fr->mlx)
 		free(fr->mlx);
-	if (fr)
-		free(fr);
-	write(1, "Clean exit program.", 19);
-	exit(1);
-	return (0);
+	free(fr);
+	ft_putendl_fd("Clean exit", 1);
+	exit(0);
 }
 
+/**
+ * M: minus: reduces step per zoom: shows less detail, faster
+ * P: plus: increases step per zomm: shows more detail, slower
+*/
 void	change_precision(t_fractal *fr, int key_code)
 {
 	if (key_code == M)

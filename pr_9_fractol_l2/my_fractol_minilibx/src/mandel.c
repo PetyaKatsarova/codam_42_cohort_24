@@ -6,15 +6,15 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 14:55:36 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/13 17:20:22 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/14 14:12:55 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fract_ol.h"
 
-static void calc_mandel(t_fractal *fr)
+static void	calc_mandel(t_fractal *fr)
 {
-    int		i;
+	int		i;
 	double	x_temp;
 
 	fr->name = "mandelbrot";
@@ -26,7 +26,7 @@ static void calc_mandel(t_fractal *fr)
 	while (i < fr->max_iterations)
 	{
 		x_temp = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
-		fr->zy = 2. * fr->zx * fr->zy + fr->cy;
+		fr->zy = 2.0 * fr->zx * fr->zy + fr->cy;
 		fr->zx = x_temp;
 		if (fr->zx * fr->zx + fr->zy * fr->zy >= __DBL_MAX__)
 			break ;
@@ -35,13 +35,13 @@ static void calc_mandel(t_fractal *fr)
 	if (i == fr->max_iterations)
 		put_color_to_pixel(fr, fr->x, fr->y, 0x000000);
 	else
-		put_color_to_pixel(fr, fr->x, fr->y, (fr->color	* i));
-                
+		put_color_to_pixel(fr, fr->x, fr->y, (fr->color * i));
 }
 
 void	populate_px_mandel(void *fr_void)
 {
 	t_fractal	*fr;
+
 	fr = (t_fractal *)fr_void;
 	if (!fr)
 		exit_fr(fr);

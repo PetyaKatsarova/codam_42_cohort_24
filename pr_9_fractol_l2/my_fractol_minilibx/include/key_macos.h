@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/13 14:36:44 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/13 14:36:46 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/14 14:14:48 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,3 @@
 #define KEY_2 19
 #define KEY_3 20
 #define KEY_4 21
-

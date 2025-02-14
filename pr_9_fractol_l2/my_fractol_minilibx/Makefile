@@ -6,13 +6,14 @@
 #    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/13 10:18:34 by pekatsar      ########   odam.nl          #
+#    Updated: 2025/02/14 18:17:09 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME     := fract-ol
 CC       := cc
-CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -Ofast -g
+CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -g
+#CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -Ofast -g
 
 LIBMLX   := lib/minilibx-linux
 LIBFT    := lib/LIBFT
@@ -35,18 +36,22 @@ libmlx:
 	@if [ ! -d "$(LIBMLX)" ]; then echo "Error: minilibx not found at $(LIBMLX)"; exit 1; fi
 	@make -C $(LIBMLX)
 
-
-# Compile object files
 $(OBJDIR)/%.o: ./src/%.c | $(OBJDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS) && printf "Compiling: $(notdir $<)\n"
 
-# Create obj directory if it doesn't exist
+# Create obj dir if it doesn't exist
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
 
 $(NAME): $(OBJS)
 	@$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME) && echo "Build successful!"
 
+test_valgrind_mandel:
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./fract-ol mandelbrot
+
+test_valgrind_juls:
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./fract-ol julia
+	
 clean:
 	@rm -rf $(OBJDIR)
 	@make -C $(LIBFT) clean
