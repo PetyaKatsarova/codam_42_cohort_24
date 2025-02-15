@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/14 13:10:35 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 16:13:32 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 17:34:27 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,21 @@ static void	calculate_julia(t_fractal *fr)
 	i = 0;
 	while (++i < fr->max_iterations)
 	{
-		temp = fr->zx;
-		fr->zx = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
-		fr->zy = 2 * fr->zy * temp + fr->cy;
-		if (fr->zx * fr->zx + fr->zy * fr->zy >= 4) // escape early
-			break ;
-	}
+		double zx_sq = fr->zx * fr->zx;
+		double zy_sq = fr->zy * fr->zy;
+		
+		if (zx_sq + zy_sq >= 4)
+			break;
+
+		fr->zy = 2 * fr->zy * fr->zx + fr->cy;
+		fr->zx = zx_sq - zy_sq + fr->cx;
+}
+
+
 	if (i == fr->max_iterations)
 		put_color_to_pixel(fr, fr->x, fr->y, 0x000000);
 	else
-		put_color_to_pixel(fr, fr->x, fr->y, fr->color * (i % 255));
+		put_color_to_pixel(fr, fr->x, fr->y, fr->color * (i % 256));
 }
 
 void	populate_px_julia(void *fr_void)
