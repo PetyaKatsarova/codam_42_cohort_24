@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/13 14:32:32 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 17:37:19 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 15:11:29 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@
 
 # define SIZE 1500
 # define STEP 42  
-
-// Not used
-# define BASE_SPEED 10
-# define BOOST_SPEED 25
-# define ZOOM_SPEED 5
 
 // Mouse codes
 # ifdef __linux__
@@ -95,4 +90,4 @@ void	change_precision(t_fractal *fr, int key_code);
 // src/main.c
 int		draw_fr(t_fractal *fr, char *name);
 
-#endif /* FRACT_OL_H */
+#endif

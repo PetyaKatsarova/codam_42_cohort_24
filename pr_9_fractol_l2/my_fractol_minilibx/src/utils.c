@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/14 14:09:42 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 18:23:23 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 15:58:08 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ int	exit_fr(t_fractal *fr)
 		mlx_destroy_window(fr->mlx, fr->window);
 	if (fr->mlx)
 		mlx_destroy_display(fr->mlx);
-	if (fr->mlx)
-		free(fr->mlx);
-	free(fr);
 	ft_putendl_fd("Clean exit", 1);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 18:21:02 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 15:05:09 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,20 @@ int	draw_fr(t_fractal *fr, char *name)
 int	main(int argc, char **argv)
 {
 	int			is_valid_i;
-	t_fractal	*fr;
+	t_fractal	fr;
 
 	is_valid_i = is_valid_input(argc, argv);
 	if (is_valid_i == 1)
 	{
-		fr = malloc(sizeof(t_fractal));
-		if (!fr)
-			exit_fr(fr);
-		add_julia_c(fr, argc, argv);
-		init_fr(fr);
-		init_mlx(fr);
-		mlx_key_hook(fr->window, key_hook, fr);
-		mlx_mouse_hook(fr->window, mouse_hook, fr);
-		mlx_hook(fr->window, 17, 0L, exit_fr, fr);
-		draw_fr(fr, argv[1]);
-		mlx_loop(fr->mlx);
+		add_julia_c(&fr, argc, argv);
+		init_fr(&fr);
+		init_mlx(&fr);
+		mlx_key_hook(fr.window, key_hook, &fr);
+		mlx_mouse_hook(fr.window, mouse_hook, &fr);
+		mlx_hook(fr.window, 17, 0L, exit_fr, &fr);
+		draw_fr(&fr, argv[1]);
+		mlx_loop(fr.mlx);
 	}
 	return (0);
 }
+

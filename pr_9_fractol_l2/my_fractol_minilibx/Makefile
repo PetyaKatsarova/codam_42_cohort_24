@@ -6,7 +6,7 @@
 #    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/14 18:17:09 by pekatsar      ########   odam.nl          #
+#    Updated: 2025/02/15 15:55:52 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,17 @@ HEADERS  := -I ./include -I $(LIBMLX)/include -I $(LIBFT)
 
 LIBS     := -L$(LIBMLX) -lmlx -L$(LIBFT) -lft -lXext -lX11 -lm -pthread
 
-SRCS     := $(shell find ./src -iname "*.c")
+SRCS     := src/hooks.c \
+			src/init.c \
+			src/input_checks.c \
+			src/input_utils.c \
+			src/mandel.c \
+			src/julia.c \
+			src/tricorn.c \
+			src/phoenix.c \
+			src/utils.c \
+			src/main.c
+
 OBJDIR   := obj
 OBJS     := $(patsubst ./src/%.c, $(OBJDIR)/%.o, $(SRCS))
 
