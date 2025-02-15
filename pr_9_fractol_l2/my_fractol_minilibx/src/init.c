@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:04:12 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 15:56:20 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 18:11:01 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	init_fr(t_fractal *fr)
 	fr->y = 0;
 	fr->color = 0x3A5F7D;
 	fr->zoom = 300;
-	fr->offset_x = -2.42;
-	fr->offset_y = -2.42;
+	fr->offset_x = -1.21;
+	fr->offset_y = -1.21;
 	fr->max_iterations = 42;
 }
 

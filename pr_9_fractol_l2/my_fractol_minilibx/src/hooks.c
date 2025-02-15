@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/13 13:56:59 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/13 17:25:05 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 18:10:25 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,14 @@ int	key_hook(int key_code, t_fractal *fr)
 	draw_fr(fr, fr->name);
 	return (0);
 }
-
+/**
+ * Adjust offsets to keep zoom centered at the mouse position
+ */
 void	zoom(t_fractal *fr, int x, int y, int zoom)
 {
 	double	zoom_level;
 
-	zoom_level = 1.42;
+	zoom_level = 1.22; // 1.42
 	if (zoom == 1)
 	{
 		fr->offset_x = (x / fr->zoom + fr->offset_x)
