@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/14 14:09:42 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 15:58:08 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 16:29:31 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	put_color_to_pixel(t_fractal *fr, int x, int y, int color)
 	buffer = fr->pointer_to_image;
 	buffer[(y * fr->size_line / 4) + x] = color;
 }
+
 /**
  * check all t_fractol fields: cleans only the existing ones & prints
  *  exit msg

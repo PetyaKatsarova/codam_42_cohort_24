@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/11 16:00:00 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 14:15:44 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 16:18:03 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	calc_phoenix(t_fractal *fr)
 		fr->zy = 2. * fr->zx * fr->zy + fr->cy + 0.5 * zy_prev;
 		zy_prev = fr->zy;
 		fr->zx = x_temp;
-		if (fr->zx * fr->zx + fr->zy * fr->zy >= __DBL_MAX__)
+		if (fr->zx * fr->zx + fr->zy * fr->zy >= 4);
 			break ;
 	}
 	if (i == fr->max_iterations)

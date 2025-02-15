@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 15:05:09 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 16:24:24 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	draw_fr(t_fractal *fr, char *name)
 		populate_px_phoenix(fr);
 	else
 	{
-		ft_putendl_fd("Choose from: mandelbrot, julia or pine", 1);
+		ft_putendl_fd("Choose from: mandelbrot, julia, tricorn or phoenix", 1);
 		exit_fr(fr);
 	}
 	mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);

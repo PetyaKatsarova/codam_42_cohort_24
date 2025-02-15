@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 14:55:36 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 14:12:55 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 16:14:23 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	calc_mandel(t_fractal *fr)
 		x_temp = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
 		fr->zy = 2.0 * fr->zx * fr->zy + fr->cy;
 		fr->zx = x_temp;
-		if (fr->zx * fr->zx + fr->zy * fr->zy >= __DBL_MAX__)
+		if (fr->zx * fr->zx + fr->zy * fr->zy >= 4) // it was double_max: this is faster
 			break ;
 		i++;
 	}

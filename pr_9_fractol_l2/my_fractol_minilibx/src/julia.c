@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/14 13:10:35 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/14 14:11:48 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/15 16:13:32 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@ static void	calculate_julia(t_fractal *fr)
 {
 	int		i;
 	double	temp;
+	double	scale;
 
 	fr->name = "julia";
-	fr->zx = fr->x / fr->zoom + fr->offset_x;
-	fr->zy = fr->y / fr->zoom + fr->offset_y;
+	scale = 1.0 / fr->zoom;
+	fr->zx = fr->x * scale + fr->offset_x; // changed: / fr->zoom cause * is faster
+	fr->zy = fr->y * scale + fr->offset_y;
 	i = 0;
 	while (++i < fr->max_iterations)
 	{
 		temp = fr->zx;
 		fr->zx = fr->zx * fr->zx - fr->zy * fr->zy + fr->cx;
 		fr->zy = 2 * fr->zy * temp + fr->cy;
-		if (fr->zx * fr->zx + fr->zy * fr->zy >= __DBL_MAX__)
+		if (fr->zx * fr->zx + fr->zy * fr->zy >= 4) // escape early
 			break ;
 	}
 	if (i == fr->max_iterations)
