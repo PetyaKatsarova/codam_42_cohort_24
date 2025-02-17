@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   hooks.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/02/13 13:56:59 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 18:10:25 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 13:56:59 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/02/17 21:48:02 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ static void	rename_fr(t_fractal *fr, int key_code)
 	else if (key_code == KEY_4)
 		fr->name = "phoenix";
 }
-
+/**
+ * copies the last byte (grayscale) into Red, Green, and Blue, making the color grayscale.
+*/
 static void	grey_scale(t_fractal *fr)
 {
 	int	grayscale;
