@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: pekatsar <pekatsar@student.codam.nl>         +#+                      #
-#                                                    +#+                       #
-#    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/15 15:55:52 by pekatsar      ########   odam.nl          #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: petya <petya@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/02/04 11:27:44 by pekatsar          #+#    #+#              #
+#    Updated: 2025/02/17 15:37:41 by petya            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS     := src/hooks.c \
 			src/main.c
 
 OBJDIR   := obj
+# change
 OBJS     := $(patsubst ./src/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 all: libmlx libft $(NAME)
@@ -59,7 +60,7 @@ $(NAME): $(OBJS)
 test_valgrind_mandel:
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./fract-ol mandelbrot
 
-test_valgrind_juls:
+test_valgrind_jul:
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./fract-ol julia
 	
 clean:
