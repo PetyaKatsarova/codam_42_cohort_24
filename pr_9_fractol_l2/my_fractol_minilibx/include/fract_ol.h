@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/13 14:32:32 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/18 12:34:25 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/18 16:16:18 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct fractal
 // src/input_utils.c
 double	str_to_double(char *str);
 int		is_double(char *str);
+void	print_menu_exit(void);
 
 // src/input_check.c
 int		is_valid_input(int argc, char **argv);

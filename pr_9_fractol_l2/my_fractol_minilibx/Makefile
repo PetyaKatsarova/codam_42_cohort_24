@@ -1,20 +1,18 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: petya <petya@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/04 11:27:44 by pekatsar          #+#    #+#              #
-#    Updated: 2025/02/17 15:37:41 by petya            ###   ########.fr        #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: petya <petya@student.42.fr>                  +#+                      #
+#                                                    +#+                       #
+#    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
+#    Updated: 2025/02/18 16:35:32 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME     := fract-ol
 CC       := cc
 CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -g
-#CFLAGS   := -Wextra -Wall -Werror -Wunreachable-code -Ofast -g
-
 LIBMLX   := lib/minilibx-linux
 LIBFT    := lib/LIBFT
 
@@ -35,8 +33,16 @@ SRCS     := src/hooks.c \
 			src/main.c
 
 OBJDIR   := obj
-# change
-OBJS     := $(patsubst ./src/%.c, $(OBJDIR)/%.o, $(SRCS))
+OBJS     := $(OBJDIR)/hooks.o \
+            $(OBJDIR)/init.o \
+            $(OBJDIR)/input_checks.o \
+            $(OBJDIR)/input_utils.o \
+            $(OBJDIR)/mandel.o \
+            $(OBJDIR)/julia.o \
+            $(OBJDIR)/tricorn.o \
+            $(OBJDIR)/phoenix.o \
+            $(OBJDIR)/utils.o \
+            $(OBJDIR)/main.o
 
 all: libmlx libft $(NAME)
 

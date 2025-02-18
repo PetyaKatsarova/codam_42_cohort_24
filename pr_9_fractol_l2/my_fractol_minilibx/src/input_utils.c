@@ -28,41 +28,31 @@ static double	get_main_part(char *str)
 {
 	int		i;
 	double	main;
-	double	factor;
 
 	i = 0;
-	factor = 1.0;
 	main = 0.0;
-	if (str[0] == '0' && str[1] == '\0')
-		return (0.0);
 	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			factor = -1.0;
 		i++;
-	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		main = main * 10.0 + (str[i] - '0');
 		i++;
 	}
-	return (main * factor);
+	return (main);
 }
 
+/**
+ * if !is_double() exits with exit failure and prints message
+*/
 double	str_to_double(char *str)
 {
 	double	result;
 	int		i;
 	double	decimal_place;
-	int		factor;
 
-	factor = 1;
+	if (!is_double(str))
+		print_menu_exit();
 	result = get_main_part(str);
-	if (result < 0)
-	{
-		result *= -1;
-		factor = -1;
-	}
 	i = main_len(str);
 	if (str[i] == '.' || str[i] == ',')
 	{
@@ -75,7 +65,10 @@ double	str_to_double(char *str)
 			i++;
 		}
 	}
-	return (result * factor);
+	if (str[0] == '-')
+		return (result * -1);
+	else
+		return (result);
 }
 
 int	is_double(char *str)
@@ -85,8 +78,6 @@ int	is_double(char *str)
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	if (str[i] < '0' || str[i] > '9')
-		return (EXIT_FAILURE);
 	while (str[i] >= '0' && str[i] <= '9')
 		i++;
 	if (str[i] == '.' || str[i] == ',')
@@ -94,6 +85,8 @@ int	is_double(char *str)
 		i++;
 		while (str[i] >= '0' && str[i] <= '9')
 			i++;
+		if (str[i] != '\0' && (str[i] < '0' || str[i] > '9'))
+			return (0);
 	}
 	if (str[i] == '\0')
 		return (1);

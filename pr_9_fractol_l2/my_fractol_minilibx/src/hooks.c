@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 13:56:59 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/02/17 21:48:02 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   hooks.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/13 13:56:59 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/02/18 13:11:45 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ static void	rename_fr(t_fractal *fr, int key_code)
 	else if (key_code == KEY_4)
 		fr->name = "phoenix";
 }
+
 /**
- * copies the last byte (grayscale) into Red, Green, and Blue, making the color grayscale.
+ * copies the last byte (grayscale) into Red, Green, and Blue, making the color
+ * grayscale.
 */
 static void	grey_scale(t_fractal *fr)
 {
@@ -65,6 +67,7 @@ int	key_hook(int key_code, t_fractal *fr)
 	draw_fr(fr, fr->name);
 	return (0);
 }
+
 /**
  * Adjust offsets to keep zoom centered at the mouse position
  */
@@ -72,22 +75,22 @@ void	zoom(t_fractal *fr, int x, int y, int zoom)
 {
 	double	zoom_level;
 
-	zoom_level = 1.22; // 1.42
+	zoom_level = 1.05;
 	if (zoom == 1)
 	{
 		fr->offset_x = (x / fr->zoom + fr->offset_x)
-			- (x / (fr->zoom * zoom_level));
+			- (x / (fr->zoom * .5));
 		fr->offset_y = (y / fr->zoom + fr->offset_y)
-			- (y / (fr->zoom * zoom_level));
-		fr->zoom *= zoom_level;
+			- (y / (fr->zoom * .5));
+		fr->zoom *= .5;
 	}
 	else if (zoom == -1)
 	{
 		fr->offset_x = (x / fr->zoom + fr->offset_x)
-			- (x / (fr->zoom / zoom_level));
+			- (x / (fr->zoom / .5));
 		fr->offset_y = (y / fr->zoom + fr->offset_y)
-			- (y / (fr->zoom / zoom_level));
-		fr->zoom /= zoom_level;
+			- (y / (fr->zoom / .5));
+		fr->zoom /= .5;
 	}
 }
 
