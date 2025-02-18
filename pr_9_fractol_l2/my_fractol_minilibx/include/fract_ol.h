@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/13 14:32:32 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 17:28:44 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/18 12:34:25 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <math.h>
 # include <stdlib.h>
 
-# define SIZE 900
+# define SIZE 1000
 # define STEP 42  
 
 // Mouse codes
