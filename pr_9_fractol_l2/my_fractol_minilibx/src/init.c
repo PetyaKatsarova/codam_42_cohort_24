@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:04:12 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/18 13:18:55 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/19 18:06:44 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ static void	exit_error(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	init_mlx(t_fractal *fractal)
+void	init_mlx(t_fractal *fr)
 {
-	fractal->mlx = mlx_init();
-	if (!fractal->mlx)
+	fr->mlx = mlx_init();
+	if (!fr->mlx)
 		exit_error("Error: MLX initialization failed");
-	fractal->window = mlx_new_window(fractal->mlx, SIZE, SIZE, "Fract-ol");
-	if (!fractal->window)
+	fr->window = mlx_new_window(fr->mlx, SIZE, SIZE, "Fract-ol");
+	if (!fr->window)
 		exit_error("Error: Window creation failed");
-	fractal->img = mlx_new_image(fractal->mlx, SIZE, SIZE);
-	if (!fractal->img)
+	fr->img = mlx_new_image(fr->mlx, SIZE, SIZE);
+	if (!fr->img)
 		exit_error("Error: Image creation failed");
-	fractal->pointer_to_image = mlx_get_data_addr(fractal->img,
-			&fractal->bits_per_pixel, &fractal->size_line, &fractal->endian);
-	if (!fractal->pointer_to_image)
+	fr->pointer_to_image = mlx_get_data_addr(fr->img,
+			&fr->bits_per_pixel, &fr->size_line, &fr->endian);
+	if (!fr->pointer_to_image)
 		exit_error("Error: Failed to get image data address");
 }

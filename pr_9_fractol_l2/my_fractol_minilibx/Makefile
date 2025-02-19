@@ -6,7 +6,7 @@
 #    By: petya <petya@student.42.fr>                  +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/02/04 11:27:44 by pekatsar      #+#    #+#                  #
-#    Updated: 2025/02/18 16:35:32 by pekatsar      ########   odam.nl          #
+#    Updated: 2025/02/19 14:07:10 by pekatsar      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,8 @@ libmlx:
 	@if [ ! -d "$(LIBMLX)" ]; then echo "Error: minilibx not found at $(LIBMLX)"; exit 1; fi
 	@make -C $(LIBMLX)
 
+# $@ represents the name of the target in a rule.
+# $< refers to the first prerequisite (dependency) in a rule
 $(OBJDIR)/%.o: ./src/%.c | $(OBJDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS) && printf "Compiling: $(notdir $<)\n"
 

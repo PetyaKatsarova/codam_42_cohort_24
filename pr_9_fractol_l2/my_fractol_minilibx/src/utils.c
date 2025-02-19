@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/14 14:09:42 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/15 16:29:31 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/02/19 18:10:27 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	put_color_to_pixel(t_fractal *fr, int x, int y, int color)
  * check all t_fractol fields: cleans only the existing ones & prints
  *  exit msg
  * mlx_destroy_display(fr->mlx); needed only for linux
+ * If you only used mlx_init(), then you should not call free(fr->mlx). The MiniLibX library manages that memory internally, and freeing it manually can cause undefined behavior: but chatGBT is wrong: if i dont free(fr->mlx) get still reachable bytes on exit
 */
 
 int	exit_fr(t_fractal *fr)
@@ -33,7 +34,10 @@ int	exit_fr(t_fractal *fr)
 	if (fr->window)
 		mlx_destroy_window(fr->mlx, fr->window);
 	if (fr->mlx)
+	{
 		mlx_destroy_display(fr->mlx);
+		free(fr->mlx);
+	}
 	ft_putendl_fd("Clean exit", 1);
 	exit(0);
 }

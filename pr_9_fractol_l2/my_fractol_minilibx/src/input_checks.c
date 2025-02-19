@@ -52,16 +52,16 @@ static int	check_julia(int argc, char **argv)
 int	is_valid_input(int argc, char **argv)
 {
 	if (argc == 2 && (!ft_strncmp(argv[1], "mandelbrot", 10)
-			|| !ft_strncmp(argv[1], "1", 1)))
+			|| !ft_strncmp(argv[1], "1", 1)) && (ft_strlen(argv[1]) == 10 || ft_strlen(argv[1]) == 1))
 		return (1);
 	if ((argc == 2 || argc == 4) && (!ft_strncmp(argv[1], "julia", 5)
-			|| !ft_strncmp(argv[1], "2", 1)))
+			|| !ft_strncmp(argv[1], "2", 1)) && (ft_strlen(argv[1]) == 5 || ft_strlen(argv[1]) == 1))
 		return (check_julia(argc, argv));
 	if (argc == 2 && (!ft_strncmp(argv[1], "tricorn", 7)
-			|| !ft_strncmp(argv[1], "3", 1)))
+			|| !ft_strncmp(argv[1], "3", 1)) && (ft_strlen(argv[1]) == 7 || ft_strlen(argv[1]) == 1))
 		return (1);
 	if (argc == 2 && (!ft_strncmp(argv[1], "phoenix", 7)
-			|| !ft_strncmp(argv[1], "4", 1)))
+			|| !ft_strncmp(argv[1], "4", 1)) && (ft_strlen(argv[1]) == 7 || ft_strlen(argv[1]) == 1))
 		return (1);
 	print_menu_exit();
 	return (0);
