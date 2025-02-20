@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   hooks.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: petya <petya@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/02/13 13:56:59 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/18 13:11:45 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 13:56:59 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/02/20 14:42:51 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ void	zoom(t_fractal *fr, int x, int y, int zoom)
 {
 	double	zoom_level;
 
-	zoom_level = 1.05;
+	zoom_level = 0.5;
 	if (zoom == 1)
 	{
 		fr->offset_x = (x / fr->zoom + fr->offset_x)
-			- (x / (fr->zoom * .5));
+			- (x / (fr->zoom * zoom_level));
 		fr->offset_y = (y / fr->zoom + fr->offset_y)
-			- (y / (fr->zoom * .5));
-		fr->zoom *= .5;
+			- (y / (fr->zoom * zoom_level));
+		fr->zoom *= zoom_level;
 	}
 	else if (zoom == -1)
 	{
