@@ -32,7 +32,8 @@ char *ft_strdup(char *str, int start, int end)
     if (end <= start)
         return (NULL);
     int i = 0;
-    char *dup = malloc(sizeof (char) * (end - start + 1));
+    char *dup;
+    dup = malloc(sizeof (char) * (end - start + 1));
     if (!dup)
         return (NULL);
 
@@ -67,7 +68,7 @@ char **ft_split(char *str, char delim)
     
     if (!arr)
         return (NULL);
-    while (str[i])
+    while (str[i] && j < wc)
     {
         while (str[i] && str[i] == delim)
             i++;
@@ -75,6 +76,7 @@ char **ft_split(char *str, char delim)
         while (str[i] && str[i] != delim)
             i++;
         arr[j] = ft_strdup(str, start, i);
+        printf("split: arr[j] = %s\n", arr[j]);
         if (!arr[j])
         {
             free_arr(arr);
