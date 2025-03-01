@@ -90,6 +90,7 @@ t_list *push_node(t_list **head, int data)
 }
 
 // cc -Wall -Wextra -Werror sort_list.c && ./a.out
+// cc -g -Wall -Wextra -Werror sort_list.c && valgrind --leak-check=full ./a.out
 int main()
 {
     printf("ascend: %d\n", ascending(3,4)); // 1
