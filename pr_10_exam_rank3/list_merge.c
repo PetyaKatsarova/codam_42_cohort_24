@@ -1,24 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "sort_list.h"
+
 /*
 Write a function that merges two sorted linked lists into one sorted list.
 
-Function Prototype
-c
-Copy
-Edit
 t_list *merge_sorted_lists(t_list *lst1, t_list *lst2);
 Example
 Input
-rust
-Copy
-Edit
 List 1: 1 -> 3 -> 5 -> NULL
 List 2: 2 -> 4 -> 6 -> NULL
 Output
-rust
-Copy
-Edit
 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> NULL
-🚀 Constraints
+Constraints
 No extra memory allocation.
 The merged list must be sorted.
 */
+
+t_list *merge_sorted_lists(t_list *lst1, t_list *lst2)
+{
+    if (!lst1) return (lst2);
+    if (!lst2) return (lst1);
+    t_list  dummy, *tail;
+
+    tail = &dummy; // stores the address of dummy
+    tail->next = NULL;
+    while (lst1 != NULL && lst2 != NULL)
+    {
+        if (lst1->data < lst2->data)
+        {
+            tail->next = lst1;
+            lst1 = lst1->next;
+        }
+        else
+        {
+            tail->next = lst2;
+            lst2 = lst2->next;
+        }
+        tail = tail->next;
+    }
+    if (lst1) tail->next = lst1;
+    if (lst2) tail->next = lst2;
+    return (dummy.next);
+}
+
+void init_lst(t_list **lst, int value)
+{
+    t_list *node = malloc(sizeof(t_list));
+    if (!node) return;
+    node->data = value;
+    node->next = NULL;
+    t_list *cpy;
+    
+    if (!*lst)
+    {
+        *lst = node;
+        return;
+    }
+    cpy = *lst;
+    while (cpy->next != NULL)
+        cpy = cpy->next;
+    cpy->next = node;
+}
+// cc -Werror -Wextra -Wall list_merge.c && ./a.out
+// cc -g -Werror -Wextra -Wall list_merge.c && valgrind --leak-check=full ./a.out
+int main()
+{
+    t_list  *lst2 = NULL;
+    t_list  *lst1 = NULL;
+    t_list  *merged = NULL;
+    t_list  *temp = NULL;
+
+    init_lst(&lst1, 1);
+    init_lst(&lst2, 2);
+    init_lst(&lst1, 3);
+    init_lst(&lst2, 4);
+    init_lst(&lst1, 5);
+    init_lst(&lst2, 6);
+
+    merged = merge_sorted_lists(lst1, lst2);
+    while (merged != NULL)
+    {
+        temp = merged;
+        printf("%d -> ", merged->data);
+        merged = merged->next;
+        free(temp);
+    }
+    printf("NULL\n");
+    return (0);
+}
