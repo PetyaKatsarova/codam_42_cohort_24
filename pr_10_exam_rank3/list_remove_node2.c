@@ -18,23 +18,24 @@ No extra memory allocation.
 
 t_list *remove_nth_from_end(t_list *lst, int n)
 {
-    t_list dummy, *fast = lst, *slow = &dummy;
+    t_list dummy, *fast = lst, *slow = &dummy, *temp;
 
     dummy.next = lst;
-    while (n > 0)
+    while (n > 0 && fast != NULL)
     {
         if (!fast) return (lst);
-        fast = fast->next; // moved n times fwd
+        fast = fast->next; // moves n times fwd: if want the second last: and 5 nodes: moves 2 nodes fwd
         n--;
     }
     while (fast)
     {
-        fast = fast->next; // reach end
-        slow = slow->next;
+        fast = fast->next; // mvs till end: if 5 el: 3 more till end
+        slow = slow->next; // moves x times from head of lst(x times till the end): from head moves 3 times, left 2 nodes: reached node b4 second last
     }
-    t_list *temp = slow->next;
+    temp = slow->next;
     slow->next = slow->next->next;
     free(temp);
+
     return (dummy.next);
 }
 
@@ -57,31 +58,33 @@ void init_lst(t_list **lst, int value)
     cpy->next = node;
 }
 
-// cc -Werror -Wextra -Wall list_remove_node.c && ./a.out
-// cc -g -Werror -Wextra -Wall list_remove_node.c && valgrind --leak-check=full ./a.out
+// cc -Werror -Wextra -Wall list_remove_node2.c && ./a.out
+// cc -g -Werror -Wextra -Wall list_remove_node2.c && valgrind --leak-check=full ./a.out
 int main()
 {
-    t_list  *temp = NULL;
-    t_list  *bla = NULL;
+    t_list *lst = NULL;
+    init_lst(&lst, 1);
+    init_lst(&lst, 2);
+    init_lst(&lst, 3);
+    init_lst(&lst, 4);
+    init_lst(&lst, 5);
+    init_lst(&lst, 6);
+    init_lst(&lst, 7);
+    init_lst(&lst, 8);
 
-    init_lst(&bla, 1);
-    init_lst(&bla, 2);
-    init_lst(&bla, 3);
-    init_lst(&bla, 4);
-    // init_lst(&bla, 5);
-
-    t_list *cpy = bla;
+    t_list *cpy = lst;
+    t_list *temp = NULL;
     while (cpy)
     {
         printf("%d -> ", cpy->data);
         cpy = cpy->next;
     }
     printf("NULL\n");
-    cpy = remove_nth_from_end(bla, 3);
-    while (cpy != NULL)
+    cpy = remove_nth_from_end(lst, 1);
+    while (cpy)
     {
-        temp = cpy;
         printf("%d -> ", cpy->data);
+        temp = cpy;
         cpy = cpy->next;
         free(temp);
     }
