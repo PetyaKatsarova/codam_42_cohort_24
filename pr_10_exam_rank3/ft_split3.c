@@ -66,7 +66,7 @@ char **ft_split(char *str, char delim)
         splitted[j] = word_dup(str, start, i);
         if (!splitted[j])
         {
-            printf("wtf: %s\n", splitted[j-1]);
+            printf("oops: %s\n", splitted[j-1]);
         }
         j++;
     }
