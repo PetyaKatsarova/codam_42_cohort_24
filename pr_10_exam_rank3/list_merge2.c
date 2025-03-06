@@ -20,57 +20,57 @@ The merged list must be sorted.
 
 t_list *merge_sorted_lists(t_list *lst1, t_list *lst2)
 {
-    if (!lst1) return (lst2);
-    if (!lst2) return (lst1);
-    t_list  dummy = {0, NULL}, *tail;
+    t_list dummy = {0, NULL}, *merged = &dummy;
 
-    tail = &dummy; // stores the address of dummy
-    tail->next = NULL;
     while (lst1 != NULL && lst2 != NULL)
     {
         if (lst1->data < lst2->data)
         {
-            tail->next = lst1;
+            merged->next = lst1;
             lst1 = lst1->next;
         }
         else
         {
-            tail->next = lst2;
+            merged->next = lst2;
             lst2 = lst2->next;
         }
-        tail = tail->next;
+        merged = merged->next;
     }
-    if (lst1) tail->next = lst1;
-    if (lst2) tail->next = lst2;
+    merged->next = lst1 ? lst1 : lst2;
     return (dummy.next);
 }
 
 void init_lst(t_list **lst, int value)
 {
-    t_list *node = malloc(sizeof(t_list));
+    /*
+    !! NB !!
+    !lst checks if the passed pointer itself is NULL (should be checked first), prevents crash here: init_lst(NULL, 1); 
+    !(*lst) checks if the list is empty.
+    If lst is NULL, checking *lst causes segmentation fault.
+    */
+    if (!lst) return;
+    t_list *node, *cpy;
+
+    node = (t_list *)malloc(sizeof(t_list));
     if (!node) return;
     node->data = value;
     node->next = NULL;
-    t_list *cpy;
-    
-    if (!*lst)
+    if (*lst == NULL)
     {
         *lst = node;
         return;
     }
     cpy = *lst;
-    while (cpy->next != NULL)
+    while (cpy->next)
         cpy = cpy->next;
-    cpy->next = node;
+    cpy->next = node;    
 }
-// cc -Werror -Wextra -Wall list_merge.c && ./a.out
-// cc -g -Werror -Wextra -Wall list_merge.c && valgrind --leak-check=full ./a.out
+
+// cc -Werror -Wextra -Wall list_merge2.c && ./a.out
+// cc -g -Werror -Wextra -Wall list_merge2.c && valgrind --leak-check=full ./a.out
 int main()
 {
-    t_list  *lst2 = NULL;
-    t_list  *lst1 = NULL;
-    t_list  *merged = NULL;
-    t_list  *temp = NULL;
+    t_list *lst1 = NULL, *lst2 = NULL, *merged, *cpy, *temp;
 
     init_lst(&lst1, 1);
     init_lst(&lst2, 2);
@@ -78,21 +78,16 @@ int main()
     init_lst(&lst2, 4);
     init_lst(&lst1, 5);
     init_lst(&lst2, 6);
-
+    init_lst(&lst1, 7);
     merged = merge_sorted_lists(lst1, lst2);
-    while (merged != NULL)
+    cpy = merged;
+    while (cpy)
     {
-        temp = merged;
-        printf("%d -> ", merged->data);
-        merged = merged->next;
+        temp = cpy;
+        printf("%d -> ", cpy->data);
+        cpy = cpy->next;
         free(temp);
     }
     printf("NULL\n");
     return (0);
 }
-/*
-IF I have only t_list dummy, *tail = &dummy;
-dummy is not initialized, so its data field contains garbage.
-tail = &dummy; makes tail point to dummy.
-tail->next = NULL; sets dummy.next = NULL;, making it a valid empty node.
-*/

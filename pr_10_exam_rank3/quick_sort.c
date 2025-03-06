@@ -9,7 +9,7 @@ void swap(int *a, int *b)
 
 int partition(int *tab, int low, int high)
 {
-    int pivot = tab[high];  // Choose last element as pivot
+    int pivot = tab[high];
     int i = low - 1;  // Track smaller elements
     
     for (int j = low; j < high; j++)
