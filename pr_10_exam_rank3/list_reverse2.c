@@ -18,9 +18,20 @@ The function should modify the list in place.
 Return the new head of the reversed list.
 */
 
-// t_list *reverse_list(t_list *lst)
-// {
-//     t_list *prev, *curr, *next;
+t_list *reverse_list(t_list *lst)
+{
+    t_list *curr = lst;
+    t_list *prev = NULL;
+    t_list *next = NULL; // placeholder for curr->next node
 
+    // example: 1 2 3 4
+    while (curr != NULL)
+    {
+        next = curr->next; // 2 - 3
+        curr->next = prev; // null - 1
+        prev = curr; // 1 - 2
+        curr = next; // 2 - 3
+    }
+    return (prev);
+}
 
-// }

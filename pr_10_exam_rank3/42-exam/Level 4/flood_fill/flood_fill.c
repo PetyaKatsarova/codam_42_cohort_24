@@ -1,16 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   test_main.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jdunnink <marvin@codam.nl>                   +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2019/06/17 15:07:35 by jdunnink      #+#    #+#                 */
-/*   Updated: 2019/06/17 15:58:37 by jdunnink      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "t_point.h"
+typedef struct s_point
+{
+    int x;
+    int y;
+} t_point;
 
 void	flood_fill(char **tab, t_point size, t_point begin)
 {

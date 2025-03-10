@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "sort_list.h"
 
 /*
 Write a function that checks if a linked list is a palindrome.
@@ -21,9 +20,19 @@ Solve it without extra memory (O(1) space complexity).
 The function must modify the list only temporarily.
 */
 
-t_list *reverse_list(t_list *lst)
+typedef struct s_list t_list;
+
+struct s_list
 {
-    t_list *prev = NULL, *curr = lst, *next = NULL;
+	int     data;
+	t_list  *next;
+};
+
+t_list *reverse_lst(t_list *lst)
+{
+    t_list  *prev = NULL;
+    t_list  *curr = lst;
+    t_list  *next = NULL;
 
     while (curr != NULL)
     {
@@ -37,28 +46,31 @@ t_list *reverse_list(t_list *lst)
 
 int is_palindrome(t_list *lst)
 {
-    if (!lst || !lst->next) return (1); // empty or single node is palindrome
-    t_list *slow = lst, *fast = lst, *cpy, *slow_cpy;
+    if (!lst || !lst->next) return (1);
+    //empty or single node r polindrome
+    t_list *slow = lst;
+    t_list *fast = lst;
+    t_list *reversed_slow, *cpy;
 
     while (fast && fast->next)
     {
-        fast = fast->next->next; // end of lst
-        slow = slow->next; // reaches 1/2 of lst
+        fast = fast->next->next;
+        slow = slow->next; // get second half of lst
     }
-    slow = reverse_list(slow);
-    slow_cpy = slow;
+    slow = reverse_lst(slow);
+    reversed_slow = slow;
     cpy = lst;
-    while (slow_cpy != NULL)
+    while (reversed_slow != NULL)
     {
-        if (slow_cpy->data != cpy->data)
+        if (reversed_slow->data != cpy->data)
         {
-            reverse_list(slow);
-            return (0);
+            reverse_lst(slow);
+            return (0); // not polindrome
         }
-        slow_cpy = slow_cpy->next;
+        reversed_slow = reversed_slow->next;
         cpy = cpy->next;
     }
-    reverse_list(slow);
+    reverse_lst(slow);
     return (1);
 }
 
@@ -92,7 +104,7 @@ int main()
     init_lst(&bla, 2);
     init_lst(&bla, 3);
     init_lst(&bla, 2);
-    init_lst(&bla, 1); // comment out if testing not polindrome
+    // init_lst(&bla, 1); // comment out if testing not polindrome
 
     t_list *cpy = bla;
     while (cpy)

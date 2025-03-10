@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "sort_list.h"
 
 /*
 Write a function that merges two sorted linked lists into one sorted list.
@@ -18,78 +17,87 @@ No extra memory allocation.
 The merged list must be sorted.
 */
 
+typedef struct s_list t_list;
+
+struct s_list
+{
+	int     data;
+	t_list  *next;
+};
+
 t_list *merge_sorted_lists(t_list *lst1, t_list *lst2)
 {
     if (!lst1) return (lst2);
     if (!lst2) return (lst1);
-    t_list  dummy = {0, NULL}, *tail;
 
-    tail = &dummy; // stores the address of dummy
-    tail->next = NULL;
+    t_list dummy = {0, NULL};
+    t_list *merged = &dummy; // stores the address of dummy
+
     while (lst1 != NULL && lst2 != NULL)
     {
-        if (lst1->data < lst2->data)
+        if (lst1->data > lst2->data)
         {
-            tail->next = lst1;
-            lst1 = lst1->next;
+            merged->next = lst2;
+            lst2 = lst2->next;
         }
         else
         {
-            tail->next = lst2;
-            lst2 = lst2->next;
+            merged->next = lst1;
+            lst1 = lst1->next;
         }
-        tail = tail->next;
+        merged = merged->next;
     }
-    if (lst1) tail->next = lst1;
-    if (lst2) tail->next = lst2;
+    merged->next = (lst1 ? lst1 : lst2);
     return (dummy.next);
 }
 
-void init_lst(t_list **lst, int value)
+void init_list(t_list **lst, int value)
 {
-    t_list *node = malloc(sizeof(t_list));
+    t_list *node, *cpy;
+
+    if (!lst) return;
+    node = malloc(sizeof(t_list));
     if (!node) return;
     node->data = value;
     node->next = NULL;
-    t_list *cpy;
-    
     if (!*lst)
     {
         *lst = node;
         return;
     }
     cpy = *lst;
-    while (cpy->next != NULL)
+    while (cpy->next)
         cpy = cpy->next;
     cpy->next = node;
 }
+
 // cc -Werror -Wextra -Wall list_merge.c && ./a.out
 // cc -g -Werror -Wextra -Wall list_merge.c && valgrind --leak-check=full ./a.out
 int main()
 {
-    t_list  *lst2 = NULL;
-    t_list  *lst1 = NULL;
-    t_list  *merged = NULL;
-    t_list  *temp = NULL;
+    t_list *lst1 = NULL;
+    t_list *lst2 = NULL;
+    t_list *merged, *temp;
 
-    init_lst(&lst1, 1);
-    init_lst(&lst2, 2);
-    init_lst(&lst1, 3);
-    init_lst(&lst2, 4);
-    init_lst(&lst1, 5);
-    init_lst(&lst2, 6);
+    init_list(&lst1, 1);
+    init_list(&lst1, 3);
+    init_list(&lst1, 5);
+    init_list(&lst2, 2);
+    init_list(&lst2, 4);
+    init_list(&lst2, 6);
 
     merged = merge_sorted_lists(lst1, lst2);
     while (merged != NULL)
     {
-        temp = merged;
         printf("%d -> ", merged->data);
+        temp = merged;
         merged = merged->next;
         free(temp);
     }
-    printf("NULL\n");
+    printf("NUL\n");
     return (0);
 }
+
 /*
 IF I have only t_list dummy, *tail = &dummy;
 dummy is not initialized, so its data field contains garbage.

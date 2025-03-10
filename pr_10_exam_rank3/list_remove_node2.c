@@ -60,6 +60,7 @@ void init_lst(t_list **lst, int value)
 
 // cc -Werror -Wextra -Wall list_remove_node2.c && ./a.out
 // cc -g -Werror -Wextra -Wall list_remove_node2.c && valgrind --leak-check=full ./a.out
+//!!NB!! error if remove first el
 int main()
 {
     t_list *lst = NULL;
