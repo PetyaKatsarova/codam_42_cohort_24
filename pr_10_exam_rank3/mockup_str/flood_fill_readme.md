@@ -47,16 +47,7 @@ char** make_area(char** zone, t_point size)
 		new[i][size.x] = '\0';
 	}
 
-	return new;
-}
-
-int main(void)
-{
-	t_point size = {8, 5};
-	char *zone[] = {
-		"11111111",
-		"10001001",
-		"10010001",
+	return new;// cc -g -Wall -Werror -Wextra flood_fill.c && valgrind --leak-check=full ./a.out 
 		"10110001",
 		"11100001",
 	};
