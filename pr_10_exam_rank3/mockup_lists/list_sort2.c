@@ -10,90 +10,82 @@ struct s_list
 	t_list  *next;
 };
 
-int	lst_len (t_list *lst)
+int ascending(int a, int b)
 {
-	int count = 0;
-	t_list *cpy = lst;
-
-	while (cpy != NULL)
-	{
-		cpy = cpy->next;
-		count++;
-	}
-	return (count);
+	return (a <= b);
 }
 
-t_list	*sort_list(t_list *lst)
+t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
 {
-	t_list *cpy_lst;
-	t_list *last_node = NULL;
-	int		swapped = 0, temp = 0;
+    t_list  *cpy = lst, *last_node = NULL;
+    int     swapped = 0, temp = 0;
 
-	do {
-		cpy_lst = lst;
-		swapped = 0;
-		while (cpy_lst->next != last_node)
-		{
-			if (cpy_lst->data > cpy_lst->next->data)
-			{
-				temp = cpy_lst->data;
-				cpy_lst->data = cpy_lst->next->data;
-				cpy_lst->next->data = temp;
-				swapped = 1;
-			}
-			cpy_lst = cpy_lst->next;
-		}
-		last_node = cpy_lst;
-	} while (swapped);
-	return (lst);
+    do
+    {
+        swapped = 0;
+        cpy = lst;
+        while (cpy->next != last_node)
+        {
+            if (cmp(cpy->data, cpy->next->data) == 0)
+            {
+                temp = cpy->data;
+                cpy->data = cpy->next->data;
+                cpy->next->data = temp;
+                swapped = 1;
+            }
+            cpy = cpy->next;
+        }
+        last_node = cpy;
+        
+    } while (swapped);
+    return (lst);
 }
 
-t_list *init_lst(t_list *lst, int value)
+void init_lst(t_list **lst, int val)
 {
-    t_list *node, *cpy_lst;
-
-    node = (t_list *)malloc(sizeof(t_list));
-    if (!node) return (NULL);
-    node->data = value;
+    if (!lst) return;
+    t_list *node = malloc(sizeof(t_list));
+    t_list *cpy = *lst;
+    if (!node) return; // probably need to free entire list?
+    node->data = val;
     node->next = NULL;
-    cpy_lst = lst;
-    if (!lst)
-        return (node);
-    while (cpy_lst->next != NULL)
-        cpy_lst = cpy_lst->next;
-    cpy_lst->next = node;
-    return(lst);
+    if (!*lst)
+    {
+        *lst = node;
+        return;
+    }
+    while (cpy->next)
+        cpy = cpy->next;
+    cpy->next = node;
 }
 
 // cc -Werror -Wextra -Wall list_sort2.c && ./a.out
 // cc -g -Werror -Wextra -Wall list_sort2.c && valgrind --leak-check=full ./a.out
+
 int main()
 {
-    t_list *temp;
-
-    t_list *mylist = NULL;
-    mylist = init_lst(mylist, 6);
-    mylist = init_lst(mylist, 5);
-    mylist = init_lst(mylist, -9);
-    mylist = init_lst(mylist, 42);
-    mylist = init_lst(mylist, 0);
-
-    t_list *cpy = mylist;
-    while (cpy != NULL)
+    t_list *lst = NULL;
+    init_lst(&lst, 5);
+    init_lst(&lst, 1);
+    init_lst(&lst, 4);
+    init_lst(&lst, 2);
+    init_lst(&lst, 3);
+    
+    t_list *cpy1 = lst;
+    while (cpy1)
     {
-        printf("%d -> ", cpy->data);
-        temp = cpy;
-        cpy = cpy->next;
+        printf("%d->", cpy1->data);
+        cpy1 = cpy1->next;
     }
-    printf("NULL\nSORTED:\n");
-    mylist = sort_list(mylist);
-    while (mylist != NULL)
+    printf("NUL\n");
+    sort_list(lst, ascending);
+    while (lst)
     {
-        printf("%d -> ", mylist->data);
-        temp = mylist;
-        mylist = mylist->next;
+        printf("%d->", lst->data);
+        t_list *temp = lst;
+        lst = lst->next;
         free(temp);
     }
-    printf("NULL\n");
+
     return (0);
 }
