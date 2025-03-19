@@ -45,24 +45,25 @@ $>
 
 #include <unistd.h>
 
-void print_str(char *str, int start, int end)
+int is_pal(char *str, int start, int end)
 {
 	while (start <= end)
 	{
-		write(1, &str[start++], 1);
-	}
-}
-
-int is_pal(char *str, int start, int end)
-{
-	if (!str || start > end) return (0);
-
-	while (start < end)
-	{
-		if (str[start++] != str[end--])
+		if (str[start] != str[end])
 			return (0);
+		start++;
+		end--;
 	}
 	return (1);
+}
+
+void print_str(char *str, int i, int j)
+{
+	while (i <= j)
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
 }
 
 void print_biggest_pal(char *str)

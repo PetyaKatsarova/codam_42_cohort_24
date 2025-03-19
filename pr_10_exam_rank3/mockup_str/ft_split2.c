@@ -1,18 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split2.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 15:00:42 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/03/15 08:00:58 by petya            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
 Assignment name  : ft_split
 Expected files   : ft_split.c
@@ -29,51 +14,40 @@ Your function must be declared as follows:
 
 char    **ft_split(char *str);
 */
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+
 int is_space(char c)
 {
-	if (c == ' ' || c == '\t' || c == '\n')
+	if (c == ' ' || c == '\t' || c=='\n')
 		return (1);
 	return (0);
 }
 
-
-int count_words(char *str)
+int words_count(char *str)
 {
 	int i = 0, count = 0, in_word = 0;
 
-	while (str[i] && is_space(str[i]))
-		i++;
 	while (str[i])
 	{
 		if (is_space(str[i]))
 			in_word = 0;
-		else if (!in_word && !is_space(str[i]))
+		else if (!in_word)
 		{
+			in_word = 0;
 			count++;
-			in_word = 1;
 		}
 		i++;
 	}
 	return (count);
 }
 
-char *cpy_word(char *str, int start, int end)
-{
-	int i = 0;
-	char *word;
-
-	word = malloc(sizeof(char) * (end - start + 1));
-	if (!word) return (0);
-	while (str[i] && start < end)
-		word[i++] = str[start++];
-	word[i] = '\0';
-	return (word);
-}
-
 void free_arr(char **arr)
 {
 	int i = 0;
-	
+
 	while (arr[i])
 	{
 		free(arr[i]);
@@ -81,32 +55,54 @@ void free_arr(char **arr)
 	free(arr);
 }
 
-char    **ft_split(char *str)
+char *cpy_word (char *str, int start, int end)
 {
-	int i = 0, j = 0, wc = count_words(str), start = 0;
+	int i = 0;
+	char *result = malloc(sizeof(char) * (end - start + 1)); // or + 2?
+	if (!result) return NULL;
+
+	while (start < end) // ?
+	{
+		result[i++] = str[start++];
+	}
+	result[i] = '\0';
+	return (result);
+}
+
+char **ft_split(char *str)
+{
+	int i = 0, j = 0, start, wc = words_count(str);
 	char **result;
 
 	result = malloc(sizeof(char *) * (wc + 1));
-	if (!result) return (NULL);
-	
 	while (str[i] && j < wc)
 	{
-		while (str[i] && is_space(str[i]))
-			i++;
-		start = i;
-		while (str[i] && !is_space(str[i]))
-			i++;
-		result[j] = cpy_word(str, start, i);
-		if (!result[j])
+		if (is_space(str[i]))
 		{
-			free_arr(result);
-			return (NULL);
+			while (str[i] && is_space(str[i]))
+				i++;
 		}
-		j++;
+		else
+		{
+			start = i;
+			while (str[i] && !is_space(str[i]))
+				i++;
+			result[j] = cpy_word(str, start, i);
+			if (!result[j])
+			{
+				free_arr(result);
+				return (NULL);
+			}
+			j++;
+		}
+		i++;
 	}
-	result[j] = NULL; // forgot this was giving mem err!!!
+	result[j] = NULL;
 	return (result);
 }
+
+
+
 
 
 // cc -Wall -Wextra -Werror ft_split2.c && ./a.out "hwllo qoels bla "
@@ -118,16 +114,16 @@ int main(int argc, char **argv)
      if (argc == 2)
     {
 		char *str = argv[1];
-		char **bla = ft_split(str);
+		char **result = ft_split(str);
 		int i = 0;
 
-		while (bla[i])
+		while (result[i])
 		{
-			printf("[%d]%s\n", i, bla[i]);
-			free(bla[i]);
+			printf("[%d] %s\n", i, result[i]);
+			free(result[i]);
 			i++;
 		}
-		free(bla);
+		free(result);
     }
     return (0);
 }
