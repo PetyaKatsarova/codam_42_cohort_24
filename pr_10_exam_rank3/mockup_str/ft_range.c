@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/13 16:42:48 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/03/13 17:03:32 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/03/14 15:38:59 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,13 @@ Examples:
 
 int     *ft_range(int start, int end)
 {
-	int *result, i = 0;
+	int *result, i = 0, arr_len;
 
-	result = malloc(sizeof(int) * (abs(end - start) + 1));
+	if (start <= end)
+		arr_len = end - start + 1;
+	else
+		arr_len = start - end + 1;
+	result = malloc(sizeof(int) * arr_len);
 	if (!result) return (NULL);
 	if (start < end)
 	{
@@ -48,9 +52,10 @@ int     *ft_range(int start, int end)
 	return (result);
 }
 // cc -g -Wall -Wextra -Werror ft_range.c && ./a.out
+//cc -g -Wall -Wextra -Werror ft_range.c && valgrind --leak-check=full ./a.out
 int main()
 {
-	int start = 5, end = -5;
+	int start = -1, end = 2;
 	int *result = ft_range(start, end);
 	for (int i = 0; i < abs(end - start) + 1; i++)
 	{
