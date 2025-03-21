@@ -1,18 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_split2.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/03/13 15:00:42 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/03/13 15:43:36 by pekatsar      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
 Assignment name  : ft_split
 Expected files   : ft_split.c
@@ -30,19 +15,28 @@ Your function must be declared as follows:
 char    **ft_split(char *str);
 */
 
-int count_words(char *str, char delim)
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int is_space(char c)
 {
-	int in_word = 0, i = 0, count = 0;
+	if (c == ' ' || c == '\t' || c=='\n')
+		return (1);
+	return (0);
+}
+
+int words_count(char *str)
+{
+	int i = 0, count = 0, in_word = 0;
 
 	while (str[i])
 	{
-		if (str[i] == delim)
+		if (is_space(str[i]))
+			in_word = 0;
+		else if (!in_word)
 		{
 			in_word = 0;
-		}
-		else if (str[i] && !in_word)
-		{
-			in_word = 1;
 			count++;
 		}
 		i++;
@@ -50,47 +44,66 @@ int count_words(char *str, char delim)
 	return (count);
 }
 
-char *cpy_word(char *str, int start, int end)
-{	
-	if (end - start < 0 || !str) return (NULL);
-	
-	int		i = 0;
-	char	*word = malloc(sizeof(char) * (end - start + 1));
-	if (!word) return (NULL);
-	while (start < end && str[i])
-		word[i++] = str[start++];
-	word[start] = '\0';
-	return (word);
+void free_arr(char **arr)
+{
+	int i = 0;
+
+	while (arr[i])
+	{
+		free(arr[i]);
+	}
+	free(arr);
 }
 
-char    **ft_split(char *str, char c)
+char *cpy_word (char *str, int start, int end)
 {
-	int		i = 0, j = 0, start = 0;
-	int		wc = count_words(str, c);
-	char	*cpy = str;
-	char	**result;
+	int i = 0;
+	char *result = malloc(sizeof(char) * (end - start + 1)); // or + 2?
+	if (!result) return NULL;
+
+	while (start < end) // ?
+	{
+		result[i++] = str[start++];
+	}
+	result[i] = '\0';
+	return (result);
+}
+
+char **ft_split(char *str)
+{
+	int i = 0, j = 0, start, wc = words_count(str);
+	char **result;
 
 	result = malloc(sizeof(char *) * (wc + 1));
-	if (!result) return (NULL);
-	while (cpy[i] && j < wc)
+	while (str[i] && j < wc)
 	{
-		while (cpy[i] && cpy[i] == c)
-			i++;
-		start = i;
-		while (cpy[i] && cpy[i] != c)
-			i++;
-		result[j] = cpy_word(str, start, i);
-		if (!result[j])
+		if (is_space(str[i]))
 		{
-			while (j > 0)
-				free(result[j--]);
-			return (NULL);
+			while (str[i] && is_space(str[i]))
+				i++;
 		}
-		j++;
+		else
+		{
+			start = i;
+			while (str[i] && !is_space(str[i]))
+				i++;
+			result[j] = cpy_word(str, start, i);
+			if (!result[j])
+			{
+				free_arr(result);
+				return (NULL);
+			}
+			j++;
+		}
+		i++;
 	}
 	result[j] = NULL;
 	return (result);
 }
+
+
+
+
 
 // cc -Wall -Wextra -Werror ft_split2.c && ./a.out "hwllo qoels bla "
 // cc -Wall -Wextra -Werror ft_split2.c && ./a.out ""
@@ -100,20 +113,17 @@ int main(int argc, char **argv)
 {
      if (argc == 2)
     {
-        int     wc = count_words(argv[1], ' ');
-        char    **result = ft_split(argv[1], ' '); // check = NULL;
-        if (!result || !*result)
-            return (-1);
-        int     i = 0;
+		char *str = argv[1];
+		char **result = ft_split(str);
+		int i = 0;
 
-        printf("wc: %d\n", wc);
-        while (result[i])
-        {
-            printf("[%d] %s\n", i+1, result[i]);
-            free(result[i]);
-            i++;
-        }
-        free(result);
+		while (result[i])
+		{
+			printf("[%d] %s\n", i, result[i]);
+			free(result[i]);
+			i++;
+		}
+		free(result);
     }
     return (0);
 }

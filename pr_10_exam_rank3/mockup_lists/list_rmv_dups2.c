@@ -27,19 +27,21 @@ struct s_list
 
 void remove_duplicates(t_list *lst)
 {
-	t_list *sorted_cpy = lst, *temp;
-
-	while (sorted_cpy != NULL && sorted_cpy->next != NULL)
-	{
-		if (sorted_cpy->data == sorted_cpy->next->data)
-		{
-			temp = sorted_cpy->next;
-			sorted_cpy->next = sorted_cpy->next->next;
-			free(temp);
-		}
-		else
-			sorted_cpy = sorted_cpy->next;
-	}
+	t_list  *cpy = lst;
+    t_list  *temp;
+    
+    while (cpy->next)
+    {
+        if (cpy->data == cpy->next->data)
+        {
+            temp = cpy->next;
+            cpy->next = cpy->next->next;
+            free(temp);
+        }
+        else {
+            cpy = cpy->next;
+        }
+    }
 }
 
 void init_list(t_list **lst, int value)
@@ -61,8 +63,8 @@ void init_list(t_list **lst, int value)
     temp->next = node;
 }
 
-// cc -Wall -Wextra -Werror list_remove_dups.c && ./a.out
-// cc -g -Wall -Wextra -Werror list_remove_dups.c && valgrind --leak-check=full ./a.out
+// cc -Wall -Wextra -Werror list_rmv_dups2.c && ./a.out
+// cc -g -Wall -Wextra -Werror list_rmv_dups2.c && valgrind --leak-check=full ./a.out
 int main()
 {
     t_list *temp;

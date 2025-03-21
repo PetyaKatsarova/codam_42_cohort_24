@@ -27,33 +27,35 @@ struct s_list
 
 t_list *reverse_list(t_list *lst)
 {
-	t_list *prev = NULL, *next = NULL, *curr = lst;
+    t_list *cpy = lst, *prev = NULL, *next = NULL;
 
-	while (curr)
-	{
-		next = curr->next;
-		curr->next = prev;
-		prev = curr;
-		curr = next;
-	}
-	return (prev);
+    while (cpy)
+    {
+        next = cpy->next;
+        cpy->next = prev;
+        prev = cpy;
+        cpy = next;
+    }
+    return (prev);
 }
 
-void init_list(t_list **lst, int value)
+void init_lst(t_list **lst, int value)
 {
-    t_list *node, *cpy;
+    if (!lst) return;
+    t_list *node;
+    t_list *cpy;
 
-    node = (t_list *)malloc(sizeof(t_list));
-    if (!node) return;
+    node = malloc(sizeof(t_list));
     node->data = value;
     node->next = NULL;
+
     if (!*lst)
     {
         *lst = node;
         return;
     }
     cpy = *lst;
-    while (cpy->next != NULL)
+    while (cpy->next)
         cpy = cpy->next;
     cpy->next = node;
 }
@@ -63,20 +65,26 @@ void init_list(t_list **lst, int value)
 int main()
 {
     t_list *lst = NULL;
-    init_list(&lst, 1);
-    init_list(&lst, 2);
-    init_list(&lst, 3);
-    init_list(&lst, 4);
-    init_list(&lst, 5);
+    t_list *cpy;
 
+    init_lst(&lst, 1);
+    init_lst(&lst, 2);
+    init_lst(&lst, 3);
+    init_lst(&lst, 4);
+    init_lst(&lst, 5);
     lst = reverse_list(lst);
-    while (lst)
-    {
-        t_list *temp = lst;
-        printf("%d -> ", temp->data);
+    cpy = lst;
+
+    while (lst) {
+        printf("%d->", lst->data);
         lst = lst->next;
+    }
+    while (cpy)
+    {
+        t_list *temp = cpy;
+        cpy = cpy->next;
         free(temp);
     }
-    printf("NULL\n");
     return (0);
 }
+
