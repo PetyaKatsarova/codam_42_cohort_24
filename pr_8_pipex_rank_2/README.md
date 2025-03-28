@@ -6,6 +6,7 @@ Program name pipex
 Turn in files Makefile, *.h, *.c
 Makefile NAME, all, clean, fclean, re
 Arguments file1 cmd1 cmd2 file2
+------------------------------------------------------------------
 External functs.
 • open, close, read, write,
 malloc, free, perror,
@@ -15,6 +16,7 @@ unlink, wait, waitpid
 • ft_printf and any equivalent
 YOU coded
 Libft authorized Yes
+-------------------------------------------------------------------
 Description This project is about handling pipes.
 Your program will be executed as follows:
 ./pipex file1 cmd1 cmd2 file2

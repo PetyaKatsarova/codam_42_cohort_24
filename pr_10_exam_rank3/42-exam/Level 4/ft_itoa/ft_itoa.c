@@ -6,9 +6,20 @@
 /*   By: jdunnink <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 10:56:22 by jdunnink      #+#    #+#                 */
-/*   Updated: 2019/05/21 11:04:43 by jdunnink      ########   odam.nl         */
+/*   Updated: 2025/03/21 09:05:19 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+Function name: ft_itoa_base
+Prototype: char *ft_itoa_base(int value, int base);
+Allowed bases: 2 to 16
+Digits above 9 must be uppercase letters (A–F)
+Negative sign only for base 10
+malloc is allowed
+Must return a null-terminated string
+Return "0" if value == 0
+*/
 
 #include <stdlib.h>
 

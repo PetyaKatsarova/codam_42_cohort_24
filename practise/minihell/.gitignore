@@ -1,0 +1,7 @@
+*.o
+libft/*.o
+libft/libft.a
+.vscode
+minishell
+eof
+readline.supp
