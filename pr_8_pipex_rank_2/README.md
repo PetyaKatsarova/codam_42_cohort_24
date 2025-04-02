@@ -55,3 +55,12 @@ This:
 $> ./pipex here_doc LIMITER cmd cmd1 file
 Should behave like:
 cmd << LIMITER | cmd1 >> file
+
+
+// ooops: not working in some built in commands cases:
+./pipex main.c "cd ~" "pwd" tralala.md
+./pipex main.c "export bla=tralala" "echo $bla" tralala.md
+
+this works:
+./pipex main.c "false" "echo $?" tralala.md
+./pipex main.c "env" "echo $HOME" tralala.md
