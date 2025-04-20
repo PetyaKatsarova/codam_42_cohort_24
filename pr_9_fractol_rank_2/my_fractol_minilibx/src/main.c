@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/31 17:14:57 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/02/20 14:43:33 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: marvin <marvin@student.42.fr>                +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/04/20 16:54:03 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ int	draw_fr(t_fractal *fr, char *name)
 	mlx_put_image_to_window(fr->mlx, fr->window, fr->img, 0, 0);
 	return (0);
 }
-
+/**
+ * In order to work in wsl, you need to run the following command in your terminal before make: export DISPLAY=:0
+ */
 int	main(int argc, char **argv)
 {
 	int			is_valid_i;
