@@ -41,7 +41,7 @@ Developed as part of LLVM project
 Very fast and modular
 Gives clearer error messages than GCC
 Often used with static analyzers, code formatters, and sanitizers
-===========================================================================
+======================================================================
 int xi = (int)x;               // Warning: casting pointer to int
 (void *)(i + 1);               // Warning: casting int to pointer
 You're abusing pointer types to pass/receive integers, which is:
@@ -60,6 +60,35 @@ leads to warnings and data loss
 So you use intptr_t to bridge them safely
 ====================================================================
 A mutex (mutual exlusion) allows us to encapsulate blocks of code that should only be executed in one thread at a time. Put another way, it allows us to glue together a sequence of operations that would otherwise not be atomic, so that they are executed atomically. Put yet another way, it allows us to be certain that the intermediate state during a sequence of operations will not be observed or tampered with by another thread. 
+=====================================================================
+int bla = *(int *)x;
+(int *)x	Cast x to a pointer to int	(int *)0x1234
+*(int *)x	Dereference it to get the actual int value	42
+int bla = *(int *)x;	Assign that value to variable bla	bla = 42
+======================================================================
+
+When to use detach?
+Use pthread_detach():
+When you don’t care when or how the thread ends.
+
+Background workers, logging, cleanup threads, fire-and-forget tasks.
+
+Don’t use detach if you need to:
+
+Wait for a thread to finish.
+Get its return value.
+
+Ensure it finishes before exiting main.
+Example difference:
+With join:
+
+pthread_create(&tid, NULL, func, NULL);
+pthread_join(tid, NULL); // blocks until thread finishes
+With detach:
+
+pthread_create(&tid, NULL, func, NULL);
+pthread_detach(tid); // returns immediately, no join later
+=================================================================
 
 
 

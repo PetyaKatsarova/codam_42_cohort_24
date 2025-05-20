@@ -97,3 +97,4 @@ The specific rules for the bonus part are:
 a semaphore.
 • Each philosopher must be represented as a separate process. However, the main
 process should not act as a philosopher.
+
