@@ -16,10 +16,8 @@ void *square(void *x)
     return NULL; // nth to return, prevent warning
 }
 /**
- * to run main 40 times:
+ * cc -Wall -Werror -Wextra -pthread race_example.c
  * for i in {1..40}; do ./a.out; done
- * cc -Wall -Werror -Wall race_example.c && ./a.out 
- * cc -Wall -Werror -Wextra -pthread race_example.c -o race_example
  */
 int main()
 {

@@ -89,6 +89,42 @@ With detach:
 pthread_create(&tid, NULL, func, NULL);
 pthread_detach(tid); // returns immediately, no join later
 =================================================================
+1. Core
+A core is the actual computing unit inside a CPU that performs instructions.
+Each core can:
+Fetch instructions from RAM
+Process data
+Write back results
+Modern CPUs have multiple cores, allowing them to run multiple tasks in parallel (multitasking or parallel processing).
+Your CPU has 14 cores, meaning it can process 14 separate instruction streams at once.
+
+2. Thread
+A thread is the smallest sequence of programmed instructions.
+With Hyperthreading (Intel's tech), each physical core can handle 2 threads, acting like 2 logical cores.
+
+Your CPU can handle 28 threads at once.
+------------------------------------------------------------------
+lscpu
+------------------------------------------------------------------
+
+3. Architecture
+Your architecture is x86_64, which: Supports 32-bit and 64-bit instruction sets.
+Means it's a 64-bit processor (can handle large memory, faster math, more data per cycle).
+
+4. Caches
+These are fast memory blocks inside the CPU:
+L1: Closest to the core. Small but fastest.
+L2: Bigger, slower than L1. Each core usually has one.
+L3: Shared between all cores. Bigger, slower, good for shared data.
+You have:
+L1: 672 KB data + 448 KB instruction
+L2: 28 MB (2 MB per core)
+L3: 30 MB shared (for quick inter-core data access)
+
+5. Virtualization (VT-x)
+Intel's VT-x allows the CPU to run virtual machines efficiently by handling guest OS instructions directly in hardware instead of software
+------------------------------------------------------
+
 
 
 
