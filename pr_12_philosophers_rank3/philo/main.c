@@ -1,63 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/05/27 14:30:56 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/05/27 19:34:35 by pekatsar      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "include/philo.h"
 
-// void	print_data_debug(t_data *data)
-// {
-// 	int	i;
+static void clean_up(t_data *data)
+{
+    for (int i = 0; i < data->args.ph_count; i++)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+	}
+	pthread_mutex_destroy(&data->dead_mutex);
+    pthread_mutex_destroy(&data->print_mutex);
 
-// 	printf("=== Parsed Arguments ===\n");
-// 	printf("count: %d, die: %lu, eat: %lu, sleep: %lu, times_eat: %d\n",
-// 		data->args.ph_count, data->args.time_to_die,
-// 		data->args.time_to_eat, data->args.time_to_sleep,
-// 		data->args.num_if_times_to_eat);
-
-// 	if (!data->forks)
-// 		printf("forks not allocated\n");
-// 	else
-// 		printf("forks allocated at %p\n", (void *)data->forks);
-
-// 	if (!data->philos)
-// 		printf("philos not allocated\n");
-// 	// else
-// 	// {
-// 	// 	printf("=== Philosopher Details ===\n");
-// 	// 	i = 0;
-// 	// 	while (i < data->args.ph_count)
-// 	// 	{
-// 	// 		printf("Philo %d | left: %p | right: %p | meals: %d | last: %lu\n",
-// 	// 			data->philos[i].id,
-// 	// 			(void *)data->philos[i].left_fork,
-// 	// 			(void *)data->philos[i].right_fork,
-// 	// 			data->philos[i].meals_eaten,
-// 	// 			data->philos[i].last_meal);
-// 	// 		i++;
-// 	// 	}
-// 	// }
-// 	printf("print_mutex address: %p\n", (void *)&data->print_mutex);
-// }
-
-
+    free(data->forks);
+    free(data->philos);
+}
+/**
+ * TODO: MAKE SURE CHANGES IN PHILO.H STILL REBUILD PROJECT!!
+ */
 int	main(int argc, char **argv)
 {
-	t_data	data;
-	argv_t	args;
-	int		i;
+	t_data		data;
+	argv_t		args;
+	pthread_t	monitor;
+	int			i;
 
 	if (init_args(&args, argc, argv))
-	{
 		return (1); // todo: handle
-	}
 	if (init_data(&args, &data))
-	{
-		printf("Initialization failed\n");
-		return (1); // todo: handle
-	}
-
-	// ✅ Join philosopher threads to avoid leaks
+		return (printf("Initialization failed\n"),1); // todo: handle
+	data.start_time = get_time_ms();
+	for (i = 0; i < args.ph_count; i++)
+		data.philos[i].last_meal = data.start_time;
+	for (i = 0; i < args.ph_count; i++)
+		pthread_create(&data.philos[i].thread, NULL, philo_routine, &data.philos[i]);
+	pthread_create(&monitor, NULL, monitor_routine, &data);
+	pthread_join(monitor, NULL); //  wait for monitor first
 	i = 0;
 	while (i < args.ph_count)
 	{
 		pthread_join(data.philos[i].thread, NULL);
 		i++;
 	}
+	clean_up(&data);
 	return (0);
 }

@@ -22,6 +22,7 @@ typedef struct s_philo
     pthread_t       thread;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
+	pthread_mutex_t	meal_mutex;
     struct s_data   *data;
 } t_philo;
 
@@ -30,6 +31,7 @@ typedef struct s_data
     argv_t          args;
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
+	pthread_mutex_t	dead_mutex;
     unsigned long   start_time;
     int             dead;
     t_philo         *philos;
@@ -42,7 +44,9 @@ unsigned long	ft_atoul(const char *str);
 int         	ft_atoi(const char *str);
 
 // initiation.c
-int init_args(argv_t *args_struct, int argc, char **argv);
-int init_data(argv_t *argv_struct, t_data *data);
+unsigned long	get_time_ms();
+int 			init_args(argv_t *args_struct, int argc, char **argv);
+int 			init_data(argv_t *argv_struct, t_data *data);
 
-void *philo_routine(void *ptr);
+void 			*philo_routine(void *ptr);
+void 			*monitor_routine(void *arg);

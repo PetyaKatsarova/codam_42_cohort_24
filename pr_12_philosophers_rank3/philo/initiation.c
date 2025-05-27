@@ -17,7 +17,6 @@ static int	parser_checker(int argc, char **argv)
 	return (0);
 }
 
-// todo: should it be static?
 int init_args(argv_t *args_struct, int argc, char **argv)
 {
     if (parser_checker(argc, argv) == 1)
@@ -35,7 +34,10 @@ int init_args(argv_t *args_struct, int argc, char **argv)
         args_struct->num_if_times_to_eat = -1;
     return (0);
 }
-
+/**
+ * Inits all mutexes(forks and print_mutex)
+ * Create thread per philo with philo_routine
+ */
 int init_data(argv_t *argv_struct, t_data *data)
 {
     int i;
@@ -47,7 +49,7 @@ int init_data(argv_t *argv_struct, t_data *data)
     data->philos = malloc(sizeof(t_philo) * argv_struct->ph_count);
     // todo: protect malloc again
     pthread_mutex_init(&data->print_mutex, NULL); // todo: print_mutex : printing funcs
-
+	pthread_mutex_init(&data->dead_mutex, NULL); // todo: same
     for (i = 0; i < argv_struct->ph_count; i++)
         pthread_mutex_init(&data->forks[i], NULL);
     i = 0;
@@ -59,7 +61,7 @@ int init_data(argv_t *argv_struct, t_data *data)
         data->philos[i].data = data;
         data->philos[i].meals_eaten = 0;
         data->philos[i].last_meal = 0;
-        pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]);
+		pthread_mutex_init(&data->philos[i].meal_mutex, NULL);
         i++;
     }
 

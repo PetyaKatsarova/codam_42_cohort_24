@@ -6,6 +6,7 @@ SRCS    := main.c \
 			ft_atoi.c \
 			initiation.c \
 			philo_routine.c \
+			monitor_routine.c \
 
 OBJDIR  := objs
 OBJS    := $(SRCS:.c=.o)

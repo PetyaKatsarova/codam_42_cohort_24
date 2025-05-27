@@ -124,7 +124,25 @@ L3: 30 MB shared (for quick inter-core data access)
 5. Virtualization (VT-x)
 Intel's VT-x allows the CPU to run virtual machines efficiently by handling guest OS instructions directly in hardware instead of software
 ------------------------------------------------------
+pthread_join(thread, NULL)
+diff from pthread_detach()
+both prevent leaks;
+Waits for the thread to finish and cleans up its internal resources (stack, metadata).
 
+What it does:
+Blocks the caller until thread exits
+
+Retrieves return value (if not NULL)
+
+Reclaims memory used by that thread (prevents resource leaks)
+
+Without pthread_join, a finished thread becomes a zombie thread — it’s done but still consuming resources.
+
+pthread_detach(thread)
+Tells the system:
+
+When this thread finishes, clean it up automatically, no join will follow.
+====================================
 
 
 
