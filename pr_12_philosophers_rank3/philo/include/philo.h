@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h> // for usleep
 #include <sys/time.h> // for gettimeofday
+#include <limits.h> // INT_MAX
 
 typedef struct argvs_s
 {

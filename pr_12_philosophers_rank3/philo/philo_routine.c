@@ -27,28 +27,44 @@ static void print_state(char *msg, t_philo *ph)
     pthread_mutex_unlock(&data->print_mutex);
 }
 
-void *philo_routine(void *ptr)
+void	*philo_routine(void *ptr)
 {
-    t_philo *ph = (t_philo *)ptr;
-    t_data  *data = ph->data;
+	t_philo			*ph = (t_philo *)ptr;
+	t_data			*data = ph->data;
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
 
-    if (ph->id % 2 == 0)
-        usleep(1000); // sleep 1 s?
-    while (!data->dead)
-    {
-        print_state("is thinking", ph);
-        pthread_mutex_lock(ph->left_fork);
-        print_state("has taken left fork", ph);
-        pthread_mutex_lock(ph->right_fork);
-        print_state("has taken right fork", ph);
-        ph->last_meal = get_time_ms();
-        print_state("is eating", ph);
-        smart_sleep(data->args.time_to_eat);
-        ph->meals_eaten++;
-        pthread_mutex_unlock(ph->right_fork);
-        pthread_mutex_unlock(ph->left_fork);
-        print_state("is sleeping", ph);
-        smart_sleep(data->args.time_to_sleep);
-    }
-    return (NULL);
+	if (ph->id % 2 == 0)
+		usleep(1000); // slight delay to reduce contention
+
+	while (!data->dead)
+	{
+		print_state("is thinking", ph);
+
+		first = ph->left_fork;
+		second = ph->right_fork;
+		if (first > second)
+		{
+			first = ph->right_fork;
+			second = ph->left_fork;
+		}
+
+		pthread_mutex_lock(first);
+		print_state("has taken a fork", ph);
+		pthread_mutex_lock(second);
+		print_state("has taken a fork", ph);
+
+		ph->last_meal = get_time_ms();
+		print_state("is eating", ph);
+		smart_sleep(data->args.time_to_eat);
+		ph->meals_eaten++;
+
+		pthread_mutex_unlock(second);
+		pthread_mutex_unlock(first);
+
+		print_state("is sleeping", ph);
+		smart_sleep(data->args.time_to_sleep);
+	}
+	return (NULL);
 }
+

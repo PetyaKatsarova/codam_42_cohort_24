@@ -1,59 +1,67 @@
 #include "include/philo.h"
 
-static	int	is_digit(char c)
+#include <limits.h>
+
+static int	is_space(char c)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
+	return (c == ' ' || (c >= 9 && c <= 13));
 }
 
-static	int	is_space(char c)
+static int	is_digit(char c)
 {
-	if (c == ' ' || (c >= 9 && c <= 13))
-		return (1);
-	return (0);
+	return (c >= '0' && c <= '9');
 }
 
+/**
+ * Returns num between 1 and INT_MAX
+ */
 int	ft_atoi(const char *str)
 {
-	int	result;
-	int	sign;
-	int	i;
+	long	r;
+	int		i;
 
-	result = 0;
-	sign = 1;
+	r = 0;
 	i = 0;
-	while (is_space(str[i]))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	while (is_digit(str[i]))
-	{
-		result += (str[i] - '0');
-		if (is_digit(str[i + 1]))
-			result = result * 10;
-		i++;
-	}
-	return (result * sign);
-}
-
-unsigned long	ft_atoul(const char *str)
-{
-	unsigned long	result = 0;
-	int				i = 0;
-
 	while (is_space(str[i]))
 		i++;
 	if (str[i] == '+')
 		i++;
+	if (!is_digit(str[i]))
+		return (-1);
 	while (is_digit(str[i]))
 	{
-		result = result * 10 + (str[i] - '0');
-		i++;
+		if (r > (INT_MAX - (str[i] - '0')) / 10)
+			return (-1);
+		r = r * 10 + (str[i++] - '0');
 	}
-	return (result);
+	if (r == 0)
+		return (-1);
+	return ((int)r);
+}
+
+/**
+ * Returns num between 1 and ULONG_MAX
+ */
+unsigned long	ft_atoul(const char *str)
+{
+	unsigned long	r;
+	int				i;
+
+	r = 0;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '+')
+		i++;
+	if (str[i] < '0' || str[i] > '9')
+		return (0);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		if (r > (ULONG_MAX - (str[i] - '0')) / 10)
+			return (0);
+		r = r * 10 + (str[i++] - '0');
+	}
+	if (r == 0)
+		return (0);
+	return (r);
 }
