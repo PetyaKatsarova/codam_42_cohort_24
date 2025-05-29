@@ -9,7 +9,7 @@ unsigned long	get_time_ms()
 }
 
 /**
- * Sleep in short bursts to stay responsive
+ * 
  */
 static void smart_sleep(unsigned long ms, t_data *data)
 {
@@ -27,15 +27,17 @@ static void smart_sleep(unsigned long ms, t_data *data)
 	}
 }
 
-
+/**
+ * Locks/unlocks print && dead_mutexes, checking if not dead, print the msg
+ */
 static void print_state(char *msg, t_philo *ph)
 {
-    t_data 		*data = ph->data;
+    t_data 		*data = ph->data; // just to make it cleaner
     unsigned	long curr_time = get_time_ms() - data->start_time;
     pthread_mutex_lock(&data->print_mutex);
 	pthread_mutex_lock(&data->dead_mutex);
 	if (!data->dead)
-	printf("%lu %d %s\n", curr_time, ph->id, msg);
+		printf("%lu %d %s\n", curr_time, ph->id, msg);
 	pthread_mutex_unlock(&data->dead_mutex);
 	pthread_mutex_unlock(&data->print_mutex);
 }
@@ -43,23 +45,18 @@ static void print_state(char *msg, t_philo *ph)
  * Lock 2 forks(imaginary resources) and inside add the set time for eating, unlock, can think(doesnt take time) and sleep(set time, can be parallel, no shared resources)
  */
 
- /**
-  * allows a philosopher to die, because the timing margin is too tight between when a philosopher finishes eating, sleeps, thinks, and then waits for forks again. The main problem is that sleep time + fork wait + scheduling delay > time_to_die.
-  */
-void	*philo_routine(void *ptr)
+void	*philo_routine(void *philo)
 {
-	t_philo			*ph = (t_philo *)ptr;
+	t_philo			*ph = (t_philo *)philo;
 	t_data			*data = ph->data;
 	pthread_mutex_t	*first;
 	pthread_mutex_t	*second;
 
+	// avoid deadlock
 	if (ph->id % 2 == 0)
 		usleep(data->args.time_to_eat * 1000 / 2);
-		//usleep(1000); // reduce contention
-
 	while (1)
 	{
-		// Check for death flag
 		pthread_mutex_lock(&data->dead_mutex);
 		if (data->dead)
 		{
@@ -67,10 +64,8 @@ void	*philo_routine(void *ptr)
 			break;
 		}
 		pthread_mutex_unlock(&data->dead_mutex);
-
 		print_state("is thinking", ph);
-
-		// Determine fork order (deadlock avoidance)
+		// deadlock avoidance
 		first = ph->left_fork;
 		second = ph->right_fork;
 		if (first > second)
@@ -78,35 +73,24 @@ void	*philo_routine(void *ptr)
 			first = ph->right_fork;
 			second = ph->left_fork;
 		}
-
-		// Lock forks
 		pthread_mutex_lock(first);
 		print_state("has taken a fork", ph);
 		pthread_mutex_lock(second);
 		print_state("has taken a fork", ph);
-
-		// SAFELY update shared meal data (while holding forks)
-		pthread_mutex_lock(&ph->meal_mutex); // or right_fork — both are locked already, so this is safe
+		pthread_mutex_lock(&ph->meals_eaten_mutex); // or right_fork — both are locked already, so this is safe
 		ph->last_meal = get_time_ms();
 		ph->meals_eaten++;
-		pthread_mutex_unlock(&ph->meal_mutex);
-
+		pthread_mutex_unlock(&ph->meals_eaten_mutex);
 		//print_state("is eating", ph);
-
-
 		char msg[64];
-		snprintf(msg, sizeof(msg), "is eating (%d)", ph->meals_eaten);
+		snprintf(msg, sizeof(msg), "is eating (%d)", ph->meals_eaten); // rmv: only for testing: TODO
 		print_state(msg, ph);
-		
-
 		smart_sleep(data->args.time_to_eat, data);
-
-		// Unlock forks
 		pthread_mutex_unlock(second);
 		pthread_mutex_unlock(first);
 
 		print_state("is sleeping", ph);
-		smart_sleep(data->args.time_to_sleep, data);
+		smart_sleep(data->args.time_to_sleep, data); // for 500 microseconds
 		if (ph->id % 2 == 0)
 			usleep(1000); // desync again before next cycle
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   fract-ol.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/02/04 11:31:52 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 17:15:02 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   fract-ol.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/04 11:31:52 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void            draw_pinecone(void *fr_void);
 
 
 // src/hooks.c
-void            key_hook(mlx_key_data_t keydata, void *param);
+void            key_hook(mlx_key_t_data keydata, void *param);
 void            scroll_hook(double xdelta, double ydelta, void *param);
 void            close_hook(void *param);
 

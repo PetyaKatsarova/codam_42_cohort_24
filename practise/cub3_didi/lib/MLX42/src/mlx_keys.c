@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   mlx_keys.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/01/01 21:06:45 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2023/02/13 12:24:40 by W2Wizard      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   mlx_keys.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/01 21:06:45 by W2Wizard          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void mlx_key_callback(GLFWwindow* window, int32_t key, int32_t scancode, 
 {
 	const mlx_t* mlx = glfwGetWindowUserPointer(window);
 	const mlx_key_t key_hook = ((mlx_ctx_t*)mlx->context)->key_hook;
-	const mlx_key_data_t callback_data = {
+	const mlx_key_t_data callback_data = {
 		key,
 		action,
 		scancode,

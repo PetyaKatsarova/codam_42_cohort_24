@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   fast_smooth_move_circle.c                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 14:14:32 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   fast_smooth_move_circle.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/31 17:14:57 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void move_circle()
     draw_circle();
 }
 
-void key_hook(mlx_key_data_t keydata, void *param)
+void key_hook(mlx_key_t_data keydata, void *param)
 {
     (void)param;
     if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)

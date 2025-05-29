@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   move_zoom_sq.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/01/31 11:20:38 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/04 13:47:29 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   move_zoom_sq.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/31 11:20:38 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void update_movement(void *param)
 /*
     Key callback for exiting
 */
-void key_callback(mlx_key_data_t keydata, void *param)
+void key_callback(mlx_key_t_data keydata, void *param)
 {
     (void) param;
     if (keydata.action == MLX_PRESS)
@@ -160,7 +160,7 @@ MLX_REPEAT is an event type that indicates a key is being held down.
     Registers a keyboard event listener.
     Calls key_callback() when a key is pressed, released, or held.
     NULL is an optional parameter (used if you want to pass extra data).
-void key_callback(mlx_key_data_t keydata, void* param) {
+void key_callback(mlx_key_t_data keydata, void* param) {
     if (keydata.action == MLX_PRESS) {
         if (keydata.key == MLX_KEY_ESCAPE)
             mlx_close_window((mlx_t*)param); // Close on ESC

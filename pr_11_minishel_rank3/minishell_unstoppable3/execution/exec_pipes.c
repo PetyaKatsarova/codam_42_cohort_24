@@ -62,7 +62,7 @@ static void	exec_pipeline_loop(t_data *data, t_node *cmd,
 	while (cmd)
 	{
 		setup_data_one(data, i, data->pipes, tree);
-		setup_data_two(data, data->pids, cmd, env);
+		setup_t_datawo(data, data->pids, cmd, env);
 		data->i = i;
 		safe_pipe_alloc(data->pipes, i, data->pipe_count);
 		exec_pipeline_fork(data, i);

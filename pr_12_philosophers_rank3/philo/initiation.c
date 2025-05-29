@@ -1,5 +1,9 @@
 #include "include/philo.h"
 
+/**
+ * Checks if received 5 or 6 args and valid int or unsigned long.
+ * Returns 0 if correct input, else 1
+ */
 static int	parser_checker(int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
@@ -17,11 +21,11 @@ static int	parser_checker(int argc, char **argv)
 	return (0);
 }
 
-int init_args(argv_t *args_struct, int argc, char **argv)
+int init_args(t_argv *args_struct, int argc, char **argv)
 {
     if (parser_checker(argc, argv) == 1)
     {
-        printf("Naughty, naughty... u can give numbers between 1 and 10000 and the format is:\nnumber_philos time_to_die time_to_eat time_to_sleep [times_to_eat_optional]\n");
+        printf("Naughty, naughty... u can give only positive nums starting from 1 and the format is:\n*number_philos *time_to_die *time_to_eat *time_to_sleep [*times_to_eat_optional]\n");
         return (1);
     }
     args_struct->ph_count = ft_atoi(argv[1]);
@@ -35,10 +39,11 @@ int init_args(argv_t *args_struct, int argc, char **argv)
     return (0);
 }
 /**
- * Inits all mutexes(forks and print_mutex)
+ * Inits t_data mutexes(forks, dead and print_mutex)
  * Create thread per philo with philo_routine
+ * Malloc's *forks and *philos
  */
-int init_data(argv_t *argv_struct, t_data *data)
+int init_data(t_argv *argv_struct, t_data *data)
 {
     int i;
     
@@ -58,10 +63,10 @@ int init_data(argv_t *argv_struct, t_data *data)
         data->philos[i].id = i + 1;
         data->philos[i].left_fork = &data->forks[i];
         data->philos[i].right_fork = &data->forks[(i + 1) % argv_struct->ph_count];
-        data->philos[i].data = data;
+        data->philos[i].data = data; // todo: do i need it?
         data->philos[i].meals_eaten = 0;
         data->philos[i].last_meal = 0;
-		pthread_mutex_init(&data->philos[i].meal_mutex, NULL);
+		pthread_mutex_init(&data->philos[i].meals_eaten_mutex, NULL);
         i++;
     }
 

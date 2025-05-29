@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   hooks.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/02/06 15:22:55 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 16:47:34 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/06 15:22:55 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void zoom(t_fractal *fr, int x, int y, double zoom_factor)
     mlx_image_to_window(fr->mlx, fr->img, 0, 0);
 }
 
-void key_hook(mlx_key_data_t keydata, void *param)
+void key_hook(mlx_key_t_data keydata, void *param)
 {
     t_fractal *fr = (t_fractal *)param;
 

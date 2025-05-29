@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/01/31 17:14:57 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/02/06 17:24:50 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/31 17:14:57 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ if (!mlx)
 
     Handling Keyboard Input (mlx_key_hook)
     Registers a function that runs when a key is pressed or released.
-    Takes a callback function that receives an mlx_key_data_t struct.
+    Takes a callback function that receives an mlx_key_t_data struct.
 
-Structure of mlx_key_data_t
+Structure of mlx_key_t_data
 typedef struct {
     mlx_key_t key;      // Which key was pressed
     action_t action;    // MLX_PRESS, MLX_RELEASE, or MLX_REPEAT

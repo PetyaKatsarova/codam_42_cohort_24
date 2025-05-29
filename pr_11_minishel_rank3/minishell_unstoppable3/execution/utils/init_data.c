@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:38:18 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/05/14 17:27:08 by petya            ###   ########.fr       */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	setup_data_one(t_data *data, int i, int **pipes, t_tree *tree)
 	data->tree = tree;
 }
 
-void	setup_data_two(t_data *data, pid_t *pids,
+void	setup_t_datawo(t_data *data, pid_t *pids,
 				t_node *cmd, t_env_list *env)
 {
 	data->pids = pids;

@@ -6,7 +6,7 @@
 
 
 // gcc hooks.c ../../lib/MLX42/build/libmlx42.a -I MLX42/include -ldl -lglfw -pthread  -Ofast -lm && ./a.out
-void my_keyhook(mlx_key_data_t keydata, void* param)
+void my_keyhook(mlx_key_t_data keydata, void* param)
 {
 	// If we PRESS the 'J' key, print "Hello".
 	if (keydata.key == MLX_KEY_J && keydata.action == MLX_PRESS)

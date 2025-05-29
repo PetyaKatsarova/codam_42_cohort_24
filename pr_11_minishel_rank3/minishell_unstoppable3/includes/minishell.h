@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:42:50 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/05/14 17:38:31 by petya            ###   ########.fr       */
+/*   Updated: 2025/05/28 17:24:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void		*xalloc(t_alloc_type type, void *a, void *b, size_t size);
 void		close_all_pipe_fds(void);
 void		total_liberation(t_tree *tree, t_env_list *env_list_struct, t_data *data, int **pipes);
 void		setup_data_one(t_data *data, int i, int **pipes, t_tree *tree);
-void		setup_data_two(t_data *data, pid_t *pids,
+void		setup_t_datawo(t_data *data, pid_t *pids,
 	t_node *cmd, t_env_list *env);
 /* handle_commands */
 int			execute_builtin(t_node *cmd, t_tree *tree, t_env_list *env);
