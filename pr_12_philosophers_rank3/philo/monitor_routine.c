@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:01:23 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/05/29 10:08:16 by petya            ###   ########.fr       */
+/*   Updated: 2025/05/29 10:18:26 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 static int all_philos_ate_enough(t_data *data)
 {
 	if (data->args.num_if_times_to_eat < 0)
-		return 0; // no limit
+		return 0;
 	for (int i = 0; i < data->args.ph_count; i++)
 	{
 		pthread_mutex_lock(&data->philos[i].meals_eaten_mutex);

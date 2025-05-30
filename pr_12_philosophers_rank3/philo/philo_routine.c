@@ -54,7 +54,7 @@ void	*philo_routine(void *philo)
 
 	// avoid deadlock
 	if (ph->id % 2 == 0)
-		usleep(data->args.time_to_eat * 1000 / 2);
+		usleep(1000);
 	while (1)
 	{
 		pthread_mutex_lock(&data->dead_mutex);
