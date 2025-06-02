@@ -14,14 +14,19 @@ typedef struct argvs_s
     int             num_if_times_to_eat; // optional
 } t_argv;
 
+typedef struct s_fork {
+    pthread_mutex_t mutex;
+    int             taken; // 0 = free, 1 = taken
+} t_fork;
+
 typedef struct s_philo
 {
     int             id;
     unsigned long   last_meal;
     int             meals_eaten;
     pthread_t       thread;
-    pthread_mutex_t *left_fork;
-    pthread_mutex_t *right_fork;
+    t_fork          *left_fork;
+    t_fork          *right_fork;
 	pthread_mutex_t	meals_eaten_mutex;
     struct s_data   *data;
 } t_philo;
@@ -29,7 +34,8 @@ typedef struct s_philo
 typedef struct s_data
 {
     t_argv          args;
-    pthread_mutex_t *forks; // 1 per philo, malloced
+    // pthread_mutex_t *forks; // 1 per philo, malloced
+    t_fork          *forks;
     pthread_mutex_t print_mutex;
 	pthread_mutex_t	dead_mutex;
     unsigned long   start_time;

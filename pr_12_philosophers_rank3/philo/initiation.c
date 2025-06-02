@@ -49,14 +49,17 @@ int init_data(t_argv *argv_struct, t_data *data)
     
     data->args = *argv_struct;
     data->dead = 0;
-    data->forks = malloc(sizeof(pthread_mutex_t) * argv_struct->ph_count);
+    data->forks = malloc(sizeof(t_fork) * argv_struct->ph_count);
     // todo: protect the malloc: if fails..
     data->philos = malloc(sizeof(t_philo) * argv_struct->ph_count);
     // todo: protect malloc again
     pthread_mutex_init(&data->print_mutex, NULL); // todo: print_mutex : printing funcs
 	pthread_mutex_init(&data->dead_mutex, NULL); // todo: same
     for (i = 0; i < argv_struct->ph_count; i++)
-        pthread_mutex_init(&data->forks[i], NULL);
+    {
+        pthread_mutex_init(&data->forks[i].mutex, NULL);
+        data->forks[i].taken = 0;
+    }
     i = 0;
     while (i < argv_struct->ph_count)
     {
