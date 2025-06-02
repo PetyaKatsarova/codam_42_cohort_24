@@ -49,8 +49,8 @@ void	*philo_routine(void *philo)
 {
 	t_philo			*ph = (t_philo *)philo;
 	t_data			*data = ph->data;
-	pthread_mutex_t	*first;
-	pthread_mutex_t	*second;
+	t_fork			*first;
+	t_fork			*second;
 
 	// avoid deadlock
 	if (ph->id % 2 == 0)
@@ -73,9 +73,9 @@ void	*philo_routine(void *philo)
 			first = ph->right_fork;
 			second = ph->left_fork;
 		}
-		pthread_mutex_lock(first);
+		pthread_mutex_lock(&first->mutex);
 		print_state("has taken a fork", ph);
-		pthread_mutex_lock(second);
+		pthread_mutex_lock(&second->mutex);
 		print_state("has taken a fork", ph);
 		pthread_mutex_lock(&ph->meals_eaten_mutex); // or right_fork — both are locked already, so this is safe
 		ph->last_meal = get_time_ms();
@@ -86,8 +86,8 @@ void	*philo_routine(void *philo)
 		snprintf(msg, sizeof(msg), "is eating (%d)", ph->meals_eaten); // rmv: only for testing: TODO
 		print_state(msg, ph);
 		smart_sleep(data->args.time_to_eat, data);
-		pthread_mutex_unlock(second);
-		pthread_mutex_unlock(first);
+		pthread_mutex_unlock(&second->mutex);
+		pthread_mutex_unlock(&first->mutex);
 
 		print_state("is sleeping", ph);
 		smart_sleep(data->args.time_to_sleep, data); // for 500 microseconds

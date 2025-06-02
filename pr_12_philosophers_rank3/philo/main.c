@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:30:56 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/05/28 21:53:10 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/02 17:35:58 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void clean_up_data(t_data *data)
 {
     for (int i = 0; i < data->args.ph_count; i++)
-		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->forks[i].mutex);
 	pthread_mutex_destroy(&data->dead_mutex);
     pthread_mutex_destroy(&data->print_mutex);
 
