@@ -1,9 +1,5 @@
-./philo 5 800 200 200
-5 philosophers run in parallel
-Nobody dies
 Each philosopher cycles through thinking → taking forks → eating → sleeping
 ============================================
-./philo 1 500 200 200
 
 Do not test with more than 200 philosophers.
 Do not test with time_to_die or time_to_eat or time_to_sleep set to values lower than 60 ms.

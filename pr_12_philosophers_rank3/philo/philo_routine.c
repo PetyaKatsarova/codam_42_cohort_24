@@ -41,6 +41,16 @@ static void print_state(char *msg, t_philo *ph)
 	pthread_mutex_unlock(&data->dead_mutex);
 	pthread_mutex_unlock(&data->print_mutex);
 }
+
+static int check_death(t_data *data)
+{
+	pthread_mutex_lock(&data->dead_mutex);
+	if (data->dead)
+		return(pthread_mutex_unlock(&data->dead_mutex), 1);
+	pthread_mutex_unlock(&data->dead_mutex);
+	return (0);
+}
+
 /**
  * Lock 2 forks(imaginary resources) and inside add the set time for eating, unlock, can think(doesnt take time) and sleep(set time, can be parallel, no shared resources)
  */
@@ -57,13 +67,8 @@ void	*philo_routine(void *philo)
 		usleep(1000);
 	while (1)
 	{
-		pthread_mutex_lock(&data->dead_mutex);
-		if (data->dead)
-		{
-			pthread_mutex_unlock(&data->dead_mutex);
+		if (check_death(data))
 			break;
-		}
-		pthread_mutex_unlock(&data->dead_mutex);
 		print_state("is thinking", ph);
 		// deadlock avoidance
 		first = ph->left_fork;

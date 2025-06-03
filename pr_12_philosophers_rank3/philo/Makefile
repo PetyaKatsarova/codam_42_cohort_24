@@ -1,3 +1,4 @@
+
 NAME    := philo
 CC      := cc
 CFLAGS  := -Wall -Wextra -Werror -pthread -g -fsanitize=thread
@@ -7,6 +8,7 @@ SRCS    := main.c \
 			initiation.c \
 			philo_routine.c \
 			monitor_routine.c \
+			cleanup_all.c \
 
 OBJDIR  := objs
 OBJS    := $(SRCS:.c=.o)
@@ -31,6 +33,10 @@ fclean: clean
 
 re: fclean all
 
+mem_check:
+	$(MAKE) fclean
+	$(MAKE) CFLAGS="-Wall -Wextra -Werror -pthread -g -fsanitize=address" all
+	ASAN_OPTIONS=detect_leaks=1 ./$(NAME) 5 800 200 200 7
+
 .PHONY: all clean fclean re
 
-bla: clean

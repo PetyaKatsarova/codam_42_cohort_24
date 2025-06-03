@@ -6,23 +6,13 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:30:56 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/02 17:35:58 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/03 10:54:37 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "include/philo.h"
 
-static void clean_up_data(t_data *data)
-{
-    for (int i = 0; i < data->args.ph_count; i++)
-		pthread_mutex_destroy(&data->forks[i].mutex);
-	pthread_mutex_destroy(&data->dead_mutex);
-    pthread_mutex_destroy(&data->print_mutex);
-
-    free(data->forks);
-    free(data->philos);
-}
 /**
  * TODO: MAKE SURE CHANGES IN PHILO.H STILL REBUILD PROJECT!!
  */
@@ -36,7 +26,7 @@ int	main(int argc, char **argv)
 	if (init_args(&args, argc, argv))
 		return (1); // todo: handle
 	if (init_data(&args, &data))
-		return (printf("Initialization failed\n"),1); // todo: handle
+		return (printf("Data initialization failed\n"), cleanup_all(&data));
 	data.start_time = get_time_ms();
 	for (i = 0; i < args.ph_count; i++)
 	{
@@ -49,5 +39,5 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < args.ph_count)
 		pthread_join(data.philos[i++].thread, NULL);
-	return (clean_up_data(&data), 0);
+	return (cleanup_all(&data), 0);
 }

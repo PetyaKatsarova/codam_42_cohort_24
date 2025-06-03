@@ -34,13 +34,12 @@ typedef struct s_philo
 typedef struct s_data
 {
     t_argv          args;
-    // pthread_mutex_t *forks; // 1 per philo, malloced
     t_fork          *forks;
     pthread_mutex_t print_mutex;
 	pthread_mutex_t	dead_mutex;
     unsigned long   start_time;
     int             dead;
-    t_philo         *philos; // malloced: todo: free
+    t_philo         *philos;
 } t_data;
 
 int             main(int argc, char **argv);
@@ -56,3 +55,4 @@ int 			init_data(t_argv *argv_struct, t_data *data);
 
 void 			*philo_routine(void *ptr);
 void 			*monitor_routine(void *arg);
+int 	        cleanup_all(t_data *data);

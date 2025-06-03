@@ -66,7 +66,7 @@ int init_data(t_argv *argv_struct, t_data *data)
         data->philos[i].id = i + 1;
         data->philos[i].left_fork = &data->forks[i];
         data->philos[i].right_fork = &data->forks[(i + 1) % argv_struct->ph_count];
-        data->philos[i].data = data; // todo: do i need it?
+        data->philos[i].data = data;
         data->philos[i].meals_eaten = 0;
         data->philos[i].last_meal = 0;
 		pthread_mutex_init(&data->philos[i].meals_eaten_mutex, NULL);
