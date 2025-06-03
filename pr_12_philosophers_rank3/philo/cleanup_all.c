@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   cleanup_all.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/03 17:34:53 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/06/03 17:35:12 by pekatsar      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "include/philo.h"
 
 int	cleanup_all(t_data *data)
@@ -26,4 +38,3 @@ int	cleanup_all(t_data *data)
 	pthread_mutex_destroy(&data->dead_mutex);
 	return (1);
 }
-

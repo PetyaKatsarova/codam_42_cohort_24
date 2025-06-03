@@ -1,6 +1,11 @@
 Each philosopher cycles through thinking → taking forks → eating → sleeping
 ============================================
 
+./philo 5 800 200 200 7 | grep "eating" | wc -l
+
+returns 35: 5 philos eat 5 times = 35
+==============================================
+
 Do not test with more than 200 philosophers.
 Do not test with time_to_die or time_to_eat or time_to_sleep set to values lower than 60 ms.
 
@@ -22,7 +27,7 @@ No philosopher should die.  -- WORKS -- :)
 
 5. ===============
 ./philo 4 310 200 100
-One philosopher should die. -- WORKS -- :)
+One philosopher should die. -- WORKS -- :), after refactor: not :()
 
 6. =================
 Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is
