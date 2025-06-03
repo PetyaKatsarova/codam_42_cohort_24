@@ -34,3 +34,9 @@ that they don't steal forks, and so forth.
 
 ./philo 200 1000 100 100
 All philosophers eat and sleep, no one dies.
+=====================================
+
+
+./philo 200 410 200 200
+
+./philo 3 610 200 200

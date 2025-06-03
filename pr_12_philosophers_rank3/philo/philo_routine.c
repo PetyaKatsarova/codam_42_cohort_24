@@ -70,9 +70,13 @@ void	*philo_routine(void *philo)
 		if (check_death(data))
 			break;
 		print_state("is thinking", ph);
+		usleep(500); // todo
 		// deadlock avoidance
+
+		
 		first = ph->left_fork;
 		second = ph->right_fork;
+		// (i == nphilos)
 		if (first > second)
 		{
 			first = ph->right_fork;
@@ -86,10 +90,10 @@ void	*philo_routine(void *philo)
 		ph->last_meal = get_time_ms();
 		ph->meals_eaten++;
 		pthread_mutex_unlock(&ph->meals_eaten_mutex);
-		//print_state("is eating", ph);
-		char msg[64];
-		snprintf(msg, sizeof(msg), "is eating (%d)", ph->meals_eaten); // rmv: only for testing: TODO
-		print_state(msg, ph);
+		print_state("is eating", ph);
+		// char msg[64];
+		// snprintf(msg, sizeof(msg), "is eating (%d)", ph->meals_eaten); // rmv: only for testing: TODO
+		// print_state(msg, ph);
 		smart_sleep(data->args.time_to_eat, data);
 		pthread_mutex_unlock(&second->mutex);
 		pthread_mutex_unlock(&first->mutex);

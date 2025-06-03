@@ -1,7 +1,9 @@
 
 NAME    := philo
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CFLAGS  := -Wall -Wextra -Werror -pthread 
+# -O3
+# -g -fsanitize=thread
 HEADERS := -I ./include
 SRCS    := main.c \
 			ft_atoi.c \
