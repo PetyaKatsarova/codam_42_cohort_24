@@ -44,5 +44,5 @@ All philosophers eat and sleep, no one dies.
 
 ./philo 200 410 200 200
 
-./philo 3 610 200 200 
+./philo 3 610 200 200 -- last check worked :)
 // todo: tsts for die
