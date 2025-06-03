@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 18:09:15 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/03 18:27:31 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	*philo_routine(void *philo)
 		if (check_death(data))
 			break ;
 		print_state("is thinking", ph);
-		usleep(500);
+		usleep(500); // solves death: 4 410 200 200
 		first = ph->left_fork;
 		second = ph->right_fork;
 		if (first > second)

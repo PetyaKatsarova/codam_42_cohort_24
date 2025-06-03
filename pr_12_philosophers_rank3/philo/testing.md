@@ -18,8 +18,8 @@ The philosopher should not eat and should die. -- TODO --
 No philosopher should die. -- WORKS -- :)
 
 3. =================
-./philo 5 800 200 200 7
-No philosopher should die and the simulation should stop when every philosopher has eaten at least 7 times. -- WORKS -- :)
+./philo 5 800 200 200 7 | grep "eating" | wc -l
+No philosopher should die and the simulation should stop when every philosopher has eaten at least 7 times returns 35. -- WORKS -- :)
 
 4. ===================
 ./philo 4 410 200 200
@@ -27,7 +27,7 @@ No philosopher should die.  -- WORKS -- :)
 
 5. ===============
 ./philo 4 310 200 100
-One philosopher should die. -- WORKS -- :), after refactor: not :()
+One philosopher should die. -- WORKS -- :)
 
 6. =================
 Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is
@@ -44,4 +44,5 @@ All philosophers eat and sleep, no one dies.
 
 ./philo 200 410 200 200
 
-./philo 3 610 200 200
+./philo 3 610 200 200 
+// todo: tsts for die
