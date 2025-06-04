@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 13:44:41 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/04 18:05:36 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,28 @@ static void	eat_sleep(t_philo *ph, t_fork *first, t_fork *second,
 	print_state("has taken a fork", ph);
 	pthread_mutex_lock(&second->mutex);
 	print_state("has taken a fork", ph);
+
 	pthread_mutex_lock(&ph->meals_eaten_mutex);
 	ph->last_meal = get_time_ms();
 	ph->meals_eaten++;
 	pthread_mutex_unlock(&ph->meals_eaten_mutex);
+
 	print_state("is eating", ph);
 	smart_sleep(data->args.time_to_eat, data);
+
 	pthread_mutex_unlock(&second->mutex);
 	pthread_mutex_unlock(&first->mutex);
+
 	print_state("is sleeping", ph);
 	smart_sleep(data->args.time_to_sleep, data);
+}
+
+static void sleeping_beauty(t_philo *ph)
+{
 	if (ph->id % 2 == 0)
-		usleep(1000);
+		usleep(1000); // 500
 	else
-		usleep(500);
-	// usleep(data->args.time_to_eat * 0.5); // eats 7 times if asked but 
-	// 200 philos die, can have less
+		usleep(200);
 }
 
 void	*philo_routine(void *philo)
@@ -78,12 +84,13 @@ void	*philo_routine(void *philo)
 	ph = (t_philo *)philo;
 	data = ph->data;
 	//usleep(ph->id * 10);
+	sleeping_beauty(ph);
 	while (1)
 	{
 		if (is_dead(data))
 			break ;
 		print_state("is thinking", ph);
-		//usleep(500);
+		//usleep(100);
 		first = ph->left_fork;
 		second = ph->right_fork;
 		if (first > second)

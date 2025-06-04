@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:30:39 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 13:45:39 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/04 17:43:32 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static int	some_helper(t_data *data)
 			pthread_mutex_lock(&data->dead_mutex);
 			if (!data->dead)
 				print_death(data, now, i);
-				//another_st_helper(data, now, i);
 			pthread_mutex_unlock(&data->dead_mutex);
 			pthread_mutex_unlock(&data->print_mutex);
 			pthread_mutex_unlock(&data->philos[i].meals_eaten_mutex);

@@ -6,13 +6,13 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/27 14:30:56 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 14:19:10 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/04 17:16:07 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-static	int	whatever(t_data *data, t_argv *args, char **argv, int argc)
+static	int	total_init(t_data *data, t_argv *args, char **argv, int argc)
 {
 	if (init_args(args, argc, argv))
 		return (1);
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 	pthread_t	monitor;
 	int			i;
 
-	if (whatever(&data, &args, argv, argc) == 1)
+	if (total_init(&data, &args, argv, argc) == 1)
 		return (1);
 	data.start_time = get_time_ms();
 	i = 0;
