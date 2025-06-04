@@ -23,7 +23,7 @@ No philosopher should die and the simulation should stop when every philosopher 
 
 4. ===================
 ./philo 4 410 200 200
-No philosopher should die.  -- WORKS -- :)
+No philosopher should die.  -- WORKS -- :) dies...
 
 5. ===============
 ./philo 4 310 200 100
@@ -43,8 +43,13 @@ All philosophers eat and sleep, no one dies.
 
 
 ./philo 200 410 200 200
+./philo 4 410 200 200
 
+
+./philo 200 1000 100 100 -- works :)
 ./philo 3 610 200 200 -- works :)
+./philo 200 2000 200 200 -- works ;)
+./philo 199 2000 200 200 -- works ;)
 // todo: tsts for die
 =================================
 so far best perf with 200:

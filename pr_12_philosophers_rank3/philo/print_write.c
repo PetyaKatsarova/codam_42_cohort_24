@@ -50,3 +50,22 @@ void	print_state(char *msg, t_philo *ph)
 	pthread_mutex_unlock(&data->dead_mutex);
 	pthread_mutex_unlock(&data->print_mutex);
 }
+
+//void print_death(t_data *data, unsigned long now, int i)
+//{
+//	printf("%lu %d died\n", now - data->start_time,
+//		data->philos[i].id);
+//	data->dead = 1;
+//}
+
+void	print_death(t_data *data, unsigned long now, int i)
+{
+	unsigned long	curr_time;
+
+	curr_time = now - data->start_time;
+	ft_putnbr_ul(1, curr_time);
+	write(1, " ", 1);
+	ft_putnbr(1, data->philos[i].id);
+	write(1, " died\n", 6);
+	data->dead = 1;
+}

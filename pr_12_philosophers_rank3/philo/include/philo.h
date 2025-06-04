@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 16:10:30 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/04 09:21:12 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   philo.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/03 16:10:30 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/06/04 12:35:14 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ void			*monitor_routine(void *arg);
 int				cleanup_all(t_data *data);
 unsigned long	get_time_ms(void);
 void	        print_state(char *msg, t_philo *ph);
+void			print_death(t_data *data, unsigned long now, int i);
 
 #endif

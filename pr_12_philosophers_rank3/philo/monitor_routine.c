@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:30:39 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 17:31:47 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/04 13:45:39 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,6 @@ static int	all_philos_ate_enough(t_data *data)
 	return (1);
 }
 
-static	void	another_st_helper(t_data *data, unsigned long now, int i)
-{
-	printf("%lu %d died\n", now - data->start_time,
-		data->philos[i].id);
-	data->dead = 1;
-}
-
 static int	some_helper(t_data *data)
 {
 	int				i;
@@ -55,7 +48,8 @@ static int	some_helper(t_data *data)
 			pthread_mutex_lock(&data->print_mutex);
 			pthread_mutex_lock(&data->dead_mutex);
 			if (!data->dead)
-				another_st_helper(data, now, i);
+				print_death(data, now, i);
+				//another_st_helper(data, now, i);
 			pthread_mutex_unlock(&data->dead_mutex);
 			pthread_mutex_unlock(&data->print_mutex);
 			pthread_mutex_unlock(&data->philos[i].meals_eaten_mutex);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo_routine.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/04 09:47:09 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   philo_routine.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/06/04 13:44:41 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,6 @@ static void	smart_sleep(unsigned long ms, t_data *data)
 		usleep(500);
 	}
 }
-
-/**
- * Locks/unlocks print && dead_mutexes, checking if not dead, print the msg
- */
-// static void	print_state(char *msg, t_philo *ph)
-// {
-// 	t_data			*data;
-// 	unsigned long	curr_time;
-
-// 	data = ph->data;
-// 	curr_time = get_time_ms() - data->start_time;
-// 	pthread_mutex_lock(&data->print_mutex);
-// 	pthread_mutex_lock(&data->dead_mutex);
-// 	if (!data->dead)
-// 		printf("%lu %d %s\n", curr_time, ph->id, msg);
-// 	pthread_mutex_unlock(&data->dead_mutex);
-// 	pthread_mutex_unlock(&data->print_mutex);
-// }
 
 static int	is_dead(t_data *data)
 {
@@ -95,13 +77,13 @@ void	*philo_routine(void *philo)
 
 	ph = (t_philo *)philo;
 	data = ph->data;
-	usleep(ph->id * 10);
+	//usleep(ph->id * 10);
 	while (1)
 	{
 		if (is_dead(data))
 			break ;
 		print_state("is thinking", ph);
-		usleep(500);
+		//usleep(500);
 		first = ph->left_fork;
 		second = ph->right_fork;
 		if (first > second)
