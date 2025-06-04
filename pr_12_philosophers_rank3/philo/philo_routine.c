@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/04 09:21:18 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/04 09:31:30 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	is_dead(t_data *data)
 	return (0);
 }
 
-static void	sleep_eat(t_philo *ph, t_fork *first, t_fork *second,
+static void	eat_sleep(t_philo *ph, t_fork *first, t_fork *second,
 		t_data *data)
 {
 	pthread_mutex_lock(&first->mutex);
@@ -78,12 +78,11 @@ static void	sleep_eat(t_philo *ph, t_fork *first, t_fork *second,
 	pthread_mutex_unlock(&first->mutex);
 	print_state("is sleeping", ph);
 	smart_sleep(data->args.time_to_sleep, data);
-	// if (ph->id % 2 == 0)
-	// 	usleep(1000);
-	// else
-	// 	usleep(500);
-	usleep(data->args.time_to_eat * 0.5);
-
+	if (ph->id % 2 == 0)
+		usleep(1000);
+	else
+		usleep(500);
+	// usleep(data->args.time_to_eat * 0.5);
 }
 
 void	*philo_routine(void *philo)
@@ -109,7 +108,7 @@ void	*philo_routine(void *philo)
 			first = ph->right_fork;
 			second = ph->left_fork;
 		}
-		sleep_eat(ph, first, second, data);
+		eat_sleep(ph, first, second, data);
 	}
 	return (NULL);
 }
