@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/04 09:31:30 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/04 09:47:09 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ static void	eat_sleep(t_philo *ph, t_fork *first, t_fork *second,
 		usleep(1000);
 	else
 		usleep(500);
-	// usleep(data->args.time_to_eat * 0.5);
+	// usleep(data->args.time_to_eat * 0.5); // eats 7 times if asked but 
+	// 200 philos die, can have less
 }
 
 void	*philo_routine(void *philo)
