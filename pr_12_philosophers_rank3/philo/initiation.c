@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   initiation.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 16:20:07 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 16:52:29 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   initiation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 16:20:07 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/04 08:46:49 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	init_args(t_argv *args_struct, int argc, char **argv)
 	if (parser_checker(argc, argv) == 1)
 	{
 		printf("Naughty, naughty... u can give only positive");
-		printf("numsstarting from 1 and the format is:\n");
-		printf("*number_philos *time_to_die *time_to_eat");
-		printf("*time_to_sleep [*times_to_eat_optional]\n");
+		printf(" nums starting from 1 and the format is:\n");
+		printf("* number_philos *time_to_die *time_to_eat");
+		printf("* time_to_sleep [*times_to_eat_optional]\n");
 		return (1);
 	}
 	args_struct->ph_count = ft_atoi(argv[1]);

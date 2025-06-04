@@ -1,7 +1,7 @@
 
 NAME    := philo
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror -pthread -g -fsanitize=thread -O3
+CFLAGS  := -Wall -Wextra -Werror -pthread -O3
 # -O3
 # -g -fsanitize=thread
 HEADERS := -I ./include
@@ -12,6 +12,7 @@ SRCS    := main.c \
 			monitor_routine.c \
 			cleanup_all.c \
 			utils.c \
+			print_write.c \
 
 OBJDIR  := objs
 OBJS    := $(SRCS:.c=.o)

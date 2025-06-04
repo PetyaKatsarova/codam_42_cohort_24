@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   philo_routine.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 18:33:24 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/04 09:21:18 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
 /**
- * Sleeps for ms milliseconds but wakes up every 500μs to check if a philosopher
+ * Sleeps for ms but wakes up every 500μs to check if a philosopher
  * has died, exiting early if so.
  */
 static void	smart_sleep(unsigned long ms, t_data *data)
@@ -37,22 +37,22 @@ static void	smart_sleep(unsigned long ms, t_data *data)
 /**
  * Locks/unlocks print && dead_mutexes, checking if not dead, print the msg
  */
-static void	print_state(char *msg, t_philo *ph)
-{
-	t_data			*data;
-	unsigned long	curr_time;
+// static void	print_state(char *msg, t_philo *ph)
+// {
+// 	t_data			*data;
+// 	unsigned long	curr_time;
 
-	data = ph->data;
-	curr_time = get_time_ms() - data->start_time;
-	pthread_mutex_lock(&data->print_mutex);
-	pthread_mutex_lock(&data->dead_mutex);
-	if (!data->dead)
-		printf("%lu %d %s\n", curr_time, ph->id, msg);
-	pthread_mutex_unlock(&data->dead_mutex);
-	pthread_mutex_unlock(&data->print_mutex);
-}
+// 	data = ph->data;
+// 	curr_time = get_time_ms() - data->start_time;
+// 	pthread_mutex_lock(&data->print_mutex);
+// 	pthread_mutex_lock(&data->dead_mutex);
+// 	if (!data->dead)
+// 		printf("%lu %d %s\n", curr_time, ph->id, msg);
+// 	pthread_mutex_unlock(&data->dead_mutex);
+// 	pthread_mutex_unlock(&data->print_mutex);
+// }
 
-static int	check_death(t_data *data)
+static int	is_dead(t_data *data)
 {
 	pthread_mutex_lock(&data->dead_mutex);
 	if (data->dead)
@@ -61,7 +61,7 @@ static int	check_death(t_data *data)
 	return (0);
 }
 
-static void	helper_routine(t_philo *ph, t_fork *first, t_fork *second,
+static void	sleep_eat(t_philo *ph, t_fork *first, t_fork *second,
 		t_data *data)
 {
 	pthread_mutex_lock(&first->mutex);
@@ -78,8 +78,12 @@ static void	helper_routine(t_philo *ph, t_fork *first, t_fork *second,
 	pthread_mutex_unlock(&first->mutex);
 	print_state("is sleeping", ph);
 	smart_sleep(data->args.time_to_sleep, data);
-	if (ph->id % 2 == 0)
-		usleep(1000);
+	// if (ph->id % 2 == 0)
+	// 	usleep(1000);
+	// else
+	// 	usleep(500);
+	usleep(data->args.time_to_eat * 0.5);
+
 }
 
 void	*philo_routine(void *philo)
@@ -94,7 +98,7 @@ void	*philo_routine(void *philo)
 	usleep(ph->id * 10);
 	while (1)
 	{
-		if (check_death(data))
+		if (is_dead(data))
 			break ;
 		print_state("is thinking", ph);
 		usleep(500);
@@ -105,7 +109,7 @@ void	*philo_routine(void *philo)
 			first = ph->right_fork;
 			second = ph->left_fork;
 		}
-		helper_routine(ph, first, second, data);
+		sleep_eat(ph, first, second, data);
 	}
 	return (NULL);
 }
