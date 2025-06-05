@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/05 19:32:45 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/05 19:51:37 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,19 @@ static void	eat_sleep(t_philo *ph, t_fork *first, t_fork *second,
 	smart_sleep(data->args.time_to_sleep, data);
 }
 
-static void sleeping_beauty(t_philo *ph)
+static void desync_start(t_philo *ph)
 {
-    int is_last = ph->data->args.ph_count;
-    int is_odd = (ph->id % 2 != 0);
+    //int is_last = ph->data->args.ph_count;
+    //int is_odd = (ph->id % 2 != 0);
 
-    if (is_last)
-        my_usleep(500);
-    else if (is_odd && !is_last)
-        my_usleep(1000);
+    //if (is_last)
+    //    my_usleep(500);
+    //else if (is_odd && !is_last)
+    //    my_usleep(1000);
     //else
     //    my_usleep(500);
+	if (ph->id % 2)
+		my_usleep(1000);
 }
 
 void	*philo_routine(void *philo)
@@ -88,18 +90,18 @@ void	*philo_routine(void *philo)
 
 	ph = (t_philo *)philo;
 	data = ph->data;
-	sleeping_beauty(ph);
 
 	// lock start mutex
 	// unlock start mutex
 	pthread_mutex_lock(&ph->data->synch_mutex);
 	pthread_mutex_unlock(&ph->data->synch_mutex);
+	desync_start(ph);
 	while (1)
 	{
 		if (is_dead(data))
 			break ;
 		print_state("is thinking", ph);
-		my_usleep(500);
+		//my_usleep(500);
 		first = ph->left_fork;
 		second = ph->right_fork;
 		if (first > second)
