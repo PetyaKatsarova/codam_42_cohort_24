@@ -51,8 +51,38 @@ All philosophers eat and sleep, no one dies.
 ./philo 200 2000 200 200 -- works ;)
 ./philo 199 2000 200 200 -- works ;)
 // todo: tsts for die
-=================================
-so far best perf with 200:
+./philo 3 320 200 100
 
-with 199:
-./philo 
+===============================
+works:
+./philo 26 410 200 200 // but dies with 25
+./philo 3 810 200 200
+./philo 40 710 200 200
+=================================
+time_to_die ≥ time_to_eat + time_to_sleep + margin
+
+For 3 philosophers:
+
+time_to_eat = 200 ms
+
+time_to_sleep = ~100–200 ms
+
+margin = 10–50 ms (for thread delays)
+-------------------------------------
+time_to_die ≈ 200 (eat) + 100 (sleep) + 10 (margin) = 310 ms
+Anything below 310ms may cause random deaths due to:
+
+OS thread scheduling delays
+
+minor CPU lag
+
+mutex wait times
+
+
+=================================
+!!!!!
+time_to_die ≥ time_to_eat + time_to_sleep + scheduling_overhead
+!!!!!
+
+should pass:
+./philo 199 310 150 150

@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 16:10:30 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 12:35:14 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/05 19:25:39 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	t_fork			*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	dead_mutex;
+	pthread_mutex_t synch_mutex;
 	unsigned long	start_time;
 	int				dead;
 	t_philo			*philos;
@@ -76,6 +77,7 @@ void			*philo_routine(void *ptr);
 void			*monitor_routine(void *arg);
 int				cleanup_all(t_data *data);
 unsigned long	get_time_ms(void);
+void			my_usleep(unsigned long us);
 void	        print_state(char *msg, t_philo *ph);
 void			print_death(t_data *data, unsigned long now, int i);
 

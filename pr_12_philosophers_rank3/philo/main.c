@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/27 14:30:56 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 17:16:07 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/05 19:33:24 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int	main(int argc, char **argv)
 		return (1);
 	data.start_time = get_time_ms();
 	i = 0;
+	// lock start mutex
+	pthread_mutex_init(&data.synch_mutex, NULL);
+	pthread_mutex_lock(&data.synch_mutex);
 	while (i < args.ph_count)
 	{
 		data.philos[i].last_meal = data.start_time;
@@ -41,6 +44,9 @@ int	main(int argc, char **argv)
 			philo_routine, &data.philos[i]);
 			i++;
 	}
+	// unlock start mutex
+	pthread_mutex_unlock(&data.synch_mutex);
+	// destroy
 	pthread_create(&monitor, NULL, monitor_routine, &data);
 	pthread_join(monitor, NULL);
 	i = 0;

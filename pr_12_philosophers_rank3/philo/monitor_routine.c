@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:30:39 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/04 17:43:32 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/05 19:14:01 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	*monitor_routine(void *arg)
 		pthread_mutex_unlock(&data->dead_mutex);
 		if (check_monitor(data) == NULL)
 			return (NULL);
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }
