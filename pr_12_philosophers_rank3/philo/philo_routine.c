@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   philo_routine.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: petya <petya@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/05 19:51:37 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/06 21:09:35 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,9 @@
  * Sleeps for ms but wakes up every 500μs to check if a philosopher
  * has died, exiting early if so.
  */
-static void	smart_sleep(unsigned long ms, t_data *data)
-{
-	unsigned long	start;
 
-	start = get_time_ms();
-	while (get_time_ms() - start < ms)
-	{
-		pthread_mutex_lock(&data->dead_mutex);
-		if (data->dead)
-		{
-			pthread_mutex_unlock(&data->dead_mutex);
-			break ;
-		}
-		pthread_mutex_unlock(&data->dead_mutex);
-		my_usleep(500);
-	}
-}
 
-static int	is_dead(t_data *data)
+int	is_dead(t_data *data)
 {
 	pthread_mutex_lock(&data->dead_mutex);
 	if (data->dead)
@@ -43,73 +27,22 @@ static int	is_dead(t_data *data)
 	return (0);
 }
 
-static void	eat_sleep(t_philo *ph, t_fork *first, t_fork *second,
-		t_data *data)
-{
-	pthread_mutex_lock(&first->mutex);
-	print_state("has taken a fork", ph);
-	pthread_mutex_lock(&second->mutex);
-	print_state("has taken a fork", ph);
-
-	pthread_mutex_lock(&ph->meals_eaten_mutex);
-	ph->last_meal = get_time_ms();
-	ph->meals_eaten++;
-	pthread_mutex_unlock(&ph->meals_eaten_mutex);
-
-	print_state("is eating", ph);
-	smart_sleep(data->args.time_to_eat, data);
-
-	pthread_mutex_unlock(&second->mutex);
-	pthread_mutex_unlock(&first->mutex);
-
-	print_state("is sleeping", ph);
-	smart_sleep(data->args.time_to_sleep, data);
-}
-
-static void desync_start(t_philo *ph)
-{
-    //int is_last = ph->data->args.ph_count;
-    //int is_odd = (ph->id % 2 != 0);
-
-    //if (is_last)
-    //    my_usleep(500);
-    //else if (is_odd && !is_last)
-    //    my_usleep(1000);
-    //else
-    //    my_usleep(500);
-	if (ph->id % 2)
-		my_usleep(1000);
-}
-
 void	*philo_routine(void *philo)
 {
 	t_philo		*ph;
 	t_data		*data;
-	t_fork		*first;
-	t_fork		*second;
 
 	ph = (t_philo *)philo;
 	data = ph->data;
-
-	// lock start mutex
-	// unlock start mutex
 	pthread_mutex_lock(&ph->data->synch_mutex);
 	pthread_mutex_unlock(&ph->data->synch_mutex);
-	desync_start(ph);
-	while (1)
+	if (ph->id % 2)
+		my_usleep(1000);
+	while (!is_dead(data))
 	{
-		if (is_dead(data))
-			break ;
-		print_state("is thinking", ph);
-		//my_usleep(500);
-		first = ph->left_fork;
-		second = ph->right_fork;
-		if (first > second)
-		{
-			first = ph->right_fork;
-			second = ph->left_fork;
-		}
-		eat_sleep(ph, first, second, data);
+		thinking(ph);
+		eating(ph, data);
+		sleeping(ph, data);
 	}
 	return (NULL);
 }

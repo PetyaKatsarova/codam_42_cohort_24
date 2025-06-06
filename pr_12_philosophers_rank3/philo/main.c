@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: petya <petya@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/05/27 14:30:56 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/05 19:49:42 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/27 14:30:56 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/06 20:55:48 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,16 @@
 
 static	int	total_init(t_data *data, t_argv *args, char **argv, int argc)
 {
+	unsigned long	curr_time;
+
+	curr_time = 0;
 	if (init_args(args, argc, argv))
 		return (1);
 	if (args->ph_count == 1)
-		return (printf("0 1 died\n"), 1);
+	{
+		curr_time = get_time_ms();
+		return (printf("%lu 1 died\n", curr_time), 1);
+	}
 	if (init_data(args, data))
 		return (printf("Data initialization failed\n"), cleanup_all(data), 1);
 	return (0);

@@ -9,6 +9,7 @@ SRCS    := main.c \
 			ft_atoi.c \
 			initiation.c \
 			philo_routine.c \
+			philo_routine_helper.c \
 			monitor_routine.c \
 			cleanup_all.c \
 			utils.c \

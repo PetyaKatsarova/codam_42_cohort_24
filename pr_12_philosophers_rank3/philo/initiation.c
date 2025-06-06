@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:20:07 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/04 08:46:49 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/06 20:42:55 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static	void	init_phillos(t_data *data, int i, t_argv *argv_struct)
 	data->philos[i].meals_eaten = 0;
 	data->philos[i].last_meal = 0;
 	pthread_mutex_init(&data->philos[i].meals_eaten_mutex, NULL);
+	pthread_mutex_init(&data->philos[i].update_last_meal_mutex, NULL);
 }
 
 int	init_data(t_argv *argv_struct, t_data *data)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cleanup_all.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 17:34:53 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 17:35:12 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cleanup_all.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 17:34:53 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/06 20:42:55 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	cleanup_all(t_data *data)
 	{
 		i = 0;
 		while (i < data->args.ph_count)
+		{
 			pthread_mutex_destroy(&data->philos[i++].meals_eaten_mutex);
+			pthread_mutex_destroy(&data->philos[i++].update_last_meal_mutex);
+		}
 		free(data->philos);
 		data->philos = NULL;
 	}
