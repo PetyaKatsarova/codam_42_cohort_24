@@ -2,8 +2,14 @@
 NAME    := philo
 CC      := cc
 CFLAGS  := -Wall -Wextra -Werror -pthread
-# -O3
-# -g -fsanitize=thread
+
+ifdef DEBUGMEM
+	CFLAGS += -g -fsanitize=address
+endif
+ifdef DEBUGTTHREAD
+	CFLAGS += -g -fsanitize=thread
+endif
+
 HEADERS := -I ./include
 SRCS    := main.c \
 			ft_atoi.c \
@@ -20,6 +26,15 @@ OBJS    := $(SRCS:.c=.o)
 OBJS    := $(addprefix $(OBJDIR)/, $(notdir $(OBJS)))
 
 all: $(NAME)
+
+debugmem:
+	$(MAKE) fclean
+	$(MAKE) DEBUGMEM=1
+
+debugthread:
+	$(MAKE) fclean
+	$(MAKE) DEBUGTTHREAD=1
+
 
 $(NAME): $(OBJS) Makefile
 	$(CC) $(CFLAGS) $(OBJS) $(HEADERS) -o $(NAME) && echo "Build complete"

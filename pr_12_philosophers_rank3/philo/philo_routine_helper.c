@@ -4,7 +4,7 @@ void thinking(t_philo *ph)
 {
     print_state("is thinking", ph);
     if (ph->id % 2)
-		my_usleep(1000);
+		my_usleep(500);
 }
 
 static void	smart_sleep(unsigned long ms, t_data *data)
@@ -39,11 +39,11 @@ void eating(t_philo *ph, t_data *data)
 
   	first = ph->left_fork;
 	second = ph->right_fork;
-  if (first > second)
-  {
-    first = ph->right_fork;
-    second = ph->left_fork;
-  }
+	if (first > second)
+	{
+		first = ph->right_fork;
+		second = ph->left_fork;
+	}
   	pthread_mutex_lock(&first->mutex);
 	print_state("has taken a fork", ph);
 	pthread_mutex_lock(&second->mutex);

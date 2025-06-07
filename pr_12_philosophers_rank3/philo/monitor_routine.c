@@ -1,148 +1,100 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   monitor_routine.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 17:30:39 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/05 19:55:33 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   monitor_routine.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 17:30:39 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/06/07 13:52:19 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-//static int	all_philos_ate_enough(t_data *data)
-//{
-//	int	i;
-
-//	if (data->args.num_if_times_to_eat < 0)
-//		return (0);
-//	i = 0;
-//	while (i < data->args.ph_count)
-//	{
-//		pthread_mutex_lock(&data->philos[i].meals_eaten_mutex);
-//		if (data->philos[i].meals_eaten < data->args.num_if_times_to_eat)
-//		{
-//			pthread_mutex_unlock(&data->philos[i].meals_eaten_mutex);
-//			return (0);
-//		}
-//		pthread_mutex_unlock(&data->philos[i].meals_eaten_mutex);
-//		i++;
-//	}
-//	return (1);
-//}
-
-//static int	some_helper(t_data *data)
-//{
-//	int				i;
-//	unsigned long	now;
-
-//	i = 0;
-//	while (i < data->args.ph_count)
-//	{
-//		pthread_mutex_lock(&data->philos[i].meals_eaten_mutex);
-//		now = get_time_ms();
-//		if ((now - data->philos[i].last_meal) > data->args.time_to_die)
-//		{
-//			pthread_mutex_lock(&data->print_mutex);
-//			pthread_mutex_lock(&data->dead_mutex);
-//			if (!data->dead)
-//				print_death(data, now, i);
-//			pthread_mutex_unlock(&data->dead_mutex);
-//			pthread_mutex_unlock(&data->print_mutex);
-//			pthread_mutex_unlock(&data->philos[i].meals_eaten_mutex);
-//			return (1);
-//		}
-//		pthread_mutex_unlock(&data->philos[i++].meals_eaten_mutex);
-//	}
-//	return (0);
-//}
-
-//static void	*check_monitor(t_data *data)
-//{
-//	if (some_helper(data))
-//		return (NULL);
-//	if (all_philos_ate_enough(data))
-//	{
-//		pthread_mutex_lock(&data->dead_mutex);
-//		data->dead = 1;
-//		pthread_mutex_unlock(&data->dead_mutex);
-//		return (NULL);
-//	}
-//	return ((void *)1);
-//}
-
-//void	*monitor_routine(void *arg)
-//{
-//	t_data	*data;
-
-//	data = (t_data *)arg;
-//	while (1)
-//	{
-//		pthread_mutex_lock(&data->dead_mutex);
-//		if (data->dead)
-//		{
-//			pthread_mutex_unlock(&data->dead_mutex);
-//			break ;
-//		}
-//		pthread_mutex_unlock(&data->dead_mutex);
-//		if (check_monitor(data) == NULL)
-//			return (NULL);
-//		usleep(500);
-//	}
-//	return (NULL);
-//}
-
-
-
-
-
-static int	monitor_loop(t_data *d)
+/*
+Checks if should die, mark as dead if so
+Returns 1 if dead, 0 if not
+*/
+static int	has_died(t_philo *ph)
 {
-	int	i = 0, full = 0;
-	while (i < d->args.ph_count)
+	unsigned long	now;
+	unsigned long	ttd;
+
+	pthread_mutex_lock(&ph->meals_eaten_mutex);
+	now = get_time_ms();
+	ttd = (unsigned long)ph->data->args.time_to_die;
+	if (now - ph->last_meal >= ttd)
 	{
-		pthread_mutex_lock(&d->philos[i].meals_eaten_mutex);
-		if (get_time_ms() - d->philos[i].last_meal > d->args.time_to_die)
+		pthread_mutex_lock(&ph->data->print_mutex);
+		pthread_mutex_lock(&ph->data->dead_mutex);
+		if (!ph->data->dead)
 		{
-			pthread_mutex_lock(&d->print_mutex);
-			pthread_mutex_lock(&d->dead_mutex);
-			if (!d->dead)
-			{
-				print_death(d, get_time_ms(), i);
-				d->dead = 1;
-			}
-			pthread_mutex_unlock(&d->dead_mutex);
-			pthread_mutex_unlock(&d->print_mutex);
-			pthread_mutex_unlock(&d->philos[i].meals_eaten_mutex);
-			return (1);
+			print_death(ph->data, now, ph->id);
+			ph->data->dead = 1;
 		}
-		if (d->args.num_if_times_to_eat >= 0 &&
-			d->philos[i].meals_eaten >= d->args.num_if_times_to_eat)
-			full++;
-		pthread_mutex_unlock(&d->philos[i++].meals_eaten_mutex);
+		pthread_mutex_unlock(&ph->data->dead_mutex);
+		pthread_mutex_unlock(&ph->data->print_mutex);
+		pthread_mutex_unlock(&ph->meals_eaten_mutex);
+		return (1);
 	}
-	if (d->args.num_if_times_to_eat >= 0 && full == d->args.ph_count)
-		return (pthread_mutex_lock(&d->dead_mutex), d->dead = 1,
-			pthread_mutex_unlock(&d->dead_mutex), 1);
+	pthread_mutex_unlock(&ph->meals_eaten_mutex);
 	return (0);
 }
 
+static int	monitor_loop(t_data *data)
+{
+	int			i;
+	int			times_eaten;
+	t_philo		*ph;
+
+	i = 0;
+	times_eaten = 0;
+	while (i < data->args.ph_count)
+	{
+		ph = &data->philos[i];
+		if (has_died(ph))
+			return (1);
+		pthread_mutex_lock(&ph->meals_eaten_mutex);
+		if (data->args.num_if_times_to_eat >= 0
+			&& ph->meals_eaten >= data->args.num_if_times_to_eat)
+			times_eaten++;
+		pthread_mutex_unlock(&ph->meals_eaten_mutex);
+		i++;
+	}
+	if (data->args.num_if_times_to_eat >= 0 && times_eaten == data->args.ph_count)
+	{
+		pthread_mutex_lock(&data->dead_mutex);
+		data->dead = 1;
+		return (pthread_mutex_unlock(&data->dead_mutex), 1);
+	}
+	return (0);
+}
+/*
+Central observer of the simulation
+Detects:
+If any philosopher has died
+If all have eaten enough
+It is the only one that sets data->dead = 1
+It ends first and signals others to stop
+*/
 void	*monitor_routine(void *arg)
 {
-	t_data	*d = arg;
+	t_data	*data;
+
+	data = arg;
 	while (1)
 	{
-		pthread_mutex_lock(&d->dead_mutex);
-		if (d->dead)
-			return (pthread_mutex_unlock(&d->dead_mutex), NULL);
-		pthread_mutex_unlock(&d->dead_mutex);
-		if (monitor_loop(d))
+		pthread_mutex_lock(&data->dead_mutex);
+		if (data->dead)
+		{
+			pthread_mutex_unlock(&data->dead_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&data->dead_mutex);
+		if (monitor_loop(data))
 			break ;
 		usleep(1000);
 	}
 	return (NULL);
 }
-
-
