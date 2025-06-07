@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:39 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/07 13:52:19 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/07 14:19:11 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	*monitor_routine(void *arg)
 		pthread_mutex_unlock(&data->dead_mutex);
 		if (monitor_loop(data))
 			break ;
-		usleep(1000);
+		usleep(500); // 500
 	}
 	return (NULL);
 }

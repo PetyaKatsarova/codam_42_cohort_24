@@ -55,7 +55,7 @@ void eating(t_philo *ph, t_data *data)
 	smart_sleep(data->args.time_to_eat, data);
 	pthread_mutex_unlock(&second->mutex);
 	pthread_mutex_unlock(&first->mutex);
-	if (!is_dead(data))
+	// if (!is_dead(data))
   		update_meals_count(ph);
 }
 

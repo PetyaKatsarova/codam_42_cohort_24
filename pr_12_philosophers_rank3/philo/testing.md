@@ -55,9 +55,9 @@ All philosophers eat and sleep, no one dies.
 
 ===============================
 works:
-./philo 26 410 200 200 // but dies with 25
-./philo 3 810 200 200
-./philo 40 710 200 200
+./philo 30 410 200 200
+./philo 50 610 200 200
+./philo 
 =================================
 time_to_die ≥ time_to_eat + time_to_sleep + margin
 

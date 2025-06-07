@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/06 21:09:35 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/07 14:04:27 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	*philo_routine(void *philo)
 	data = ph->data;
 	pthread_mutex_lock(&ph->data->synch_mutex);
 	pthread_mutex_unlock(&ph->data->synch_mutex);
-	if (ph->id % 2)
-		my_usleep(1000);
+	// if (ph->id % 2)
+	// 	my_usleep(1000);
+	my_usleep(ph->id * 100);
 	while (!is_dead(data))
 	{
 		thinking(ph);
