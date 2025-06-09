@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 16:10:30 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/06 20:58:33 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   philo.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/03 16:10:30 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/06/09 15:09:01 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_data
 	t_fork			*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	dead_mutex;
-	pthread_mutex_t synch_mutex;
+	pthread_mutex_t	synch_mutex;
 	unsigned long	start_time;
 	int				dead;
 	t_philo			*philos;
@@ -64,25 +64,26 @@ typedef struct s_data
 
 int				main(int argc, char **argv);
 
-// ft_atoi.c
+/* ft_atoi.c */
 unsigned long	ft_atoul(const char *str);
 int				ft_atoi(const char *str);
 
-// initiation.c
+/* initiation.c */
 unsigned long	get_time_ms(void);
 int				init_args(t_argv *args_struct, int argc, char **argv);
 int				init_data(t_argv *argv_struct, t_data *data);
 
-// routines.c
+/* routines.c */
 void			*philo_routine(void *ptr);
 void			*monitor_routine(void *arg);
 int				cleanup_all(t_data *data);
-unsigned long	get_time_ms(void);
 void			my_usleep(unsigned long us);
-void	        print_state(char *msg, t_philo *ph);
+void			print_state(char *msg, t_philo *ph);
 void			print_death(t_data *data, unsigned long now, int i);
-void 			thinking(t_philo *ph);
-void 			eating(t_philo *ph, t_data *data);
-void 			sleeping(t_philo *ph, t_data *data);
+void			print_done_eating(t_data *data, unsigned long now, int i);
+void			thinking(t_philo *ph);
+void			eating(t_philo *ph, t_data *data);
+void			sleeping(t_philo *ph, t_data *data);
 int				is_dead(t_data *data);
+
 #endif

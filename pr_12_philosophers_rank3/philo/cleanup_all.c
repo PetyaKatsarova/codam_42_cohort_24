@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleanup_all.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 17:34:53 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/06 20:42:55 by petya            ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cleanup_all.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                  +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/06/03 17:34:53 by pekatsar      #+#    #+#                 */
+/*   Updated: 2025/06/09 11:42:03 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,5 @@ int	cleanup_all(t_data *data)
 		data->forks = NULL;
 	}
 	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->dead_mutex);
-	return (1);
+	return (pthread_mutex_destroy(&data->dead_mutex), 1);
 }

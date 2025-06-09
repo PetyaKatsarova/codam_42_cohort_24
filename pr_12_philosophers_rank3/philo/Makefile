@@ -1,7 +1,7 @@
 
 NAME    := philo
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror -pthread
+CFLAGS  := -Wall -Wextra -Werror -pthread -O3
 
 ifdef DEBUGMEM
 	CFLAGS += -g -fsanitize=address

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: petya <petya@student.42.fr>                +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2025/05/27 14:30:56 by pekatsar          #+#    #+#             */
-/*   Updated: 2025/06/07 11:34:55 by petya            ###   ########.fr       */
+/*   Updated: 2025/06/09 11:36:23 by pekatsar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
 
-static	int	total_init(t_data *data, t_argv *args, char **argv, int argc)
+static int	total_init(t_data *data, t_argv *args, char **argv, int argc)
 {
 	unsigned long	curr_time;
 
@@ -21,8 +21,8 @@ static	int	total_init(t_data *data, t_argv *args, char **argv, int argc)
 		return (1);
 	if (args->ph_count == 1)
 	{
-		curr_time = get_time_ms();
-		return (printf("%lu 1 died\n", curr_time), 1);
+		printf("0 1 died\n");
+		return (1);
 	}
 	if (init_data(args, data))
 		return (printf("Data initialization failed\n"), cleanup_all(data), 1);
@@ -47,7 +47,7 @@ int	main(int argc, char **argv)
 		data.philos[i].last_meal = data.start_time;
 		pthread_create(&data.philos[i].thread, NULL,
 			philo_routine, &data.philos[i]);
-			i++;
+		i++;
 	}
 	pthread_mutex_unlock(&data.synch_mutex);
 	pthread_create(&monitor, NULL, monitor_routine, &data);
