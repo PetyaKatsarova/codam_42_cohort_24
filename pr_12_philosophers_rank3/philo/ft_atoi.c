@@ -6,7 +6,7 @@
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 16:15:20 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/03 16:15:22 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/11 08:47:08 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ static int	is_digit(char c)
  */
 int	ft_atoi(const char *str)
 {
-	long	r;
+	long	res;
 	int		i;
-
-	r = 0;
+	
+	res = 0;
 	i = 0;
 	while (is_space(str[i]))
 		i++;
@@ -42,13 +42,13 @@ int	ft_atoi(const char *str)
 		return (-1);
 	while (is_digit(str[i]))
 	{
-		if (r > (INT_MAX - (str[i] - '0')) / 10)
+		if (res > (INT_MAX - (str[i] - '0')) / 10)
 			return (-1);
-		r = r * 10 + (str[i++] - '0');
+		res = res * 10 + (str[i++] - '0');
 	}
-	if (r == 0)
+	if (str[i] != '\0' || res == 0)
 		return (-1);
-	return ((int)r);
+	return ((int)res);
 }
 
 /**
@@ -73,7 +73,7 @@ unsigned long	ft_atoul(const char *str)
 			return (0);
 		r = r * 10 + (str[i++] - '0');
 	}
-	if (r == 0)
+	if (str[i] != '\0' || r == 0)
 		return (0);
 	return (r);
 }

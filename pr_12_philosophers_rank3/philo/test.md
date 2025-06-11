@@ -1,6 +1,11 @@
 Each philosopher cycles through thinking → taking forks → eating → sleeping
 ============================================
 
+!!NB!! test with: 
+valgrind --tool=drd ./philo 5 410 200 200
+
+=============================================================
+
 ./philo 5 800 200 200 7 | grep "eating" | wc -l
 
 returns 35: 5 philos eat 5 times = 35
@@ -40,11 +45,6 @@ that they don't steal forks, and so forth.
 ./philo 200 1000 100 100
 All philosophers eat and sleep, no one dies.
 =====================================
-
-
-./philo 200 410 200 200
-./philo 4 410 200 200
-
 
 ./philo 200 1000 100 100 -- works :)
 ./philo 3 610 200 200 -- works :)
@@ -86,3 +86,4 @@ time_to_die ≥ time_to_eat + time_to_sleep + scheduling_overhead
 
 should pass:
 ./philo 199 310 150 150
+5 310 100 200 

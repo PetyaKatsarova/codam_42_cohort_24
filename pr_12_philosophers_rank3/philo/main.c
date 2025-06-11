@@ -55,5 +55,5 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < args.ph_count)
 		pthread_join(data.philos[i++].thread, NULL);
-	return (cleanup_all(&data), 0);
+	return (pthread_mutex_destroy(&data.synch_mutex), cleanup_all(&data), 0);
 }

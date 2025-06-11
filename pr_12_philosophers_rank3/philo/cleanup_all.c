@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 17:34:53 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/09 11:42:03 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/11 10:02:15 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	cleanup_all(t_data *data)
 		i = 0;
 		while (i < data->args.ph_count)
 		{
-			pthread_mutex_destroy(&data->philos[i++].meals_eaten_mutex);
+			pthread_mutex_destroy(&data->philos[i].meals_eaten_mutex);
 			pthread_mutex_destroy(&data->philos[i++].update_last_meal_mutex);
 		}
 		free(data->philos);
