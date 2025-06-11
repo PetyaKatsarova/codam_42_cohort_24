@@ -6,7 +6,7 @@
 /*   By: petya <petya@student.42.fr>                  +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/06/03 16:10:30 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/09 15:09:01 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/06/11 12:32:48 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int				cleanup_all(t_data *data);
 void			my_usleep(unsigned long us);
 void			print_state(char *msg, t_philo *ph);
 void			print_death(t_data *data, unsigned long now, int i);
-void			print_done_eating(t_data *data, unsigned long now, int i);
 void			thinking(t_philo *ph);
 void			eating(t_philo *ph, t_data *data);
 void			sleeping(t_philo *ph, t_data *data);

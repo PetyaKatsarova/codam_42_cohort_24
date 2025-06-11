@@ -1,0 +1,62 @@
+
+Netherlands
+ASML (Veldhoven):
+Semiconductor manufacturing machines—lots of C++ in control software.
+
+Philips (Eindhoven):
+Medical devices, image analysis, and healthcare robotics.
+
+Sioux Technologies (Eindhoven):
+High-tech systems, automation, robotics.
+
+TNO (The Hague, Eindhoven):
+Research in autonomous systems, simulations, defense.
+
+TomTom (Amsterdam):
+Navigation systems, real-time data, some modules in C++.
+
+NXP Semiconductors (Eindhoven):
+Embedded C++ for automotive and IoT.
+
+Bulgaria
+Bosch Engineering Center (Sofia):
+Automotive software, embedded systems, C++ for ADAS, ECUs.
+
+VMware (Sofia):
+Though mainly Java/C, some performance modules in C++.
+
+Mentor Graphics / Siemens EDA (Sofia):
+Electronic design automation tools in C++.
+
+Musala Soft, Experian, Scalefocus (Sofia):
+Occasionally seek C++ for embedded, telecom, or automation projects.
+
+Austria (Vienna)
+TTTech (Vienna):
+Embedded and real-time systems for aerospace, automotive, robotics—core in C++.
+
+AVL (Graz, Vienna):
+Automotive simulation and control, lots of C++.
+
+Frequentis (Vienna):
+Air traffic management, public safety—systems in C++.
+
+Vienna University of Technology (TU Wien):
+Research groups in robotics, AI, embedded, simulation—C++ is common.
+
+AIT Austrian Institute of Technology (Vienna):
+Applied research in automation, health tech, smart mobility.
+
+Kapsch TrafficCom (Vienna):
+Intelligent transportation systems—embedded C++.
+
+Tip:
+
+Universities and research institutes in all three countries often hire C++ devs for PhD, research assistant, or project engineer positions (sometimes open to recent graduates).
+
+Look for “Graduate Engineer,” “Junior Software Engineer,” or “Trainee Embedded Developer” in job titles.
+
+Knowing German is a bonus for Austria, sometimes required.
+
+Summary:
+ASML, Philips, TTTech, AVL, Bosch, Frequentis—all reputable names. The Dutch and Austrian ecosystems are especially strong for C++ in robotics, automation, and scientific roles. Bulgaria’s opportunities are mostly in Sofia, with big names like Bosch and Mentor Graphics.
