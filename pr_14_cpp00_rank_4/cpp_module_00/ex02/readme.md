@@ -22,6 +22,7 @@ class was implemented.
 C++ - Module 00
 Namespaces, classes, member functions, stdio streams,
 initialization lists, static, const, and some other basic stuff
+
 You start to recreate the Account.cpp file. In only a few minutes, you code a few
 lines of pure awesome C++. After a couple of failed compilations, your program passes
 the tests. Its output matches perfectly the one saved in the log file (except for the
