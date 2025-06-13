@@ -9,12 +9,11 @@ int main () {
         std::cout << "Enter command (ADD, SEARCH, EXIT): ";
         std::getline(std::cin, command);
 
-        if (command == "ADD")
+        if (command == "ADD" || command == "add")
             pb.addContact();
-        else if (command == "SEARCH")
-            // std::cout << "search under construction" << std::endl;
+        else if (command == "SEARCH" || command == "search")
             pb.searchContact();
-        else if (command == "EXIT")
+        else if (command == "EXIT" || command == "exit")
             break;
         else
             std::cout << "Unknown command. " << std::endl;

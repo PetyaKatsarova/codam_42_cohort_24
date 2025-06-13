@@ -9,15 +9,13 @@
 
 /**
  * array of contacts.
-◦ maximum of 8 contacts. If the user tries to add a 9th contact,
-replace the oldest one by the new one: first?
-At program start-up, the phonebook is empty and the user is prompted to enter one
-of three commands. The program only accepts ADD, SEARCH and EXIT.
+◦ store a maximum of 8 contacts in a circular buffer, overwriting the oldest contact once the limit is reached
+At program start-up, the phonebook is empty and the user is prompted to enter one of three commands. The program only accepts ADD, SEARCH and EXIT.
  */
 class PhoneBook {
 	private:
-	    Contact contacts[8];
-		int 	nextIndex;
+	    Contact contacts[8]; // TODO: REVERT TO 8 FOR EVAL
+		int 	contactIndex;
 		int		allContacts;
 
 	public:

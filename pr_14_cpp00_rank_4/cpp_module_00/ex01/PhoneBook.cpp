@@ -4,15 +4,15 @@
 
 /* constructor using an initializer list:
 PhoneBook::PhoneBook() → Constructor definition
-: nextIndex(0), allContacts(0) → Initializer list
+: contactIndex(0), allContacts(0) → Initializer list
 {} → Empty function body (nothing else done inside)
  */
-PhoneBook::PhoneBook() : nextIndex(0), allContacts(0) {}
+PhoneBook::PhoneBook() : contactIndex(0), allContacts(0) {}
 
 void PhoneBook::addContact() {
-    contacts[nextIndex].setInfo();
-    if (!contacts[nextIndex].isEmpty()) {
-        nextIndex = (nextIndex + 1) % 8;
+    contacts[contactIndex].setInfo();
+    if (!contacts[contactIndex].isEmpty()) {
+        contactIndex = (contactIndex + 1) % 8;
         if (allContacts < 8)
             allContacts++;
     }
@@ -23,22 +23,25 @@ void PhoneBook::searchContact() const {
         std::cout << "Phonebook is empty.\n";
         return;
     }
-
-    // std::cout << std::setw(10) << "Index" << "I"
-    //           << std::setw(10) << "First Name" << "|"
-    //           << std::setw(10) << "Last Name" << "|"
-    //           << std::setw(10) << "nickName" << std::endl;
-
-    // for (int i = 0; i < allContacts; i++)
-    //     contacts[i].displayShort(i);
     
-    std::cout << "Enter index to view details: ";
+    std::cout << std::endl;
+    std::cout << std::setw(10) << "Index" << "|"
+              << std::setw(10) << "First Name" << "|"
+              << std::setw(10) << "Last Name" << "|"
+              << std::setw(10) << "nickName" << std::endl;
+
+    for (int i = 0; i < allContacts; i++) {
+        contacts[i].displayShort(i+1);
+        std::cout << std::endl;
+    }
+    
+    std::cout << "\nEnter index to view details: ";
     std::string input;
     std::getline(std::cin, input);
     if (input.length() == 1 && std::isdigit(input[0])) {
         int i = input[0] - '0';
-        if (i >= 0 && i < allContacts) {
-            contacts[i].displayFull();
+        if (i >= 1 && i <= allContacts) {
+            contacts[i-1].displayFull();
             return;
         }
     }
