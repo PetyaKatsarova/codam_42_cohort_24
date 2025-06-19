@@ -7,6 +7,9 @@
  #include <iostream>
  #include <iomanip>
 
+ /**
+  * cout, cin: char
+  */
  void Contact::setInfo() {
     std::cout << "First name: ";
     std::getline(std::cin, firstName);

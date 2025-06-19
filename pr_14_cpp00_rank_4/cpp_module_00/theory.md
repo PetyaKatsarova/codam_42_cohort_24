@@ -18,10 +18,6 @@ Move constructor (C++11+)
 Move assignment operator (C++11+)
 
 Example:
-
-cpp
-Copy
-Edit
 class Example {
 public:
     Example();                          // Default constructor

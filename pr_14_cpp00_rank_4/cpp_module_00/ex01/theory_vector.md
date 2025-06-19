@@ -9,8 +9,6 @@ Much more flexible than std::array, but slightly slower due to heap use.
 
 Example:
 
-cpp
-Copy
 #include <vector>
 #include <iostream>
 

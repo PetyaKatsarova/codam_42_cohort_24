@@ -8,6 +8,7 @@ void sth(void) {
     return;
 }
 
+// creates twice Sample instances, which increments twice num
 void sth2 () {
     Sample inst2;
     std::cout << "num of inst in sth2: " << Sample::getNumInst() << std::endl;
