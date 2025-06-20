@@ -1,7 +1,7 @@
 # Makefile for zombieHorde project
 
-NAME      = zombieHorde
-SRC       = main.cpp Zombie.cpp ZombieHorde.cpp
+NAME      = humans
+SRC       = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 OBJ       = $(SRC:.cpp=.o)
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -g
