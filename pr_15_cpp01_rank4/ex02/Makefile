@@ -1,12 +1,9 @@
-# Makefile for zombieHorde project
 
 NAME      = brain
 SRC       = main.cpp
 OBJ       = $(SRC:.cpp=.o)
 CXX       = c++
 CXXFLAGS  = -Wall -Wextra -Werror -g
-
-.PHONY: all memory clean fclean re
 
 all: $(NAME)
 
@@ -26,3 +23,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all memory clean fclean re

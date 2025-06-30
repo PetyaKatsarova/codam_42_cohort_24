@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "HumanA.hpp"
 #include "Weapon.hpp"
 

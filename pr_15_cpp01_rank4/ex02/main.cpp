@@ -1,21 +1,18 @@
-
 #include <iostream>
-#include <string>
 
-int main() {
-	std::string str = "HI THIS IS BRAIN";
-	std::string* stringPTR = &str; // Pointer to the string
-	std::string& stringREF = str;  // Reference to the string
+int main()
+{
 
-	// Print memory addresses
-	std::cout << "Memory address of the string var: " << &str << std::endl;
-	std::cout << "Memory address held by stringPTR: " << stringPTR << std::endl;
-	std::cout << "Memory address held by stringREF: " << &stringREF << std::endl;
+    std::string str = "HI THIS IS BRAIN";
+    std::string *strPtr = &str;
+    std::string &strRef = str;
 
-	// Print values
-	std::cout << "Value of the string variable: " << str << std::endl;
-	std::cout << "Value pointed to by stringPTR: " << *stringPTR << std::endl;
-	std::cout << "Value pointed to by stringREF: " << stringREF << std::endl;
+    std::cout << "str mem address: " << &str << std::endl;
+    std::cout << "strPtr mem address: " << strPtr << std::endl;
+    std::cout << "strRef mem address: " << &strRef << std::endl;
 
-	return 0;
+    std::cout << "str val address: " << str << std::endl;
+    std::cout << "strPtr val address: " << *strPtr << std::endl;
+    std::cout << "strRef val address: " << strRef << std::endl;
+    return (0);
 }

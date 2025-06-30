@@ -13,3 +13,17 @@ wisely!
 Of course, handle unexpected inputs and errors. You must create and turn in your
 own tests to ensure that your program works as expected.
 */
+
+#include "Replace.hpp"
+#include <iostream>
+
+int main (int argc, char **argv) {
+    if (argc != 4) {
+		std::cerr << "Usage: ./replace <filename> <s1> <s2>\n";
+		return 1;       
+    }
+    Replace bla(argv[1], argv[2], argv[3]);
+    if (!bla.process())
+        return (1);
+    return (0);
+}

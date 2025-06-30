@@ -6,7 +6,7 @@ void zombieHordeTest(int N, const std::string& name) {
 	Zombie* horde = zombieHorde(N, name);
 	if (horde) {
 		for (int i = 0; i < N; ++i) {
-			horde[i].announce(); // Announce each zombie
+			horde[i].announce();
 		}
 		delete[] horde; // Clean up allocated memory
 	} else {
