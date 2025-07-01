@@ -15,3 +15,17 @@ class Harl {
 };
 
 #endif
+
+/*
+void Harl::complain(std::string level) {
+	std::string levels[] = { "DEBUG", "INFO", "WARNING", "ERROR" };
+	void (Harl::*methods[])() = { &Harl::debug, &Harl::info, &Harl::warning, &Harl::error };
+
+	for (int i = 0; i < 4; ++i) {
+		if (level == levels[i]) {
+			(this->*methods[i])(); // call the function using pointer to member
+			return;
+		}
+	}
+
+*/
