@@ -4,16 +4,7 @@ Summary: This project is inspired by the world-famous Wolfenstein 3D game, which
 considered the first FPS ever created. It will enable you to explore ray-casting. Your goal
 will be to make a dynamic view inside a maze, where you will have to find your way.
 Version: 10.3
-Contents
-I Foreword 2
-II Goals 4
-III Common Instructions 5
-IV Mandatory part - cub3D 7
-V Bonus part 11
-VI Examples 12
-VII Submission and peer-evaluation 15
-1
-Chapter I
+
 Foreword
 Developed by Id Software, led by the world-renowned John Carmack and John Romero,
 and published in 1992 by Apogee Software, Wolfenstein 3D is the first true “First Person Shooter” in the history of video games.
