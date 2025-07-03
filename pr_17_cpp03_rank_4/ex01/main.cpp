@@ -1,20 +1,31 @@
-#include "ClapTrap.hpp"
+#include "ScavTrap.hpp"
 #include <iostream>
 
 int main() {
-    ClapTrap a("A");
-    ClapTrap b = a;     // Copy constructor
-    ClapTrap c("C");
-    c = a;              // Copy assignment
+    ClapTrap clappy("Clappy");
+    ScavTrap scavy("Scavy");
 
-    std::cout << "-------- attack -------" << std::endl;
-    b.setAttackDamage(42);
-    b.attack("Enemy");
+    std::cout << "--------clappy attack -------\n";
+    clappy.setAttackDamage(42);
+    clappy.attack("ClappyEnemy");
+
+    std::cout << "--------scavy attack -------\n";
+    scavy.setAttackDamage(42);
+    scavy.attack("ScavyEnemy");
+
     std::cout << "----------- repair -------" << std::endl;
-    b.beRepaired(22);
-    std::cout << "-------- take damage ----------" << std::endl;
-    b.takeDamage(3);
-    std::cout << "-------- funcs end -------" << std::endl;
+    clappy.beRepaired(22);
+    scavy.beRepaired(22);
+    std::cout << "-------- take damage ----------\n";
+    clappy.takeDamage(3);
+    scavy.takeDamage(3);
+    
+    std::cout << "-------- guard gate ----------\n";
+    scavy.guardGate();
 
+    std::cout << "-------- copy constructor test ----------\n";
+    ScavTrap scavyCopy(scavy); // Calls ScavTrap copy constructor
+    scavyCopy.attack("EnemyCopy");
+     std::cout << "-------- end funcs ----------\n";
     return 0;           // All destructors called
 }

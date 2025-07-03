@@ -7,7 +7,7 @@ ClapTrap::ClapTrap(const std::string& name) : name(name), hitPoints(10), energyP
     std::cout << "ClapTrap with name " << name << " ,hitPoints=10, energhyPoints=10 and attackPoints=0 was created" << std::endl;
 }
 
-//Use initializer list to be cleaner and slightly faster:
+//Use initializer list to be cleaner and slightly faster: better than *this = other
 ClapTrap::ClapTrap(const ClapTrap& other)
 : name(other.name), hitPoints(other.hitPoints),
   energyPoints(other.energyPoints), attackDamage(other.attackDamage) {

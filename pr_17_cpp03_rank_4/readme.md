@@ -88,8 +88,7 @@ must initialize them to:
 • Attack damage (20)
 ScavTrap will also have its own special ability:
 void guardGate();
-This member function will display a message indicating that ScavTrap is now in Gate
-keeper mode.
+This member function will display a message indicating that ScavTrap is now in Gate keeper mode.
 Don’t forget to add more tests to your program.
 8
 Chapter V
