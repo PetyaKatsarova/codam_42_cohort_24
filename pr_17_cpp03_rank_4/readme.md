@@ -147,11 +147,3 @@ Yes, there’s a trick.
 Again, add more tests to your program.
 Do you know the -Wshadow and -Wno-shadow compiler flags?
 You can pass this module without completing exercise 03.
-11
-Chapter VII
-Submission and Peer-Evaluation
-Submit your assignment in your Git repository as usual. Only the work within your
-repository will be evaluated during the defense. Don’t hesitate to double-check the names
-of your folders and files to ensure they are correct.
-???????????? XXXXXXXXXX = $3$$cf36316f07f871b4f14926007c37d388
-12

@@ -5,15 +5,9 @@
 #include <string>
 
 /**
- * ScavTrap is a subclass (child) of ClapTrap
-It inherits all members of ClapTrap
-But it overrides some behavior (like attack())
-It adds a new function: guardGate()
-
-You do not need to redeclare or reimplement inherited constructors unless you want to change their behavior (e.g. print different messages, set different initial values).
+ * ScavTrap inherits virtually from ClapTrap to avoid duplication in DiamondTrap.
  */
-
- class ScavTrap : public ClapTrap {
+ class ScavTrap : virtual public ClapTrap {
     public:
         ScavTrap();
         ScavTrap(const std::string& name);

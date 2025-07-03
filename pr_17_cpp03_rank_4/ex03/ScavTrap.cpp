@@ -7,7 +7,7 @@ ScavTrap::ScavTrap()
     hitPoints = 100;
     energyPoints = 50;
     attackDamage = 20;
-    std::cout << "ScavTrap default constructor called for " << name << std::endl;
+    std::cout << "ScavTrap default constructor\n";
 }
 
 // Param constructor
@@ -34,7 +34,6 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& other) {
     return *this;
 }
 
-// Destructor
 ScavTrap::~ScavTrap() {
     std::cout << "ScavTrap destructor called for " << name << std::endl;
 }
