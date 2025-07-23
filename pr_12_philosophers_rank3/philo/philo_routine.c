@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   philo_routine.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: petya <petya@student.42.fr>                  +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2025/06/03 17:56:28 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/06/09 16:07:29 by pekatsar      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: petya <petya@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 17:56:28 by pekatsar          #+#    #+#             */
+/*   Updated: 2025/07/23 12:55:30 by petya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static	void	give_priority(t_data *data, t_philo *ph)
 
 	pthread_mutex_lock(&ph->update_last_meal_mutex);
 	now = get_time_ms();
-	time_left = data->args.time_to_die - (now - ph->last_meal);
+	time_left = data->args.time_to_die - (now - ph->last_meal); // 5 220 200 200 // 2
 	pthread_mutex_unlock(&ph->update_last_meal_mutex);
-	if (time_left > data->args.time_to_die / 10)
+	if (time_left > data->args.time_to_die / 10) // 20> 42
 		my_usleep(1000);
 }
 
@@ -54,10 +54,10 @@ void	*philo_routine(void *philo)
 		my_usleep(1000);
 	while (!is_dead(data))
 	{
-		thinking(ph);
 		give_priority(data, ph);
 		eating(ph, data);
 		sleeping(ph, data);
+		thinking(ph);
 	}
 	return (NULL);
 }
