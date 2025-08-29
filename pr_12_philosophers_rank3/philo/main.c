@@ -14,9 +14,6 @@
 
 static int	total_init(t_data *data, t_argv *args, char **argv, int argc)
 {
-	unsigned long	curr_time;
-
-	curr_time = 0;
 	if (init_args(args, argc, argv))
 		return (1);
 	if (args->ph_count == 1)

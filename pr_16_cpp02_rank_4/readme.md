@@ -1,22 +1,5 @@
-C++ - Module 02
-Ad-hoc polymorphism, operator overloading
-and the Orthodox Canonical class form
-Summary: This document contains the exercises of Module 02 from the C++ modules.
-Version: 8.2
-Contents
-I Introduction 2
-II General rules 3
-III New rules 6
-IV Exercise 00: My First Class in Orthodox Canonical Form 7
-V Exercise 01: Towards a more useful fixed-point number class 9
-VI Exercise 02: Now we’re talking 11
-VII Exercise 03: BSP 13
-VIII Submission and Peer-Evaluation 15
 
-C++ - Module 02
-Ad-hoc polymorphism, operator overloading
-and the Orthodox Canonical class form
-• Note that unless explicitly stated otherwise, the using namespace <ns_name> and friend keywords are forbidden. Otherwise, your grade will be -42.
+• unless explicitly stated otherwise, the using namespace <ns_name> and friend keywords are forbidden. Otherwise, your grade will be -42.
 
 From now on, all your classes must be designed in the Orthodox Canonical Form,
 unless explicitly stated otherwise. They will then implement the four required member
@@ -25,19 +8,15 @@ functions below:
 • Copy constructor
 • Copy assignment operator
 • Destructor
-Split your class code into two files. The header file (.hpp/.h) contains the class
-definition, whereas the source file (.cpp) contains the implementation.
-6
-Chapter IV
-Exercise 00: My First Class in
-Orthodox Canonical Form
-Exercise : 00
-My First Class in Orthodox Canonical Form
+
 Turn-in directory : ex00/
 Files to turn in : Makefile, main.cpp, Fixed.{h, hpp}, Fixed.cpp
 Forbidden functions : None
 You think you know integers and floating-point numbers. How cute.
 Please read this 3 pages article (1, 2, 3) to discover that you don’t. Go on, read it.
+https://www.cprogramming.com/tutorial/floating_point/understanding_floating_point.html
+https://www.cprogramming.com/tutorial/floating_point/understanding_floating_point_representation.html
+https://www.cprogramming.com/tutorial/floating_point/understanding_floating_point_printing.html
 Until today, every number you used in your code was basically either an integer or a
 floating-point number, or any of their variants (short, char, long, double, and so forth).
 After reading the article above, it’s safe to assume that integers and floating-point numbers have opposite characteristics.
@@ -47,8 +26,11 @@ fixed-point numbers offer a valuable balance between performance, accuracy, rang
 precision. That explains why fixed-point numbers are particularly applicable to computer
 graphics, sound processing or scientific programming, just to name a few.
 As C++ lacks fixed-point numbers, you’re going to add them. This article from
-Berkeley is a good start. If you have no idea what Berkeley University is, read this
+Berkeley is a good start.
+https://web.archive.org/web/20231224143018/https://inst.eecs.berkeley.edu/~cs61c/sp06/handout/fixedpt.html
+ If you have no idea what Berkeley University is, read this
 section of its Wikipedia page.
+https://en.wikipedia.org/wiki/University_of_California,_Berkeley#Notable_alumni.2C_faculty.2C_and_staff
 7
 C++ - Module 02
 Ad-hoc polymorphism, operator overloading
