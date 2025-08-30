@@ -9,6 +9,7 @@ functions below:
 • Copy assignment operator
 • Destructor
 
+================================================
 Turn-in directory : ex00/
 Files to turn in : Makefile, main.cpp, Fixed.{h, hpp}, Fixed.cpp
 Forbidden functions : None
@@ -32,9 +33,7 @@ https://web.archive.org/web/20231224143018/https://inst.eecs.berkeley.edu/~cs61c
 section of its Wikipedia page.
 https://en.wikipedia.org/wiki/University_of_California,_Berkeley#Notable_alumni.2C_faculty.2C_and_staff
 7
-C++ - Module 02
-Ad-hoc polymorphism, operator overloading
-and the Orthodox Canonical class form
+
 Create a class in Orthodox Canonical Form that represents a fixed-point number:
 • Private members:
 ◦ An integer to store the fixed-point number value.
@@ -80,8 +79,8 @@ Destructor called
 Destructor called
 Destructor called
 $>
-8
-Chapter V
+
+================================================================
 Exercise 01: Towards a more useful
 fixed-point number class
 Exercise 01
@@ -150,11 +149,10 @@ Destructor called
 Destructor called
 Destructor called
 $>
-10
-Chapter VI
+
+=========================================================
 Exercise 02: Now we’re talking
-Exercise 02
-Now we’re talking
+
 Turn-in directory : ex02/
 Files to turn in : Makefile, main.cpp, Fixed.{h, hpp}, Fixed.cpp
 Allowed functions : roundf (from <cmath>)
@@ -173,10 +171,7 @@ numbers as parameters, and returns a reference to the smallest one.
 parameters, and returns a reference to the greatest one.
 • A static member function max that takes two references to constant fixed-point
 numbers as parameters, and returns a reference to the greatest one.
-11
-C++ - Module 02
-Ad-hoc polymorphism, operator overloading
-and the Orthodox Canonical class form
+
 It’s up to you to test every feature of your class. However, running the code below:
 #include <iostream>
 int main( void ) {
@@ -204,10 +199,9 @@ $>
 If you ever do a division by 0, it is acceptable that the program
 crashes
 12
-Chapter VII
+
+===================================================
 Exercise 03: BSP
-Exercise 03
-BSP
 Turn-in directory : ex03/
 Files to turn in : Makefile, main.cpp, Fixed.{h, hpp}, Fixed.cpp,
 Point.{h, hpp}, Point.cpp, bsp.cpp
@@ -242,11 +236,3 @@ bool bsp( Point const a, Point const b, Point const c, Point const point);
 • Returns: True if the point is inside the triangle. False otherwise.
 Thus, if the point is a vertex or on an edge, it will return False.
 Implement and turn in your own tests to ensure that your class behaves as expected.
-14
-Chapter VIII
-Submission and Peer-Evaluation
-Turn in your assignment in your Git repository as usual. Only the work inside your
-repository will be evaluated during the defense. Don’t hesitate to double-check the names
-of your folders and files to ensure they are correct.
-???????????? XXXXXXXXXX = $3$$d6f957a965f8361750a3ba6c97554e9f
-15
