@@ -205,10 +205,7 @@ Implement a function that indicates whether a point is inside a triangle or not.
 useful, isn’t it?
 BSP stands for Binary Space Partitioning. You are welcome. :)
 You can pass this module without completing exercise 03.
-13
-C++ - Module 02
-Ad-hoc polymorphism, operator overloading
-and the Orthodox Canonical class form
+
 Let’s start by creating the Point class in Orthodox Canonical Form that represents
 a 2D point:
 • Private members:

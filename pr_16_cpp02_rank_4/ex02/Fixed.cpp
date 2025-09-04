@@ -59,3 +59,49 @@ std::ostream &operator<<(std::ostream &os, const Fixed &obj) {
     os << obj.toFloat();
     return os;
 }
+
+bool Fixed::operator>(const Fixed& other) const {
+	return (_raw_bits > other._raw_bits);
+}
+
+bool Fixed::operator<(const Fixed& other) const {
+	return (_raw_bits < other._raw_bits);
+}
+
+bool Fixed::operator>=(const Fixed& other) const {
+	return (_raw_bits >= other._raw_bits);
+}
+
+bool Fixed::operator<=(const Fixed& other) const {
+	return (_raw_bits <= other._raw_bits);
+}
+
+bool Fixed::operator!=(const Fixed& other) const {
+	return (_raw_bits != other._raw_bits);
+}
+
+bool Fixed::operator==(const Fixed& other) const {
+	return (_raw_bits == other._raw_bits);
+}
+
+Fixed Fixed::operator+(const Fixed& other) const {
+	return ( Fixed(_raw_bits + other._raw_bits));
+}
+
+Fixed Fixed::operator-(const Fixed& other) const {
+	return ( Fixed(_raw_bits - other._raw_bits));
+}
+
+Fixed Fixed::operator*(const Fixed& other) const {
+	return ( Fixed(_raw_bits * other._raw_bits));
+}
+
+/*
+num / 0 causes a runtime error (division by zero), which usually results in a crash or undefined behavior.
+*/
+Fixed Fixed::operator/(const Fixed& other) const {
+	if (other._raw_bits == 0)
+		throw std::runtime_error("Division by zero is not allewed");
+	return ( Fixed(_raw_bits / other._raw_bits));
+}
+
