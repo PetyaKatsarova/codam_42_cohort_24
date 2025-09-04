@@ -1,78 +1,29 @@
 
-Shallow copy: Copies member values directly. If a member is a pointer, both objects point to the same memory. Changing the value via one object affects the other.
-Deep copy: Allocates new memory for pointer members and copies the actual data. Changing the value in one object does NOT affect the other.
-class Example {
-    int* data;
-public:
-    Example(int val) : data(new int(val)) {}
-    // Deep copy constructor
-    Example(const Example& other) : data(new int(*other.data)) {}
-    ~Example() { delete data; }
-};
-
-Example a(5);
-Example b = a; // Deep copy: b.data is a separate copy
-*b.data = 10;  // Changes only b, not a
-======================================
-In C++, the Orthodox Canonical Form requires every class to implement four special member functions:
-
-1. Default Constructor
-------------------------
-
-Initializes an object with default values.
-class Example {
-public:
-    Example() { /* initialize members */ }
-};
-Example e; // Calls default constructor
-
-2. Copy Constructor
---------------------------
-
-Creates a new object as a copy of an existing object.
-class Example {
-public:
-    Example(const Example& other) { /* copy members from other */ }
-};
-Example e1;
-Example e2 = e1; // Calls copy constructor
-
-3. Copy Assignment Operator
-
-Assigns the contents of one object to another existing object.
-class Example {
-public:
-    Example& operator=(const Example& other) {
-        if (this != &other) {
-            // copy members from other
-        }
-        return *this;
-    }
-};
-Example e1, e2;
-e2 = e1; // Calls copy assignment operator
-===============================
-#include <iostream>
-class Example {
-    int* data;
-public:
-    Example() : data(new int(0)) { std::cout << "Default constructor\n"; }
-    Example(const Example& other) : data(new int(*other.data)) { std::cout << "Copy constructor\n"; }
-    Example& operator=(const Example& other) {
-        std::cout << "Copy assignment operator\n";
-        if (this != &other) *data = *other.data;
-        return *this;
-    }
-    ~Example() { std::cout << "Destructor\n"; delete data; }
-};
-
-int main() {
-    Example a;         // Default constructor
-    Example b = a;     // Copy constructor
-    Example c;         
-    c = b;             // Copy assignment operator
-    // Destructors called automatically at end of scope
+**********************************************
+COPY CONSTRUCTOR
+It is called when a new object is created from an existing object, as a copy of the existing object.
+It creates a separate memory block for the new object.
+It is an overloaded constructor.
+C++ compiler implicitly provides a copy constructor, if no copy constructor is defined in the class.
+Copy assignment operator → existing object takes the value of another.
+className(const className &obj) {
+    // body
 }
+
+**********************************************
+Copy Assignment Operator
+
+This operator is called when an already initialized object is assigned a new value from another existing object.
+
+It does not automatically create a separate memory block or new memory space. However, if the class involves dynamic memory management, the assignment operator must first release the existing memory on the left-hand side and then allocate new memory as needed to copy the data from the right-hand side.
+
+It is a bitwise operator.
+A bitwise copy gets created if the assignment operator is not overloaded.
+className obj1, obj2;
+obj2 = obj1;
+
+======================================
+
 -------------------------------
 https://www.cprogramming.com/tutorial/floating_point/understanding_floating_point.html
 
@@ -156,6 +107,8 @@ When the exponent bits are zero, and the mantissa has only the last bit set, the
 The "e-7" means "times 10 to the power of -7", which moves the decimal point 7 places to the left.
 and if only -7 is to the power of 2
 ------------------------------
+
+
 
 
 
