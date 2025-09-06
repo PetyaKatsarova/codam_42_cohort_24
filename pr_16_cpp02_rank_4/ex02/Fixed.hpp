@@ -33,6 +33,18 @@ class Fixed {
 		Fixed operator-(const Fixed& other) const;
 		Fixed operator*(const Fixed& other) const;
 		Fixed operator/(const Fixed& other) const;
+
+        // pre increment
+        Fixed &operator++();
+        Fixed &operator--();
+        // post: The 'int' parameter distinguishes from pre-increment
+        Fixed operator++(int);
+        Fixed operator--(int);
+
+        static Fixed& max(Fixed &a, Fixed &b);
+        static const Fixed& max(const Fixed &a, const Fixed &b);
+        static Fixed& min(Fixed &a, Fixed &b);
+        static const Fixed& min(const Fixed &a, const Fixed &b);
 };
 
 std::ostream &operator<<(std::ostream &os, const Fixed &obj);

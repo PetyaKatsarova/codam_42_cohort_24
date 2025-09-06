@@ -92,16 +92,62 @@ Fixed Fixed::operator-(const Fixed& other) const {
 	return ( Fixed(_raw_bits - other._raw_bits));
 }
 
+// >> divide by
 Fixed Fixed::operator*(const Fixed& other) const {
-	return ( Fixed(_raw_bits * other._raw_bits));
+    long long res = (static_cast<long long>(_raw_bits) * other._raw_bits) >> _FRACTALPART;
+    Fixed bla;
+    bla.setRawBits(static_cast<int>(res));
+    return bla;
 }
 
 /*
 num / 0 causes a runtime error (division by zero), which usually results in a crash or undefined behavior.
+returns  a new obj
 */
 Fixed Fixed::operator/(const Fixed& other) const {
 	if (other._raw_bits == 0)
 		throw std::runtime_error("Division by zero is not allewed");
-	return ( Fixed(_raw_bits / other._raw_bits));
+    long long temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
+	return ( Fixed(static_cast<int>(temp)));
 }
 
+// returns ref to the same obj
+Fixed &Fixed::operator++(){
+    this->_raw_bits++;
+    return *this;
+}
+
+Fixed &Fixed::operator--(){
+    this->_raw_bits--;
+    return *this;
+}
+
+// post incr
+Fixed Fixed::operator++(int){
+    Fixed temp(*this);
+    this->_raw_bits++;
+    return temp;
+}
+
+// post decr
+Fixed Fixed::operator--(int){
+    Fixed temp(*this);
+    this->_raw_bits--;
+    return temp;
+}
+ 
+Fixed& Fixed::max(Fixed &a, Fixed &b) {
+    return (a > b) ? a : b;
+}
+
+const Fixed& Fixed::max(const Fixed &a, const Fixed &b) {
+    return (a > b) ? a : b;
+}
+
+Fixed& Fixed::min(Fixed &a, Fixed &b) {
+    return (a < b) ? a : b;
+}
+
+const Fixed& Fixed::min(const Fixed &a, const Fixed &b) {
+    return (a < b) ? a : b;
+}

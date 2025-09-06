@@ -192,8 +192,6 @@ $> ./a.out
 $>
 If you ever do a division by 0, it is acceptable that the program
 crashes
-12
-
 ===================================================
 Exercise 03: BSP
 Turn-in directory : ex03/
