@@ -3,7 +3,7 @@
 #include <iostream>
 
 Animal::Animal() : type("Animal") {
-    std::cout << "Animal: default constr.\n;";
+    std::cout << "Animal: default constr." << std::endl;
 }
 
 Animal::Animal(const Animal& other) : type(other.type) {

@@ -2,7 +2,7 @@
 #define _DOG_HPP
 
 #include "Animal.hpp"
-#include <iostream>
+// #include <string>
 
 /*
 Dog inherits all protected and public from Animal
@@ -14,11 +14,7 @@ class Dog : public Animal {
         Dog& operator=(const Dog& other);
         ~Dog();
 
-        void makeSound() const {
-            std::cout << "Bau bau\n";
-        }
-
-        
+        void makeSound() const;
 };
 
 #endif

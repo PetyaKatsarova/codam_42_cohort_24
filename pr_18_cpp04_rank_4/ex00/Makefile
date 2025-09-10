@@ -1,5 +1,6 @@
 NAME = Animal
-SRC = main.cpp Animaal.cpp Dog.cpp Cat.cpp
+SRC = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.hpp WrongCat.hpp
+
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror

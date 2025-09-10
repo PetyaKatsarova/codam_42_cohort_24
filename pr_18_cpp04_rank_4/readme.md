@@ -28,8 +28,7 @@ The type of the Animal class can be left empty or set to the value of your choic
 Every animal must be able to use the member function:
 makeSound()
 It will print an appropriate sound (cats don’t bark).
-6
-C++ - Module 04 Subtype Polymorphism, Abstract Classes, and Interfaces
+
 Running this code should print the specific sounds of the Dog and Cat classes, not
 the Animal’s.
 int main()
@@ -49,12 +48,10 @@ To ensure you understood how it works, implement a WrongCat class that inherits
 from a WrongAnimal class. If you replace the Animal and the Cat by the wrong ones
 in the code above, the WrongCat should output the WrongAnimal sound.
 Implement and turn in more tests than the ones given above.
-7
-Chapter IV
+===========================================
 Exercise 01: I don’t want to set the
 world on fire
-Exercise : 01
-I don’t want to set the world on fire
+===========================================
 Turn-in directory : ex01/
 Files to turn in : Files from previous exercise + *.cpp, *.{h, hpp}
 Forbidden functions : None
@@ -82,11 +79,9 @@ delete i;
 return 0;
 }
 Implement and turn in more tests than the ones given above.
-9
-Chapter V
+===============================================
 Exercise 02: Abstract class
-Exercise : 02
-Abstract class
+===============================================
 Turn-in directory : ex02/
 Files to turn in : Files from previous exercise + *.cpp, *.{h, hpp}
 Forbidden functions : None
@@ -94,11 +89,9 @@ Creating Animal objects doesn’t make sense after all. It’s true, they make n
 To avoid any possible mistakes, the default Animal class should not be instantiable.
 Fix the Animal class so that nobody can instantiate it. Everything should work as before.
 If you want to, you can update the class name by adding an A prefix to Animal.
-10
-Chapter VI
+================================
 Exercise 03: Interface & recap
-Exercise : 03
-Interface & recap
+================================
 Turn-in directory : ex03/
 Files to turn in : Makefile, main.cpp, *.cpp, *.{h, hpp}
 Forbidden functions : None
@@ -117,8 +110,7 @@ std::string const & getType() const; //Returns the materia type
 virtual AMateria* clone() const = 0;
 virtual void use(ICharacter& target);
 };
-11
-C++ - Module 04 Subtype Polymorphism, Abstract Classes, and Interfaces
+
 Implement the concrete classes for Materias: Ice and Cure. Use their names in lowercase ("ice" for Ice, "cure" for Cure) to set their types. Of course, their member function
 clone() will return a new instance of the same type (i.e., if you clone an Ice Materia,
 you will get a new Ice Materia).
@@ -176,8 +168,7 @@ the type is unknown.
 In a nutshell, your MateriaSource must be able to learn "templates" of Materias to
 create them when needed. Then, you will be able to generate a new Materia using just
 a string that identifies its type.
-13
-C++ - Module 04 Subtype Polymorphism, Abstract Classes, and Interfaces
+
 Running this code:
 int main()
 {
@@ -203,13 +194,3 @@ $> clang++ -W -Wall -Werror *.cpp
 $> ./a.out | cat -e
 * shoots an ice bolt at bob *$
 * heals bob's wounds *$
-As usual, implement and turn in more tests than the ones given above.
-You can pass this module without doing exercise 03.
-14
-Chapter VII
-Submission and Peer Evaluation
-Submit your assignment in your Git repository as usual. Only the work inside your
-repository will be evaluated during the defense. Don’t hesitate to double-check the names
-of your folders and files to ensure they are correct.
-???????????? XXXXXXXXXX = $3$$6b616b91536363971573e58914295d42
-15
