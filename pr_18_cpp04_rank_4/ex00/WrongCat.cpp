@@ -7,7 +7,7 @@ WrongCat::WrongCat() {
      std::cout << "WrongCat: default constr." << std::endl;
 }
 
-WrongCat::WrongCat(const WrongCat& other) : Animal(other) {
+WrongCat::WrongCat(const WrongCat& other) : WrongAnimal(other) {
     type = other.type;
     std::cout << "WrongCat: copy constr.\n";
 }
@@ -15,7 +15,7 @@ WrongCat::WrongCat(const WrongCat& other) : Animal(other) {
 WrongCat& WrongCat::operator=(const WrongCat& other) {
     std::cout << "WrongCat: Copy assignment operator called" << std::endl;
     if (this != &other)
-        Animal::operator=(other);
+        WrongAnimal::operator=(other);
     return *this;
 }
 
