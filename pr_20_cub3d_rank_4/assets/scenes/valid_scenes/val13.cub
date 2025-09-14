@@ -1,0 +1,15 @@
+NO ./assets/textures/north_wall.xpm
+SO ./assets/textures/south_wall.xpm
+WE ./assets/textures/west_wall.xpm
+EA ./assets/textures/east_wall.xpm
+
+F 220,100,0
+C 225,30,0
+
+ 11111111111111
+ 10110110000011
+ 11111111111111
+               
+ 11111111111111
+ 1011N110000011
+111111111111111

@@ -1,0 +1,107 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: petya <petya@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/08/30 11:49:07 by pekatsar          #+#    #+#              #
+#    Updated: 2025/09/12 08:04:26 by petya            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME     := cub3D
+CC       := cc
+CFLAGS   := -O3
+DEPFLAGS := -MMD -MP
+LIBMLX   := lib/minilibx_linux
+HEADERS  := -I ./include -I$(LIBMLX)/include
+LIBS     := -L$(LIBMLX) -lmlx -lX11 -lXext -lm
+
+SRC      := src/main.c \
+		   	src/render/init_data.c \
+		   	src/render/init_pl_ray.c \
+			src/render/horizontal_check.c \
+			src/render/vertical_check.c \
+		   	src/render/draw_minimap.c \
+		   	src/render/draw_minimap2.c \
+			src/render/draw_minimap3.c \
+		   	src/render/player_control.c \
+		  	src/render/draw_3d_map.c \
+			src/render/draw_3d_map2.c \
+		   	src/render/manipulate_textures.c \
+		   	src/render/keys_manip.c \
+		   	src/render/mouse_handler.c \
+			src/get_input/handle_file/validate_file.c \
+			src/get_input/get_input.c \
+			src/get_input/handle_file/read_file.c \
+			src/get_input/parse_scene/parse_scene.c \
+			src/get_input/parse_scene/parse_texture/parse_texture.c \
+			src/get_input/parse_scene/parse_floor_ceiling/parse_floor_ceiling.c \
+			src/get_input/parse_scene/parse_map/parse_map.c \
+			src/get_input/parse_scene/parse_map/all_chars_legal.c \
+			src/get_input/parse_scene/parse_map/check_map_enclosed.c \
+			src/get_input/parse_scene/parse_map/count_players.c \
+			src/get_input/parse_scene/parse_map/illegal_empty_lines.c \
+			src/get_input/parse_scene/parse_map/map_enclosed.c \
+			src/get_input/parse_scene/parse_map/measure_map.c \
+			src/get_input/initialize_parsing_data.c \
+			src/get_input/make_game_configs.c \
+			src/get_input/initialize_game_configs.c \
+			src/get_input/utils/get_next_line.c \
+			src/get_input/utils/get_next_line_utils.c \
+			src/get_input/utils/exit_error_parsing.c \
+			src/get_input/utils/free_parsing.c \
+			src/get_input/utils/validate_path.c \
+			src/get_input/utils/ft_strncmp.c \
+			src/get_input/utils/free_game_configs.c \
+			src/get_input/utils/ft_strlen.c \
+			src/get_input/utils/traverse_space.c \
+			src/get_input/utils/is_space.c \
+			src/get_input/utils/get_rgb_vals.c \
+			src/get_input/utils/copy_map.c \
+			src/get_input/test/print_parsing.c \
+			src/get_input/test/print_game_configs.c \
+			src/get_input/test/print_game_configs_utils.c \
+
+OBJ      := $(SRC:%.c=%.o)
+
+DEPS	 := $(OBJ:%.o=%.d)
+
+GREEN    := \033[0;32m
+RESET    := \033[0m
+
+
+all: libmlx $(NAME)
+
+libmlx:
+	@if [ ! -d "$(LIBMLX)" ]; then echo "Error: minilibx not found at $(LIBMLX)"; exit 1; fi
+	@make -s -C $(LIBMLX) > /dev/null 2>&1
+
+%.o: %.c Makefile
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -I/usr/include -Imlx_linux -c $< -o $@ $(HEADERS)
+	@echo "$(GREEN)Compiled$(RESET) $<"
+
+$(NAME): $(LIBMLX)/libmlx.a $(OBJ) Makefile
+	@$(CC) $(OBJ) $(LIBS) -o $(NAME)
+	@echo "$(GREEN)Build successful!$(RESET)"
+
+-include $(DEPS)
+
+clean:
+	rm -rf $(OBJ) $(DEPS) && echo "$(GREEN)Object and dependency files cleaned$(RESET)"; \
+
+	@make -C $(LIBMLX) clean > /dev/null 2>&1 || true
+	@echo "$(GREEN)MLX library cleaned$(RESET)"
+
+fclean: clean
+	@if [ -f "$(NAME)" ]; then \
+		rm -f $(NAME) && echo "$(GREEN)Executable $(NAME) removed$(RESET)"; \
+	else \
+		echo "$(GREEN)Executable $(NAME) already clean$(RESET)"; \
+	fi
+	@echo "$(GREEN)Full clean completed$(RESET)"
+
+re: fclean all
+
+.PHONY: all clean fclean re check
