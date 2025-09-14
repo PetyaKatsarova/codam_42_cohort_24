@@ -107,6 +107,9 @@ When the exponent bits are zero, and the mantissa has only the last bit set, the
 The "e-7" means "times 10 to the power of -7", which moves the decimal point 7 places to the left.
 and if only -7 is to the power of 2
 ------------------------------
+https://www.geeksforgeeks.org/dsa/binary-space-partitioning/
+BSP
+Binary space partitioning is treated as a generic process of recursively dividing a scene into two until the partitioning satisfies one or more requirements.
 
 
 
