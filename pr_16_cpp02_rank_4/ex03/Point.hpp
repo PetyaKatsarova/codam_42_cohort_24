@@ -6,8 +6,8 @@
 
 class Point {
     private:
-        Fixed const x;
-        Fixed const y;
+        Fixed x;
+        Fixed y;
 
     public:
         Point();

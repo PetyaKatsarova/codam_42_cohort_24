@@ -2,49 +2,38 @@
 #include <iostream>
 #include <cmath>
 
-Fixed::Fixed() : _raw_bits(0) {
-	std::cout << "Default constructor called" << std::endl;
-}
+Fixed::Fixed() : _raw_bits(0) {}
 
+/**
+ * num << 8 = num * 256
+ */
 Fixed::Fixed(const int num) {
-    std::cout << "Int constructor called" << std::endl;
     _raw_bits = num << _FRACTALPART;
 }
 
-/*
+/**
     roundf returns a float rounded to the nearest integer value, but the type is still float.
 */
 Fixed::Fixed(const float fnum) {
-    std::cout << "Float constructor called" << std::endl;
     _raw_bits = static_cast<int> (roundf(fnum * (1 << _FRACTALPART)));
 }
 
 Fixed::Fixed(const Fixed &other) {
-    std::cout << "Copy constructor called\n";
     _raw_bits = other._raw_bits;
 }
 
 Fixed &Fixed::operator=(const Fixed &other) {
-    std::cout << "Copy assignment operator called\n";
     if (this != &other) {
         _raw_bits = other._raw_bits;
     }
-        return *this;
+    return *this;
 }
 
-Fixed::~Fixed()  {
-	std::cout << "Destructor called" << std::endl;
-}
+Fixed::~Fixed()  {}
 
-int Fixed::getRawBits() const {
-    std::cout << "getRawBits member function called\n";
-    return _raw_bits;
-}
+int Fixed::getRawBits() const { return _raw_bits; }
 
-void Fixed::setRawBits(int const raw) {
-    _raw_bits = raw;
-    std::cout << "setRawBits member function called\n";
-}
+void Fixed::setRawBits(int const raw) { _raw_bits = raw; }
 
 float Fixed::toFloat( void ) const {
     float res = static_cast<float> (_raw_bits) / (1 << _FRACTALPART);
@@ -52,7 +41,7 @@ float Fixed::toFloat( void ) const {
 }
 
 int Fixed::toInt( void ) const {
-    return (_raw_bits >> _FRACTALPART);
+    return static_cast<int>(roundf(toFloat()));
 }
 
 std::ostream &operator<<(std::ostream &os, const Fixed &obj) {
@@ -85,11 +74,15 @@ bool Fixed::operator==(const Fixed& other) const {
 }
 
 Fixed Fixed::operator+(const Fixed& other) const {
-	return ( Fixed(_raw_bits + other._raw_bits));
+    Fixed result;
+    result.setRawBits(_raw_bits + other._raw_bits);
+	return result;
 }
 
 Fixed Fixed::operator-(const Fixed& other) const {
-	return ( Fixed(_raw_bits - other._raw_bits));
+    Fixed res;
+    res.setRawBits(_raw_bits - other._raw_bits);
+	return res;
 }
 
 // >> divide by
@@ -108,7 +101,9 @@ Fixed Fixed::operator/(const Fixed& other) const {
 	if (other._raw_bits == 0)
 		throw std::runtime_error("Division by zero is not allewed");
     long long temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
-	return ( Fixed(static_cast<int>(temp)));
+    Fixed bla;
+    bla.setRawBits(static_cast<int>(temp));
+	return bla;
 }
 
 // returns ref to the same obj

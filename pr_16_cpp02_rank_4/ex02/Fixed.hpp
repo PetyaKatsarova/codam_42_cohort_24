@@ -28,7 +28,6 @@ class Fixed {
 		bool operator!=(const Fixed& other) const;
 		bool operator==(const Fixed& other) const;
 
-		//The 4 arithmetic operators: +, -, *, and /.
 		Fixed operator+(const Fixed& other) const;
 		Fixed operator-(const Fixed& other) const;
 		Fixed operator*(const Fixed& other) const;
