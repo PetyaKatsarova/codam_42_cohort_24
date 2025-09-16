@@ -67,8 +67,7 @@ and cats as Animals. The appropriate destructors must be called in the expected 
 Don’t forget to check for memory leaks.
 A copy of a Dog or a Cat mustn’t be shallow. Thus, you have to test that your copies
 are deep copies!
-8
-C++ - Module 04 Subtype Polymorphism, Abstract Classes, and Interfaces
+
 int main()
 {
 const Animal* j = new Dog();
@@ -141,8 +140,7 @@ Save the addresses before calling unequip(), or anything else, but
 don’t forget that you have to avoid memory leaks.
 The use(int, ICharacter&) member function will have to use the Materia at the
 slot[idx], and pass the target parameter to the AMateria::use function.
-12
-C++ - Module 04 Subtype Polymorphism, Abstract Classes, and Interfaces
+
 Your character’s inventory will be able to support any type of
 AMateria.
 Your Character must have a constructor taking its name as a parameter. Any copy
