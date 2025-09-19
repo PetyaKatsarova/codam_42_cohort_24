@@ -46,12 +46,6 @@ bool bsp(Point const a, Point const b, Point const c, Point const p) {
     Fixed area1 = area(a, p, c);
     Fixed area2 = area(a, b, p);
     Fixed area3 = area(p, b, c);
-    // Fixed sum = area1 + area2 + area3;
-    // Fixed tolerance(0.0001f);
-    // Fixed res = Fixed(static_cast<float>(fabs((total - sum).toFloat())));
-
-    // return ( res <= tolerance && area1 > tolerance && area2 > tolerance && area3 > tolerance);
-    // std::cout << "** total: " << total << "\n area1: " << area1 << "\n area2: " << area2 << "\n area3: " << area3 << std::endl;
     return (total == (area1 + area2 + area3) && area1 != 0 && area2 != 0 && area3 != 0);
 }
 

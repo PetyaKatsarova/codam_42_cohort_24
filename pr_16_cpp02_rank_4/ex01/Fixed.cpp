@@ -29,7 +29,7 @@ Fixed &Fixed::operator=(const Fixed &other) {
     if (this != &other) {
         _raw_bits = other._raw_bits;
     }
-        return *this;
+    return *this;
 }
 
 Fixed::~Fixed()  {

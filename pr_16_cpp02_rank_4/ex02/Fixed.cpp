@@ -97,10 +97,19 @@ Fixed Fixed::operator*(const Fixed& other) const {
 /*
 num / 0 causes a runtime error (division by zero), which usually results in a crash or undefined behavior.
 returns  a new obj
-*/
+In fixed-point arithmetic, when you divide two numbers that are already scaled by 2^8, you need to compensate:
 Fixed Fixed::operator/(const Fixed& other) const {
 	if (other._raw_bits == 0)
 		throw std::runtime_error("Division by zero is not allewed");
+    long long temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
+    Fixed bla;
+    bla.setRawBits(static_cast<int>(temp));
+	return bla;
+}
+*/
+Fixed Fixed::operator/(const Fixed& other) const {
+	if (other._raw_bits == 0)
+		throw std::runtime_error("Division by zero is not allowed");
     long long temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
     Fixed bla;
     bla.setRawBits(static_cast<int>(temp));

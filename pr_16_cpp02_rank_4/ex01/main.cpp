@@ -22,9 +22,9 @@ int main( void ) {
     std::cout << "d is " << d.toInt() << " as integer" << std::endl;
 
 	// my tests
-	Fixed num (10);
-	Fixed fnum (42.42f);
-	std::cout << "num is " << num.toFloat() << " as a float" << std::endl;
-	std::cout << "fnum is " << fnum.toFloat() << " as a float" << std::endl; 
+	//Fixed num (10);
+	//Fixed fnum (42.42f);
+	//std::cout << "num is " << num.toFloat() << " as a float" << std::endl;
+	//std::cout << "fnum is " << fnum.toFloat() << " as a float" << std::endl; 
     return 0;
 }
