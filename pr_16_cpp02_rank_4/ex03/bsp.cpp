@@ -50,6 +50,14 @@ bool bsp(Point const a, Point const b, Point const c, Point const p) {
 }
 
 int main() {
+	Fixed 	bla;
+	int		num = 4.8; // on purpose: to int cuts the decimal point nums, doesnt round
+
+	bla.setRawBits(num);
+	std::cout<<"int: " << num << std::endl;
+	std::cout<<"raw bits: " << bla << std::endl;
+	std::cout<<"to int: " << bla.toInt() << std::endl;
+
     Point a(0, 0);
     Point b(5, 0);
     Point c(0, 5);

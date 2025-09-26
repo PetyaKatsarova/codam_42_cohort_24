@@ -41,7 +41,7 @@ float Fixed::toFloat( void ) const {
 }
 
 int Fixed::toInt( void ) const {
-    return static_cast<int>(roundf(toFloat()));
+    return (_raw_bits >> _FRACTALPART);
 }
 
 std::ostream &operator<<(std::ostream &os, const Fixed &obj) {

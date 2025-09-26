@@ -15,11 +15,10 @@ Fixed::Fixed(const int num) {
     roundf returns a float rounded to the nearest integer value, but the type is still float.
 */
 Fixed::Fixed(const float fnum) {
-    _raw_bits = static_cast<int> (roundf(fnum * (1 << _FRACTALPART)));
+    _raw_bits = static_cast<int> (fnum * (1 << _FRACTALPART));
 }
 
 Fixed::Fixed(const Fixed &other) {
-    // std::cout << "Copy constructor called\n";
     _raw_bits = other._raw_bits;
 }
 
@@ -42,7 +41,7 @@ float Fixed::toFloat( void ) const {
 }
 
 int Fixed::toInt( void ) const {
-    return static_cast<int>(roundf(toFloat()));
+    return _raw_bits >> _FRACTALPART;
 }
 
 std::ostream &operator<<(std::ostream &os, const Fixed &obj) {
@@ -86,11 +85,11 @@ Fixed Fixed::operator-(const Fixed& other) const {
 	return res;
 }
 
-// >> divide by
+// >> divide by 2
 Fixed Fixed::operator*(const Fixed& other) const {
-    long long res = (static_cast<long long>(_raw_bits) * other._raw_bits) >> _FRACTALPART;
+    int res = (static_cast<long long>(_raw_bits) * other._raw_bits) >> _FRACTALPART;
     Fixed bla;
-    bla.setRawBits(static_cast<int>(res));
+    bla.setRawBits((res));
     return bla;
 }
 
@@ -110,9 +109,9 @@ Fixed Fixed::operator/(const Fixed& other) const {
 Fixed Fixed::operator/(const Fixed& other) const {
 	if (other._raw_bits == 0)
 		throw std::runtime_error("Division by zero is not allowed");
-    long long temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
+    int temp = (static_cast<long long> (_raw_bits) << _FRACTALPART ) / other._raw_bits;   
     Fixed bla;
-    bla.setRawBits(static_cast<int>(temp));
+    bla.setRawBits(temp);
 	return bla;
 }
 
