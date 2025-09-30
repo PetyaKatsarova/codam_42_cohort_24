@@ -1,0 +1,168 @@
+Knowledge needed:
+
+The IP address 55.86.208.181/18 falls under Class A. Here's why:
+
+1. Class Definition
+
+Class A:
+
+IP range: 1.0.0.0 to 127.255.255.255
+
+Default subnet mask: /8 (255.0.0.0)
+
+Class B:
+
+IP range: 128.0.0.0 to 191.255.255.255
+
+Default subnet mask: /16 (255.255.0.0)
+
+Class C:
+
+IP range: 192.0.0.0 to 223.255.255.255
+
+Default subnet mask: /24 (255.255.255.0)
+
+2. Your IP: 55.86.208.181/18
+
+The IP address 55.86.208.181 starts with 55 in the first octet.
+
+IPs from 1.0.0.0 to 127.255.255.255 belong to Class A.
+
+3. Class A Explanation
+
+The first octet (55) is within the Class A range (1-127).
+
+So, the IP address 55.86.208.181 is a Class A IP.
+
+4. Subnet Mask /18
+
+The /18 subnet mask means that the first 18 bits are used for the network portion, and the remaining 14 bits are for the host portion of the address.
+
+This subnet mask does not change the fact that the IP belongs to Class A. It simply means you're subnetting a Class A network to create smaller subnets.
+
+calc network address for ips in level A network: third byte must be 0, 64, 128 or 192
+if address is closest above this: that's the network:
+if address is: 55.86.208.181/18, network is: 55.86.192.0/18
+/18 means the first 18 bits are for the network
+
+In any given IP network, there are certain IP addresses that should not be used for hosts or devices. These addresses have special purposes within the IP networking system. Here’s a breakdown of IP addresses that should not be used:
+
+🚫 1. Network Address
+
+Definition: The network address represents the entire network itself and cannot be assigned to a host.
+
+Usage: It’s used to identify the network, not a specific device.
+
+How to Identify: The network address is the first IP address in a subnet (all host bits set to 0).
+
+Example:
+
+If your subnet is 192.168.1.0/24, the network address is 192.168.1.0. This address cannot be assigned to a device.
+
+🚫 2. Broadcast Address
+
+Definition: The broadcast address is used to send data to all devices in a network.
+
+Usage: It’s a special address that cannot be assigned to a specific device because it’s meant for broadcast traffic.
+
+How to Identify: The broadcast address is the last IP address in a subnet (all host bits set to 1).
+
+Example:
+
+For the subnet 192.168.1.0/24, the broadcast address is 192.168.1.255. This address cannot be assigned to a device.
+
+🚫 3. Reserved IP Addresses (Private Addresses)
+
+Certain IP address ranges are reserved for private networks. These addresses should only be used within private networks and cannot be routed on the public internet. They should not be used in public-facing networks or assigned to devices that need internet access through a public IP.
+
+Private IP Ranges:
+
+Class A (10.0.0.0 - 10.255.255.255)
+
+Example: 10.0.0.0/8
+
+Class B (172.16.0.0 - 172.31.255.255)
+
+Example: 172.16.0.0/12
+
+Class C (192.168.0.0 - 192.168.255.255)
+
+Example: 192.168.0.0/16
+
+These IP addresses are intended for use within internal networks, so assigning these to devices on public networks can lead to conflicts or issues with internet access.
+
+4. Link-local Addresses
+
+Definition: These addresses are used for communication within a single network segment (local network). They are not routable and should not be assigned to devices for communication across different networks.
+
+IP Range: 169.254.0.0 - 169.254.255.255 (also known as APIPA addresses in Windows).
+
+Usage: Automatically assigned when a device cannot obtain a valid IP address via DHCP.
+
+Example:
+
+169.254.x.x addresses cannot be used for internet or inter-network communication.
+
+🚫 5. Multicast Addresses
+
+Definition: These addresses are used for multicast communication, where data is sent to multiple devices at once. They are not usable for regular host assignments.
+
+IP Range: 224.0.0.0 - 239.255.255.255
+
+Usage: Assigned to multicast groups and used by network services like video streaming, conferencing, etc.
+
+Example:
+
+224.0.0.1 is used for the All Hosts multicast address, which is meant for sending data to all devices in the local network.
+
+🚫 6. Special-Purpose Addresses
+
+Some IP addresses have special roles and are not for regular host use.
+
+Loopback Address (127.0.0.1):
+
+This address is used by a device to refer to itself (its own network interface). The entire range 127.0.0.0/8 is reserved for loopback purposes.
+
+Example: 127.0.0.1 refers to the local device.
+
+Zero Address (0.0.0.0):
+
+This is reserved to refer to an unspecified network and should not be used as a host address.
+
+Often used in routing tables or when a device is trying to self-configure.
+
+🚫 7. Private IP Addresses in Public Subnets
+
+When you're using a public subnet, private IP addresses (e.g., 10.x.x.x, 192.168.x.x) cannot be used as they are reserved for private networks. For example, 192.168.1.100 should never be used on the public internet.
+
+--solutions----
+=========================================
+level 9
+============================================
+u add any network u like for 2 networks, the third one is class one: all you have to do is to calc the internet ip address
+
+================================
+level 10
+=================================
+again 4 networks 3 share same first 3 bytes: class C, need to create 3 subnetworks:
+create all diff ip networks, only have to calc class B ip address to network, for /18
+=====================================
+level 8
+=====================================
+in internet give specific network(usually class a or b) with mask / 27: 32 addresses: then for the routers in between mask /30 same network, the 2 subnetworks: /28 from 1-15, second: /30 .17 and .18!!!
+====================================
+/24 = .0     (256 hosts)
+/25 = .128   (128 hosts) 
+/26 = .192   (64 hosts)
+/27 = .224   (32 hosts)
+/28 = .240   (16 hosts)
+/29 = .248   (8 hosts)
+/30 = .252   (4 hosts)
+
+Example: 59.41.192.254/18
+Quick Method:
+/18 affects 3rd octet (18-16=2 bits from 3rd octet)
+2 bits = 4 values → Block size = 256÷4 = 64
+Blocks: 0, 64, 128, 192, 256...
+192 falls in 192 block
+Network: 59.41.192.0/18

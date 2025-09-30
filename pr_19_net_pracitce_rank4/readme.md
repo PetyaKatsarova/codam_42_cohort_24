@@ -7,16 +7,10 @@ II Introduction 3
 III General guidelines 4
 IV Mandatory part 5
 V Submission and peer-evaluation 8
-1
-Chapter I
-Preamble
-2
-Chapter II
-Introduction
+
 This project is a general practical exercise designed to help you discover networking.
 3
-Chapter III
-General guidelines
+
 You will need to configure small-scale networks. To do so, it is necessary to understand
 how TCP/IP addressing functions.
 You will need to complete 10 levels (i.e. 10 exercises) and submit them to your Git
@@ -25,8 +19,7 @@ In this project, the networks you will work with are simulated. They
 will be available via a training interface that you will open in your
 web browser.
 4
-Chapter IV
-Mandatory part
+
 This project involves solving networking problems to ensure a network operates correctly.
 First, download the file attached to the project page.
 Then, extract the files into any folder you choose.
@@ -60,9 +53,7 @@ functional.
 To complete this assignment, it is strongly recommended that you understand how
 addressing functions in a network containing devices such as routers. Familiarize yourself
 with TCP/IP addressing.
-7
-Chapter V
-Submission and peer-evaluation
+
 Submit your assignment in your Git repository as usual. Only the work within your
 repository will be evaluated during the defense. Do not hesitate to double-check the
 names of your files to ensure they are correct (if relevant).
@@ -74,5 +65,3 @@ It is very important that you enter your login in the interface.
 During the defense, you will need to successfully complete 3 random levels as mentioned on the training platform. Naturally, you will have a limited time to do so.
 You are prohibited from using external tools during your evaluation.
 The use of a simple calculator, such as "bc", is tolerated.
-???????????? XXXXXXXXXX = $3$$84f5ef7ed1616b2fbc6c35e9567d0075
-8
