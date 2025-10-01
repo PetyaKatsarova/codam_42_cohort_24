@@ -89,17 +89,12 @@ $(NAME): $(LIBMLX)/libmlx.a $(OBJ) Makefile
 -include $(DEPS)
 
 clean:
-	rm -rf $(OBJ) $(DEPS) && echo "$(GREEN)Object and dependency files cleaned$(RESET)"; \
-
+	rm -rf $(OBJ) $(DEPS) && echo "$(GREEN)Object and dependency files cleaned$(RESET)";
 	@make -C $(LIBMLX) clean > /dev/null 2>&1 || true
 	@echo "$(GREEN)MLX library cleaned$(RESET)"
 
 fclean: clean
-	@if [ -f "$(NAME)" ]; then \
-		rm -f $(NAME) && echo "$(GREEN)Executable $(NAME) removed$(RESET)"; \
-	else \
-		echo "$(GREEN)Executable $(NAME) already clean$(RESET)"; \
-	fi
+	rm -f $(NAME) && echo "$(GREEN)Executable $(NAME) removed$(RESET)";
 	@echo "$(GREEN)Full clean completed$(RESET)"
 
 re: fclean all
