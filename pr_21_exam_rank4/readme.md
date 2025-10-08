@@ -1,6 +1,35 @@
 prep: 
 1. pipex bonus: ulimit -n 30
-2. binary trea: binary calculator: (3+5)*10
+2. binary tree: binary calculator: (3+5)*10
+============================================
 
-1.
-It lets you chain Unix commands together using pipes: pwd | wc -c ✨. Dive in to explore the process management behind shells, learn how pipelines work, and experiment with real shell-like behavior. Whether you’re a systems programming enthusiast or just curious about Unix internals, PICOSHELL offers a clean, hands-on codebase to boost your skills 🚀!
+/* Assignment name:    picoshell
+Expected files:        picoshell.c
+Allowed functions:    close, fork, wait, exit, execvp, dup2, pipe
+_
+
+Write the following function:
+
+int    picoshell(char *cmds[]);
+
+The goal of this function is to execute a pipeline. It must execute each
+commands [sic] of cmds and connect the output of one to the input of the
+next command (just like a shell).
+
+Cmds contains a null-terminated list of valid commands. Each rows [sic]
+of cmds are an argv array directly usable for a call to execvp. The first
+arguments [sic] of each command is the command name or path and can be passed
+directly as the first argument of execvp.
+
+If any error occur [sic], The function must return 1 (you must of course
+close all the open fds before). otherwise the function must wait all child
+processes and return 0. You will find in this directory a file main.c which
+contain [sic] something to help you test your function.
+
+
+Examples: 
+./picoshell /bin/ls "|" /usr/bin/grep picoshell
+picoshell
+./picoshell echo 'squalala' "|" cat "|" sed 's/a/b/g'
+squblblb/
+*/
