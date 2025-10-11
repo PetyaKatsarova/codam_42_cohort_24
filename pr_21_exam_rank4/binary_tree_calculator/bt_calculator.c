@@ -129,6 +129,62 @@ void free_tree(t_node *node)
     free(node);
 }
 
+void print_tree_horizontal(t_node *node, char *prefix, int is_last)
+{
+    if (!node)
+        return;
+    printf("%s", prefix);
+    printf("%s", is_last ? "└──" : "├──");
+    if (node->op == 'N')
+        printf("%d\n", node->val);
+    else
+        printf("%c\n", node->op);
+
+    char new_prefix[256];
+    // write to the char string str:
+    sprintf(new_prefix, "%s%s", prefix, is_last ? "  " : "| ");
+    if (node->left || node->right)
+    {
+        print_tree_horizontal(node->left, new_prefix, !node->right);
+        print_tree_horizontal(node->right, new_prefix, 1);
+    }
+}
+
+void print_tree(t_node *node, int depth, char prefix)
+{
+    // print root node
+    if (!node)
+        return;
+    for (int i = 0; i < depth; i++)
+        printf (" ");
+    if (node->op == 'N')
+        printf("%c%d\n", prefix, node->val);
+    else
+        printf("%c%c\n", prefix, node->op);
+
+    // if children print:
+    if (node->left || node->right)
+    {
+        if (node->left)
+            print_tree(node->left, depth+1, 'L');
+        else
+        {
+            for (int i = 0; i < depth + 1; i++)
+                printf(" ");
+            printf("L(null)\n");
+        }
+
+        if (node->right)
+            print_tree(node->right, depth+1, 'R');
+        else
+        {
+            for (int i = 0; i < depth +1; i++)
+                printf(" ");
+            printf("R(null)\n");
+        }
+    }
+}
+
 int main (int argc, char **argv)
 {
     if (argc != 2)
@@ -144,23 +200,10 @@ int main (int argc, char **argv)
         printf("Error\n");
         return 1;
     }
+    // print_tree(root, 0, ' ');
+    print_tree_horizontal(root, "", 1);
     int result = evaluate(root);
     printf("%d\n", result);
-
     free_tree(root);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

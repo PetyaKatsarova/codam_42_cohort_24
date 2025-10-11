@@ -18,7 +18,22 @@ Returns the character value
 cchar *g_expr = "abc";
 char c = *g_expr++;  // c = 'a', g_expr now points to "bc"
 =====================================================================
+Memory trick:
 
+LEFT = what comes BEFORE the operator
+RIGHT = what comes AFTER the operator
+In 3 + 5:
+
+3 goes LEFT of +
+5 goes RIGHT of +
+
+
+Operators = parents (have children)
+Numbers = leaves (no children)
+Left/Right = your view looking at the paper
+Evaluation = start from bottom, work up
+Precedence = *,/ before +,-
+=====================================================================
 
 
 A binary tree is a hierarchical data structure where each node has at most 2 children (left and right).
