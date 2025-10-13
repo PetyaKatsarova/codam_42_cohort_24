@@ -52,14 +52,14 @@ int picoshell(char ***cmds)
 		i++;
 	}
 	close_prev_fd(prev_fd);
-	while (wait(fds) > 0); // wait all child processes to finish
+	while (wait(NULL) > 0); // wait all child processes to finish
 	return 0;
 }
 // valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes ./a.out
 
 // gcc picoshell.c
 // ulimit -n 30
-//valgrind  --track-fds=yes --trace-children=yes ./a.out
+//valgrind -q --track-fds=yes --trace-children=yes ./a.out
 int main(void)
 {
     // Test case 1: ls | grep picoshell

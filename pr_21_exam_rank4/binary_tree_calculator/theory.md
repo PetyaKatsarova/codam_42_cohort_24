@@ -6,7 +6,7 @@ Moves the pointer forward
 Returns old pointer value
 Doesn't dereference
 
-cchar *g_expr = "abc";
+char *g_expr = "abc";
 g_expr++;  // Now g_expr points to "bc"
 
 *g_expr++
@@ -15,7 +15,7 @@ Dereferences current character
 Then moves pointer forward
 Returns the character value
 
-cchar *g_expr = "abc";
+char *g_expr = "abc";
 char c = *g_expr++;  // c = 'a', g_expr now points to "bc"
 =====================================================================
 Memory trick:
@@ -48,3 +48,7 @@ Tree:
     +   10
    / \
   3   5
+  ======================================================================
+   Always from the TOP! 👑
+We ALWAYS start with the KING (parse_on_plus_minus())
+Why? Because + and - have the lowest precedence, so they should be at the TOP of the tree!
