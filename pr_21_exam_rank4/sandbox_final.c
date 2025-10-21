@@ -75,6 +75,7 @@ if (waitpid(pid, &status, 0) == -1)  // Gets interrupted when alarm fires
 #include <errno.h>      // errno, EINTR
 #include <stdlib.h>     // exit
 
+// NB!! WRONG BUT USE THE THEORYA
 /**
  *  This function does literally nothing except exist
 	When SIGALRM arrives, it interrupts the blocking waitpid() call

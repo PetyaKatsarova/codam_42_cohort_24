@@ -1,19 +1,22 @@
 PICOSHELL https://github.com/elinakly/exam42/blob/main/rank4/ft_popen.c
-Allowed functions: pipe, fork, dup2, execvp, close, exit
-write the following function:
-    int    ft_popen(const char file, char const *argv[], char type)
-The function must launch the executable file with the arguments argv (using execvp).
-If the type is 'r' the function must return a file descriptor connected to the output of the command.
-If the type is 'w' the function must return a file descriptor connected to the input of the command.
-In case of error or invalid parameter the function must return -1.
-example:
-int main() {
-    int fd = ft_popen("ls", (char const[]){"ls", NULL}, 'r');
-    charline;
-    while(line = get_next_line(fd))
-        ft_putstr(line);
-}
-Hint: Do not leak file descriptors!
+Assignment name:	picoshell
+Expected files:		picoshell.c
+Allowed functions:	close, fork, wait, exit, execvp, dup2, pipe
+int    picoshell(char **cmds[]);
+
+The goal of this function is to execute a pipeline. It must execute each
+commands of cmds and connect the output of one to the input of the
+next command (just like a shell).
+e
+Cmds contains a null-terminated list of valid commands. Each rows
+of cmds are an argv array directly usable for a call to execvp. The first
+arguments of each command is the command name or path and can be passed
+directly as the first argument of execvp.
+
+If any error occur, The function must return 1 (you must of course
+close all the open fds before). otherwise the function must wait all child
+processes and return 0. You will find in this directory a file main.c which
+contain something to help you test your function.
 ========================================================
 
 Assignment name:		vbc
@@ -26,21 +29,21 @@ If the expression ends unexpectedly, you must print "Unexpected end of input\n".
 The same rule applies if finding an unexpected '(' or ')'.
 In case of a syscall failure, you must exit with 1.
 Examples:
-$> ./vbc '1' | cat -e
+$> ./a.out '1' | cat -e
 1$
-$> ./vbc '2+3' | cat -e
+$> ./a.out '2+3' | cat -e
 5$
-$> ./vbc '3*4+5' | cat -e
+$> ./a.out '3*4+5' | cat -e
 17$
-$> ./vbc '3+4*5' | cat -e
+$> ./a.out '3+4*5' | cat -e
 23$
-$> ./vbc '(3+4)*5' | cat -e
+$> ./a.out '(3+4)*5' | cat -e
 35$
-$> ./vbc '(((((2+2)*2+2)*2+2)*2+2)*2+2)*2' | cat -e
+$> ./a.out '(((((2+2)*2+2)*2+2)*2+2)*2+2)*2' | cat -e
 188$
-$> ./vbc '1+'
+$> ./a.out '1+'
 Unexpected end of input
-$> ./vbc '1+2)' | cat -e
+$> ./a.out '1+2)' | cat -e
 Unexpected token ')'$
 File provided: vbc.c, see below.
 // given code: 
@@ -186,4 +189,47 @@ int main() {
 }
 Hint: Do not leak file descriptors!
 ====================================================================
+Assignment name: argo
+Expected files: argo.c
+Allowed functions: getc, ungetc, printf, malloc, calloc, realloc, free, isdigit, fscanf, write
+-----------------
+Write a function argo that will parse a json file in the structure declared in argo.h:
 
+int	argo(json *dst, FILE *stream);
+
+	dst	- is the pointer to the AST that you will create
+	stream	- is the file to parse (man FILE)
+
+Your function will return 1 for success and -1 for failure.
+If an unexpected token is found you will print the following message in stdout:
+"Unexpected token '%c'\n"
+or if the token is EOF:
+"Unexpected end of input\n"
+
+Only handle numbers, strings and maps.
+Numbers will only be basic ints like in scanf("%d")
+Handle escaping in the strings only for backslashes and quotation marks (no \n \u ...)
+Don't handle spaces -> consider them as invalid tokens.
+
+In case of doubt how to parse json, read rfc8259. But you won't need it as the format is simple. Tested with the main, the output should be exactly the same as the input (except for errors).
+There are some functions in argo.c that might help you.
+
+Examples that should work:
+
+$> echo -n '1' | ./argo /dev/stdin | cat -e
+1$
+$> echo -n '"bonjour"' | ./argo /dev/stdin | cat -e
+"bonjour"$
+$> echo -n '"escape! \" "' | ./argo /dev/stdin | cat -e
+"escape! \" "$
+$> echo -n '{"tomatoes":42,"potatoes":234}' | ./argo /dev/stdin | cat -e
+{"tomatoes":42,"potatoes":234}$
+$> echo -n '{"recursion":{"recursion":{"recursion":{"recursion":"recursion"}}}}' | ./argo /dev/stdin | cat -e
+{"recursion":{"recursion":{"recursion":{"recursion":"recursion"}}}}$
+$> echo -n '"unfinished string' | ./argo /dev/stdin | cat -e
+unexpected end of input$
+$> echo -n '"unfinished string 2\"' | ./argo /dev/stdin | cat -e
+unexpected end of input$
+$> echo -n '{"no value?":}' | ./argo /dev/stdin | cat -e
+unexpected token '}'$
+================================================

@@ -64,6 +64,7 @@ int expect(char **s, char c)
     return (unexpected(**s), 0);
 }
 
+// not really needed: done in practice/btc_tue.c
 int validate_input(char *str)
 {
     int c = 0, i = -1;
