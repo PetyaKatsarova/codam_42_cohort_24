@@ -46,10 +46,10 @@ int sandbox(void (*f)(void), unsigned int timeout, bool verbose)
             alarm(0);
             if (verbose)
                  printf("Bad function: timed out after %u seconds\n", timeout);
-            return 0;
+            return 0; // 0 for bad func
         }
         alarm (0);
-        return (-1);
+        return (-1); // my func err is -1
     }
     alarm(0);
     if (WIFEXITED(status))

@@ -1,10 +1,12 @@
-#include <stdio.h>
-#include <malloc.h>
-#include <ctype.h>
-#include <stdlib.h>
-
-
-/**
+/*
+Allowed functions:	malloc, calloc, realloc, free, printf, isdigit, write
+Write a program that prints the result of a mathematical expression given as argument.
+It must handle addition, multiplication and parenthesis. All values are between 0 and 9 included.
+In case of an unexpected symbol, you must print "Unexpected token '%c'\n".
+If the expression ends unexpectedly, you must print "Unexpected end of input\n".
+The same rule applies if finding an unexpected '(' or ')'.
+In case of a syscall failure, you must exit with 1.
+Examples:
 $> ./a.out '1' | cat -e
 1$
 $> ./a.out '2+3' | cat -e
@@ -21,7 +23,14 @@ $> ./a.out '1+'
 Unexpected end of input
 $> ./a.out '1+2)' | cat -e
 Unexpected token ')'$
+File provided: vbc.c, see below.
+// given code: 
 */
+
+#include <stdio.h>
+#include <malloc.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 typedef struct node {
     enum {
@@ -55,16 +64,15 @@ void    destroy_tree(node *n)
     free(n);
 }
 
-// prints out correct msg
 void    unexpected(char c)
 {
     if (c)
         printf("Unexpected token '%c'\n", c);
     else
-        printf("Unexpected end of input\n");
+        printf("Unexpected end of file\n");
 }
 
-// return 1 if **s==c and (*s)++, else return 0
+// returns 1 if **s==c, else 0
 int accept(char **s, char c)
 {
     if (**s == c)
@@ -75,13 +83,70 @@ int accept(char **s, char c)
     return (0);
 }
 
-// accept() and unexpected()
+// prints unexpected() if not accept()
 int expect(char **s, char c)
 {
     if (accept(s, c))
         return (1);
     unexpected(**s);
     return (0);
+}
+
+node *parse_num(char **s);
+node *parse_multiply(char **s);
+node *parse_add(char **s);
+
+node *parse_num(char **s)
+{
+    if (**s == '(')
+    {
+        (*s)++;
+        node *bla = parse_add(s);
+        if (!bla)
+            return NULL;
+        if (!expect(s, ')')) // prints msg
+            return (destroy_tree(bla), NULL);
+        return bla;
+    }
+    if (isdigit(**s))
+    {
+        node n = {VAL, **s - '0', NULL, NULL};
+        (*s)++;
+        return new_node(n);
+    }
+    return NULL;
+}
+
+node *parse_multiply(char **s)
+{
+    node *left = parse_num(s);
+    if (!left)
+        return NULL;
+    while (accept(s, '*'))
+    {
+        node *right = parse_num(s);
+        if (!right)
+            return (destroy_tree(left), NULL);
+        node n = {MULTI, 0, left, right};
+        left = new_node(n);
+    }
+    return left;
+}
+
+node *parse_add(char **s)
+{
+    node *left = parse_multiply(s);
+    if (!left)
+        return NULL;
+    while (accept(s, '+'))
+    {
+        node *right = parse_multiply(s);
+        if (!right)
+            return (destroy_tree(left), NULL);
+        node n = {ADD, 0, left, right};
+        left = new_node(n);
+    }
+    return left;
 }
 
 int eval_tree(node *tree)
@@ -96,63 +161,6 @@ int eval_tree(node *tree)
             return (tree->val);
     }
 	return 0;
-}
-
-node *parse_num(char **s);
-node *parse_multiply(char **s);
-node *parse_add(char **s);
-
-node *parse_num(char **s)
-{
-    if (**s == '(')
-    { 
-        (*s)++;
-        node *bla = parse_add(s);
-        if (!bla)
-            return NULL;
-        if (!expect(s, ')')) // prints err msg
-            return (destroy_tree(bla), NULL);
-        return bla;
-    }
-    if (isdigit(**s))
-    {
-        node n = {VAL, **s - '0', NULL, NULL};
-        (*s)++;
-        return (new_node(n));
-    }
-    return NULL;
-}
-
-node *parse_multiply(char **str)
-{
-    node *left = parse_num(str);
-    if (!left)
-        return NULL;
-    while (accept(str, '*'))
-    {
-        node *right = parse_num(str);
-        if (!right)
-            return (destroy_tree(left), NULL);
-        node n = {MULTI, 0, left, right};
-        left = new_node(n);
-    }
-    return left;
-}
-
-node *parse_add(char **str)
-{
-    node *left = parse_multiply(str);
-    if (!left)
-        return NULL;
-    while (accept(str, '+'))
-    {
-        node *right = parse_multiply(str);
-        if (!right)
-            return (destroy_tree(left), NULL);
-        node n = {ADD, 0, left, right};
-        left = new_node(n);
-    }
-    return left;
 }
 
 node    *parse_expr(char *s)

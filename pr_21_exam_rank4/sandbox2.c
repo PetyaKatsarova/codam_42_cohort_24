@@ -22,31 +22,30 @@ int sandbox(void (*f)(void), unsigned int timeout, bool verbose)
     sa.sa_handler = alarm_handler;
     sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
-    if (sigaction(SIGALRM, &sa, NULL) == -1)  // FIX 2 & 4
+    if (sigaction(SIGALRM, &sa, NULL) == -1)
         return (-1);
 
     pid = fork();
     if (pid == -1)
         return (-1);
 
-    if (pid == 0)  // Child
+    if (pid == 0)
     {
         f();
         exit(0);
     }
 
-    // Parent
     alarm(timeout);
 
-    if (waitpid(pid, &status, 0) == -1)
+    if (waitpid(pid, &status, 0) == -1) // 1
     {
-        if (errno == EINTR)  // FIX 3: Use == not =
+        if (errno == EINTR)
         {
             kill(pid, SIGKILL);
             waitpid(pid, NULL, 0);
-            alarm(0);  // FIX 5: Cancel alarm
+            alarm(0);
             if (verbose)
-                printf("Bad function: timed out after %u seconds\n", timeout);  // FIX 6
+                printf("Bad function: timed out after %u seconds\n", timeout);
             return 0;
         }
         alarm(0);  // Cancel on other errors
@@ -55,7 +54,7 @@ int sandbox(void (*f)(void), unsigned int timeout, bool verbose)
 
     alarm(0);  // FIX 5: CRITICAL - Cancel alarm after successful waitpid!
 
-    if (WIFEXITED(status))
+    if (WIFEXITED(status)) //  2
     {
         if (WEXITSTATUS(status) == 0)
         {
@@ -65,13 +64,13 @@ int sandbox(void (*f)(void), unsigned int timeout, bool verbose)
         }
         else
         {
-            if (verbose)  // FIX 7: Remove duplicate
+            if (verbose)
                 printf("Bad function: exited with code %d\n", WEXITSTATUS(status));
             return 0;
         }
     }
 
-    if (WIFSIGNALED(status))
+    if (WIFSIGNALED(status)) // 3
     {
         int sig = WTERMSIG(status);  // FIX 8: Use WTERMSIG, not WIFSIGNALED
         if (verbose)
