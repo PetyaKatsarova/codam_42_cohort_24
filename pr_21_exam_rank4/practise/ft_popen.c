@@ -69,7 +69,7 @@ int    ft_popen(const char *file, char *argv[], char type)
 }
 
 int main() {
-    // Test 'r' mode - read command output
+    // Test  read command output
     int fd = ft_popen("ls", (char*[]){"ls", NULL}, 'r');
     if (fd != -1) {
         char buffer[1024];
@@ -81,12 +81,14 @@ int main() {
         close(fd);
     }
     
-    // Test 'w' mode - write to command input
+    // Test write to command input
+    printf("Sort output:\n");
     fd = ft_popen("sort", (char*[]){"sort", NULL}, 'w');
     if (fd != -1) {
         write(fd, "banana\napple\ncherry\n", 20);
-        close(fd);  // sort will output sorted lines
-        while (wait(NULL) > 0);
+        close(fd);      // Signal EOF to sort
+        wait(NULL);     // Wait for sort to finish processing
+        fflush(stdout); // Ensure all output is displayed
     }
     
     return 0;

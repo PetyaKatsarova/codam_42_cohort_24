@@ -38,12 +38,6 @@
     sleep(10);  // After 5 seconds: alarm_handler() runs, then continues
     */
 
-    /*
-     bad funcs: crashes, exits wrong or times out
-     Some functions never finish (infinite loops)
-     waitpid() would wait FOREVER without timeout, thats why alarm() solves it
-    */
-
 void alarm_handler(int sig){ (void)sig; }
 
 /**
