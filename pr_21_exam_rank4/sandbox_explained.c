@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sandbox_final.c                                    :+:    :+:            */
+/*   sandbox_explained.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pekatsar <pekatsar@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/10/17 18:32:06 by pekatsar      #+#    #+#                 */
-/*   Updated: 2025/10/17 19:25:30 by pekatsar      ########   odam.nl         */
+/*   Updated: 2025/10/23 18:10:24 by pekatsar      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,27 @@ void	alarm_handler(int sig)
 {
 	(void)sig;
 }
-/*return 1 if f is nice , 0 if f is bad or -1 in case of an error in the function.*/
+/*return 1 if f is nice , 0 if f is bad or -1 in case of an error in the function.
+
+sigaction(SIGALRM, &sa, NULL);   1. Install handler FIRST 
+alarm(timeout);                  2. Schedule alarm SECOND 
+waitpid(pid, &status, 0);        3. Wait for child 
+*/
 int	sandbox(void (*f)(void), unsigned int timeout, bool verbose)
 {
 	struct sigaction	sa;
 	pid_t				pid;
 	int					status;
 
-	pid = fork();
-	if (pid == -1)
-		return (-1);
-	/*Set up signal handler after fork (cleaner design) */
+		/*Set up signal handler after fork (cleaner design) */
 	sa.sa_handler = alarm_handler; // Install our minimal handler
 	sa.sa_flags = 0; //No special flags
 	sigemptyset(&sa.sa_mask); //Don't block any signals during handler
 	sigaction(SIGALRM, &sa, NULL);
+
+	pid = fork();
+	if (pid == -1)
+		return (-1);
 	if (pid == 0)
 	{
 		f(); //If f() crashes, child dies with signal (segfault, etc.)
@@ -118,6 +124,11 @@ int	sandbox(void (*f)(void), unsigned int timeout, bool verbose)
 		kill(pid, SIGKILL) - Force-kill the stuck child
 		waitpid(pid, NULL, 0) - Reap the zombie child
 		Print timeout message and return 0 (bad function)
+ */
+/**
+ * waitpid() was blocking
+SIGALRM fires → interrupts waitpid()
+waitpid() returns -1 
  */
 	if (waitpid(pid, &status, 0) == -1)
 	{

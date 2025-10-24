@@ -22,8 +22,8 @@ void handle_signal(int signal_num) {
 // example core dump:
 void bad_func()
 {
-    int *ptr = NULL;
-    *ptr  = 42; // crash seg fault
+    int *ptr = NULL;  // ptr points to memory address 0
+	*ptr = 42;        // try to write to address 0 = SEGMENTATION 
 }
 
 // ulimit -c unlimited    # Enable unlimited core dump size
@@ -39,7 +39,7 @@ gdb ./crash core.12345
 */
 int main()
 {
-    // signal(SIGINT, signalHandler);
+    // signal(SIGINT, signalHandler); //SIGINT = Interrupt signal (Ctrl+C)
     // while(1)
     //     printf("hello wl!\n");
 
