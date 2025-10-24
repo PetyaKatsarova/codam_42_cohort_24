@@ -45,7 +45,7 @@ class Fixed {
         static Fixed& min(Fixed &a, Fixed &b);
         static const Fixed& min(const Fixed &a, const Fixed &b);
 };
-
+// ostream=output stream
 std::ostream &operator<<(std::ostream &os, const Fixed &obj);
 
 #endif
