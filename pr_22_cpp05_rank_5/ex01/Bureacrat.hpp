@@ -14,13 +14,13 @@ class Bureacrat {
 		static const int LOWEST_GRADE = 150;
 
 	public:
-		Bureacrat(const std::string &name, int grade);
+		Bureacrat(const std::string name, int grade);
 		Bureacrat(const Bureacrat &other);
 		Bureacrat &operator=(const Bureacrat &other);
 		~Bureacrat();
 
-		const std::string& getName() const;
-		int getGrade() const;
+		const std::string getName();
+		const int getGrade();
 
 		void incrementGrade();
 		void decrementGrade();
