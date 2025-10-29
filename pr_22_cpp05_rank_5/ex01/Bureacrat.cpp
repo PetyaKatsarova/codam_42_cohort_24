@@ -1,6 +1,6 @@
 #include "Bureacrat.hpp"
 
-Bureacrat::Bureacrat(const std::string name, int grade) : _name(name), _grade(grade)
+Bureacrat::Bureacrat(const std::string& name, int grade) : _name(name), _grade(grade)
 {
 	if (this->_grade < HIGHEST_GRADE)
 		throw Bureacrat::GradeTooHighException();
@@ -9,6 +9,8 @@ Bureacrat::Bureacrat(const std::string name, int grade) : _name(name), _grade(gr
 }
 
 Bureacrat::Bureacrat(const Bureacrat &other) : _name(other._name), _grade(other._grade) {};
+
+Bureacrat::~Bureacrat() =  default;
 
 /**
 _name is not copied because is const, cant be changed after initiation
@@ -56,7 +58,7 @@ const char* Bureacrat::GradeTooLowException::what() const noexcept {
 	return "Grade too low";
 }
 
-std::ostream &operator<<(std::ostream, const Bureacrat &b)
+std::ostream &operator<<(std::ostream &os, const Bureacrat &b)
 {
-	return os << b.getName() << ", bureucrat grade " << b.getGrade() << '.';
+	return os << b.getName() << ", bureacrat grade " << b.getGrade() << '.';
 }
