@@ -5,6 +5,8 @@
 #include <iostream>
 #include <exception>
 
+class Bureacrat; // fwd declaration
+
 /**
 T& operator=(const T&) = delete; tells the compiler: do not provide/allow copy‑assignment.
 Any code that tries a = b; will be a compile‑time error.
@@ -21,27 +23,30 @@ class Form {
 		static const int LOWEST_GRADE = 150;
 
     public:
-        Form(const std::string name, int req_execute_grade, int req_signin_grade, bool is_signed);
+        Form(const std::string &name, int req_signin_grade, int req_execute_grade);
         Form(const Form &other);
         Form &operator=(const Form &other) = delete;
-        ~Form();
+        ~Form() = default;
 
         const std::string& getName() const;
-        const int getReqSigninGrade() const;
-        const int getReqExecuteGrade() const;
-        const bool getIsSigned() const;
+        int getReqSigninGrade() const;
+        int getReqExecuteGrade() const;
+        bool getIsSigned() const;
 
-        void beSigned(Bureacrat &b);
+        void setIsSigned(bool is_signed);
+        void beSigned(const Bureacrat &b);
     
         class GradeTooHighException : public std::exception {
+            public:
             const char* what() const noexcept override;
-        }
+        };
 
         class GradeTooLowException : public std::exception {
+            public:
             const char* what() const noexcept override;
-        }
-}
+        };
+};
 
-std::ostream &operator<<(std::ostream &os, Form &form);
+std::ostream &operator<<(std::ostream &os, const Form &form);
 
 #endif
