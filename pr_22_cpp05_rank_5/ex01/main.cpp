@@ -10,7 +10,7 @@ int main()
 {
     Form form("crazy", 42, 22);
     std::cout << form << std::endl;
-    printf("hello world\n");
+
     // test deep copy form
     printf("-- deep cpy --\n");
     Form f2(form);
