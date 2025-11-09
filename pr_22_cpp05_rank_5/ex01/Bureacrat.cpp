@@ -78,10 +78,10 @@ Otherwise, it will print something like:
 void Bureacrat::signForm(Form &form) {
 	try {
 		form.beSigned(*this);
-		std::cout << this->getName() << " singed " << form << std::endl;
+		std::cout << this->getName() << " singed " << form.getName() << std::endl;
 	} catch (const std::exception &e) {
 		form.setIsSigned(false);
-		std::cout << this->getName() << " couldn't sign " << form << " because " << e.what() << std::endl;
+		std::cout << this->getName() << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
 	}
 }
 

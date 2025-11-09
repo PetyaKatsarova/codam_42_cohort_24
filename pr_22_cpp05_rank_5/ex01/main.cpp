@@ -8,7 +8,7 @@
 //g++ -std=c++11 -Wall -Wextra main.cpp Bureacrat.cpp Form.cpp
 int main()
 {
-    Form form("crazy", 42, 22);
+    Form form("form1", 42, 22);
     std::cout << form << std::endl;
 
     // test deep copy form
@@ -17,7 +17,7 @@ int main()
     std::cout << "form._name addr: " << static_cast<const void*>(form.getName().data()) << std::endl;
     printf("f2._name addrs:  %p\n", static_cast<const void*>(f2.getName().data()));
     printf("-- form signing funcs --\n");
-    Bureacrat b("Brr", 42); // valid
+    Bureacrat b("B1", 42); // valid
     std::cout << b << std::endl;
     try{
         b.setGrade(151);

@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include "AForm.hpp"
 
 class AForm; // forward declaration to avoid circular include
 
@@ -28,7 +29,7 @@ class Bureacrat {
 		void decrementGrade();
 
 		void signForm(AForm &form);
-		executeForm(AForm const & form) const;
+		void executeForm(AForm const & form) const;
 
 		class GradeTooHighException : public std::exception
 		{

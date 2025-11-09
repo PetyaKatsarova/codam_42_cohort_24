@@ -68,14 +68,6 @@ const char* Bureacrat::GradeTooLowException::what() const noexcept {
 	return "Grade too low";
 }
 
-/**
- modify the signForm() member function in the Bureaucrat class. This function must call Form::beSigned() to attempt to sign the form. If the form is signed
-successfully, it will print something like:
-<bureaucrat> signed <form>
-Otherwise, it will print something like:
-<bureaucrat> couldn’t sign <form> because <reason>.
-*/
-
 void Bureacrat::signForm(AForm &form) {
 	try {
 		form.beSigned(*this);
@@ -86,14 +78,16 @@ void Bureacrat::signForm(AForm &form) {
 	}
 }
 
-executeForm(AForm const & form) const {
-	// attempt to execute the form
-	// if successful:print something like:
-// <bureaucrat> executed <form>
-// If not, print an explicit error message.
+void Bureacrat::executeForm(AForm const & form) const {
+	try {	
+		form.execute(*this);
+		std::cout << this->getName() << " executed " << form.getTarget();
+	} catch (const std::exception &e) {
+		std::cout << this->getName() << " couldn't execute " << form.getTarget() << " because " << e.what() << std::endl;
+	}
 }
 
 std::ostream &operator<<(std::ostream &os, const Bureacrat &b)
 {
-	return os << b.getName() << ", bureacrat grade " << b.getGrade() << '.';
+	return os << b.getName() << ", bureacrat grade " << b.getGrade() << std::endl;
 }

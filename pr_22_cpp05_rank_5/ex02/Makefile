@@ -1,5 +1,5 @@
 NAME = BureacraticForms
-SRC = main.cpp Bureacrat.cpp
+SRC = main.cpp Bureacrat.cpp AForm.cpp ShrubberyCreationForm.cpp RobotomyRequestForm.cpp PresidentialPardonForm.cpp 
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
