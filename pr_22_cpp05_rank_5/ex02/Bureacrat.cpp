@@ -81,7 +81,7 @@ void Bureacrat::signForm(AForm &form) {
 void Bureacrat::executeForm(AForm const & form) const {
 	try {	
 		form.execute(*this);
-		std::cout << this->getName() << " executed " << form.getTarget();
+		std::cout << this->getName() << " executed " << form.getTarget() << std::endl;
 	} catch (const std::exception &e) {
 		std::cout << this->getName() << " couldn't execute " << form.getTarget() << " because " << e.what() << std::endl;
 	}

@@ -18,7 +18,7 @@ const std::string& AForm::getTarget() const {
 }
 
 int AForm::getReqSigninGrade() const {
-    return signin_grade;  // Not is_signed!
+    return signin_grade;
 }
 
 int AForm::getReqExecuteGrade() const {

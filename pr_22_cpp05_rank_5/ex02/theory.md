@@ -77,3 +77,24 @@ C++	Pointer (MyClass*)	this->member
 Java	Reference	this.member
 Python	Reference (self)	self.member
 JavaScript	Object reference	this.member
+=============================================
+When you throw an exception, the program doesn't exit immediately. Instead:
+
+Execution stops at the throw point
+Stack unwinding begins (destructors are called)
+Control transfers to the nearest matching catch block
+Execution continues after the catch block
+
+try {
+    burie.signForm(robo_form);
+    burie.executeForm(robo_form);
+    
+    testie.signForm(trump_form);
+    testie3.signForm(trump_form); // ← Throws exception here!
+    testie2.signForm(trump_form); // ← THIS LINE NEVER EXECUTES
+    
+} catch (const std::exception &e) {
+    std::cerr << "Exception: " << e.what() << std::endl;
+}
+// ← Execution continues here after catch
+---------------------------------------------

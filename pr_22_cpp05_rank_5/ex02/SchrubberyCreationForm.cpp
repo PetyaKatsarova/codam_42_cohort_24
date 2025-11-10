@@ -26,6 +26,15 @@ void SchrubberyCreationForm::execute(Bureacrat const &executor) const {
          << "   ~  \\\\ //  ~\n"
          << "_- -   | | _- _\n"
          << "  _ -  | |   -_\n"
+         << "      // \\\\\n"
+         << "       _-_\n"
+         << "    /~~   ~~\\\n"
+         << " /~~         ~~\\\n"
+         << "{               }\n"
+         << " \\  _-     -_  /\n"
+         << "   ~  \\\\ //  ~\n"
+         << "_- -   | | _- _\n"
+         << "  _ -  | |   -_\n"
          << "      // \\\\\n";
     
     std::cout << "Schrubbery created in " << fname << std::endl;
