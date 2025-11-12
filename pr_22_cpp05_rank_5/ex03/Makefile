@@ -10,6 +10,9 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+valgrind: $(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(NAME)
+
 clean:
 	rm -f $(OBJ)
 
