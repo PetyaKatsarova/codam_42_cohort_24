@@ -19,10 +19,7 @@ Form::Form(const Form &other)
     , _is_signed(other._is_signed)
 {}
 
-
-// const on a return-by-value is meaningless and ignored.
-// !!NB emove the leading const on return‑by‑value because it does nothing useful and can be harmful.
-const std::string& Form::getName() const {
+std::string Form::getName() const {
     return this->_name;
 }
 int Form::getReqSigninGrade() const {
@@ -45,7 +42,7 @@ void Form::setIsSigned(bool is_signed) {
 If the grade is too low, throw a Form::GradeTooLowException.
 */
 void Form::beSigned(const Bureacrat &b) {
-    if (b.getGrade() > this->getReqSigninGrade()) // 1 highest > 2 lower?? or
+    if (b.getGrade() > this->getReqSigninGrade())
         throw Form::GradeTooLowException();
     setIsSigned(true);
 }

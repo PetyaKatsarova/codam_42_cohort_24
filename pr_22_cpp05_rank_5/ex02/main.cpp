@@ -15,6 +15,7 @@ int main() {
         Bureacrat testie1("testie1", 25);
         Bureacrat testie2("testie2", 5);
         Bureacrat testie3("testie3", 26);
+		
         testie.signForm(trump_form); // 25 or less
         testie1.signForm(trump_form);
         testie3.signForm(trump_form); // fail

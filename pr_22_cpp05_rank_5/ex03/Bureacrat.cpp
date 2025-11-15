@@ -14,24 +14,6 @@ Bureacrat::Bureacrat(const Bureacrat &other) : _name(other._name), _grade(other.
 
 Bureacrat::~Bureacrat(){}
 
-/**
-_name is not copied because is const, cant be changed after initiation
-*/
-Bureacrat& Bureacrat::operator=(const Bureacrat &other)
-{
-	if (this != &other)
-	{
-		if (other._grade < HIGHEST_GRADE)
-			throw Bureacrat::GradeTooHighException();
-		if (other._grade > LOWEST_GRADE)
-			throw Bureacrat::GradeTooLowException();
-
-		// name cant be assigned
-		this->_grade = other._grade;
-	}
-	return (*this);
-}
-
 const std::string& Bureacrat::getName() const {
 	return this->_name;
 }
@@ -69,11 +51,12 @@ const char* Bureacrat::GradeTooLowException::what() const noexcept {
 }
 
 void Bureacrat::signForm(AForm &form) {
+	if (form.getIsSigned() == true)
+		return;
 	try {
 		form.beSigned(*this);
 		std::cout << this->getName() << " singed " << form << std::endl;
 	} catch (const std::exception &e) {
-		form.setIsSigned(false);
 		std::cout << this->getName() << " couldn't sign " << form << " because " << e.what() << std::endl;
 	}
 }

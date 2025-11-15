@@ -9,22 +9,25 @@
 int main()
 {
     Form form("form1", 42, 22);
+	Form f2(form);
+	Bureacrat b("B1", 42); // valid
+
     std::cout << form << std::endl;
 
-    // test deep copy form
-    printf("-- deep cpy --\n");
-    Form f2(form);
+    std::cout << "-- deep cpy --" << std::endl;
     std::cout << "form._name addr: " << static_cast<const void*>(form.getName().data()) << std::endl;
-    printf("f2._name addrs:  %p\n", static_cast<const void*>(f2.getName().data()));
-    printf("-- form signing funcs --\n");
-    Bureacrat b("B1", 42); // valid
+    std::cout << "f2._name addrs:  " << static_cast<const void*>(f2.getName().data()) << std::endl;
+
+    std::cout << "-- form signing funcs --\n";
     std::cout << b << std::endl;
     try{
+		std::cout << "b.setgrade 151\n";
         b.setGrade(151);
     } catch (const std::exception &e) {
-        printf("%s\n", e.what());
+    	std::cout << e.what() << std::endl;
     }
-    b.signForm(f2);
+	b.setGrade(42);
+    b.signForm(f2); // valid
     printf("form req_sign: %d\n", f2.getReqSigninGrade());
     b.decrementGrade();
     printf("bureacrat decremented grade: %d\n", b.getGrade());

@@ -6,6 +6,11 @@
 #include "Intern.hpp"
 #include <iostream>
 
+
+/**
+ * deference null pointer = crash: like aform* bla=NULL; b.singForm(bla): crash
+ * delete NULL is safe in cpp
+ */
 int main() {
     Intern intern;
     AForm* robo_form = NULL;
@@ -19,24 +24,21 @@ int main() {
         // AForm* schrub_form = NULL;
         schrub_form = intern.makeForm("schrubbery creation", "Schrub"); //sign 145, exec 137
         printf("-- invalid form name --\n");
-        invalid_form = intern.makeForm("invalid form", "Bla");
+        //invalid_form = intern.makeForm("invalid form", "Bla");
     } catch (std::exception &e) {
         std::cerr << "Caught exception: " << e.what() << std::endl;
         delete robo_form;
         delete presi_form;
         delete invalid_form;
         delete schrub_form;
-        return 1; // valgrind will return error 1
-        // return 0;
+		return 1;
     }
 
+	// if err is caught: invalid form, never reach here
     Bureacrat b("Boss", 42);
     b.signForm(*robo_form); // yes
     b.signForm(*presi_form); // no
     b.signForm(*schrub_form); // yes
-    b.signForm(*invalid_form);
-
-    // b.signForm(*invalid_form);
 
     b.executeForm(*robo_form); // yes
     b.executeForm(*presi_form); // no

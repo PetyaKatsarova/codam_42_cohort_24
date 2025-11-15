@@ -23,6 +23,7 @@ Intern::Intern(const Intern &other) {
 Intern::~Intern() {
     std::cout << "Intern destroyed" << std::endl;
 }
+
 Intern& Intern::operator=(const Intern& other) {
     (void) other;
     return *this;

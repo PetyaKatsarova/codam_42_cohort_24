@@ -28,7 +28,7 @@ class Form {
         Form &operator=(const Form &other) = delete;
         ~Form() = default;
 
-        const std::string& getName() const;
+        std::string getName() const;
         int getReqSigninGrade() const;
         int getReqExecuteGrade() const;
         bool getIsSigned() const;
@@ -38,12 +38,12 @@ class Form {
     
         class GradeTooHighException : public std::exception {
             public:
-            const char* what() const noexcept override;
+            	virtual const char* what() const noexcept override;
         };
 
         class GradeTooLowException : public std::exception {
             public:
-            const char* what() const noexcept override;
+            	virtual const char* what() const noexcept override;
         };
 };
 

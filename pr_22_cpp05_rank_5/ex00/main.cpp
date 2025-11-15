@@ -16,11 +16,14 @@ For compile-time checks use static_assert.
 */
 static void ft_print(const char *tag, const Bureacrat &b)
 {
+
+
     std::cout << tag
             << " name='" << b.getName() << "',"
             << " grade=" << b.getGrade() << ","
-            << " addr=" << static_cast<const void*>(&b.getName())  << ", " // get addrs of string obj
-            << " buf_addr=" << static_cast<const void*>(b.getName().c_str()) // get addr of first char of string's internal buffer
+            << " obj_addr=" << static_cast<const void*>(&b)   << ", "
+			<< " name_addr=" << static_cast<const void*>(b.getNamePtr())   << ", "
+            << " buf_addr=" << static_cast<const void*>(b.getNamePtr()->c_str()) // get addr of first char of string's internal buffer
             << "\n";
 }   
 
@@ -28,35 +31,32 @@ static void ft_print(const char *tag, const Bureacrat &b)
 //g++ -std=c++11 -Wall -Wextra main.cpp Bureacrat.cpp -o main
 int main()
 {
-    Bureacrat b("Beky", 149);
-    Bureacrat e("Echo", 2);
-    std::cout << b << std::endl;
-    // ft_print("bla", b);
+    Bureacrat becky("Beky", 149);
+    Bureacrat smarty("Smarty", 2);
+	Bureacrat low_grade("LowGrader", 149);
+	Bureacrat cpy(becky);
+
+    std::cout << becky << std::endl;
     std::cout << "--- CPY CONSTR ---\n";
-    Bureacrat c(b);
-    ft_print("b", b);
-    ft_print("c", c);
-    std::cout << "--- CPY ASSINGMENT ---\n";
-    b = e; // calls cpy constr
-    ft_print("b", b);
-    ft_print("e", e);
+    
+    ft_print("orig", becky);
+    ft_print("cpy", cpy);
+
     std::cout << "--- PLAY WITH GRADES ---\n";
     try {
-        Bureacrat stupid("Stpd", 149);
-        e.incrementGrade();
-        std::cout << e << std::endl;
-        stupid.decrementGrade();
-        std::cout << stupid << std::endl;
-        e.incrementGrade();
-        std::cout << e << std::endl;
-        stupid.decrementGrade();
-        std::cout << stupid << std::endl;
+		std::cout << low_grade << std::endl;
+        low_grade.decrementGrade();
+        std::cout << low_grade << std::endl;
+        //low_grade.decrementGrade(); // err: too low e
+
+		std::cout << smarty << std::endl;
+		smarty.incrementGrade(); // 1
+        std::cout << smarty << std::endl;
+		smarty.incrementGrade(); // err: too high exception
     } 
     catch (const std::exception &e) {
         std::cerr << "Error adjusting grades: " << e.what() << '\n';
     }
-  
-    int x = 5;
-    assert(x > 0); // OK in debug
+
     return 0;
 }

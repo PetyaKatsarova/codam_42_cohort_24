@@ -18,7 +18,7 @@ class Bureacrat {
 	public:
 		Bureacrat(const std::string &name, int grade);
 		Bureacrat(const Bureacrat &other);
-		Bureacrat &operator=(const Bureacrat &other);
+		Bureacrat &operator=(const Bureacrat &other) = delete;
 		~Bureacrat();
 
 		const std::string& getName() const;

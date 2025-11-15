@@ -7,20 +7,23 @@
 
 class Form; // forward declaration to avoid circular include
 
+/**
+ * Copy assignemnt is not allowed: cant re-assign const attr name
+ */
 class Bureacrat {
 	private:
 		const std::string	 _name;
 		int				 	_grade;
-		static const int HIGHEST_GRADE = 1;
-		static const int LOWEST_GRADE = 150;
+		static const int 	HIGHEST_GRADE = 1;
+		static const int 	LOWEST_GRADE = 150;
 
 	public:
 		Bureacrat(const std::string &name, int grade);
 		Bureacrat(const Bureacrat &other);
-		Bureacrat &operator=(const Bureacrat &other);
+		Bureacrat &operator=(const Bureacrat &other) = delete;
 		~Bureacrat();
 
-		const std::string& getName() const;
+		std::string getName() const;
 		int getGrade() const;
 		void setGrade(int grade);
 

@@ -2,7 +2,7 @@
 #include "Bureacrat.hpp"
 #include <iostream>
 
-AForm::AForm(const std::string &target, int sign_grade, int exec_grade) : target(target), signin_grade(sign_grade), execute_grade(exec_grade) {
+AForm::AForm(const std::string &target, int sign_grade, int exec_grade) : target(target), signin_grade(sign_grade), execute_grade(exec_grade), is_signed(false) {
     if (signin_grade < 1 || exec_grade < 1)
         throw AForm::GradeTooHighException();
     if (signin_grade > 150 || exec_grade > 150)

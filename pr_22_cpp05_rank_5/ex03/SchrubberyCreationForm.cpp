@@ -37,5 +37,6 @@ void SchrubberyCreationForm::execute(Bureacrat const &executor) const {
          << "  _ -  | |   -_\n"
          << "      // \\\\\n";
     
+	file.close();
     std::cout << "Schrubbery created in " << fname << std::endl;
 }

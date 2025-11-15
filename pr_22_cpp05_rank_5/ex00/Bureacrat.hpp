@@ -5,21 +5,26 @@
 #include <iostream>
 #include <exception>
 
+/**
+ * Copy assignement is not allowed because cant reassign a const string name
+ */
 class Bureacrat {
 	private:
-		const std::string	 _name;
+		const std::string	 _name; // read only
 		int				 	_grade;
 
 		static const int HIGHEST_GRADE = 1;
 		static const int LOWEST_GRADE = 150;
 
 	public:
+		const std::string* getNamePtr() const; // for testing purposes
+		
 		Bureacrat(const std::string &name, int grade);
 		Bureacrat(const Bureacrat &other);
-		Bureacrat &operator=(const Bureacrat &other);
+		Bureacrat &operator=(const Bureacrat &other) = delete;
 		~Bureacrat();
 
-		const std::string& getName() const;
+		std::string getName() const;
 		int getGrade() const;
 
 		void incrementGrade();
@@ -28,13 +33,13 @@ class Bureacrat {
 		class GradeTooHighException : public std::exception
 		{
 			public:
-				const char* what() const noexcept override;
+				virtual const char* what() const noexcept override;
 		};
 
 		class GradeTooLowException : public std::exception
 		{
 			public:
-				const char* what() const noexcept override;
+				virtual const char* what() const noexcept override;
 		};
 };
 
