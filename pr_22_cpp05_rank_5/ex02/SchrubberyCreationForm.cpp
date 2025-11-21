@@ -37,5 +37,6 @@ void SchrubberyCreationForm::execute(Bureacrat const &executor) const {
          << "  _ -  | |   -_\n"
          << "      // \\\\\n";
     
+		// Not required file.closed() — the ofstream destructor flushes and closes the file (even during stack unwinding). Explicit close is fine and more explicit.
     std::cout << "Schrubbery created in " << fname << std::endl;
 }

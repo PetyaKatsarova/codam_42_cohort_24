@@ -2,14 +2,27 @@
 #include "Bureacrat.hpp"
 #include <iostream>
 
-AForm::AForm(const std::string &target, int sign_grade, int exec_grade) : target(target), signin_grade(sign_grade), execute_grade(exec_grade), is_signed(false) {
-    if (signin_grade < 1 || exec_grade < 1)
+int AForm::validate_grade(int gr) {
+	if (gr < 1) {
         throw AForm::GradeTooHighException();
-    if (signin_grade > 150 || exec_grade > 150)
+	}
+    if (gr > 150) {
         throw AForm::GradeTooLowException();
+	}
+	return gr;
 }
 
-AForm::AForm(const AForm &other) : target(other.target), signin_grade(other.signin_grade), execute_grade(other.execute_grade), is_signed(other.is_signed) {}
+AForm::AForm(const std::string &target, int signin_grade, int exec_grade)
+: target(target)
+, signin_grade(validate_grade(signin_grade))
+, execute_grade(validate_grade(exec_grade))
+, is_signed(false) {}
+
+AForm::AForm(const AForm &other)
+:target(other.target)
+, signin_grade(other.signin_grade)
+, execute_grade(other.signin_grade)
+, is_signed(other.is_signed) {}
 
 AForm::~AForm() {}
 

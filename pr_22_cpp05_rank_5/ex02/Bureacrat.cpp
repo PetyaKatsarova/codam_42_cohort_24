@@ -2,13 +2,17 @@
 #include "AForm.hpp"
 #include <iostream>
 
-Bureacrat::Bureacrat(const std::string& name, int grade) : _name(name), _grade(grade)
-{
-	if (this->_grade < HIGHEST_GRADE)
+int Bureacrat::validate_grade(int grade) {
+	if (grade < HIGHEST_GRADE)
 		throw Bureacrat::GradeTooHighException();
-	if (this->_grade > LOWEST_GRADE)
+	if (grade > LOWEST_GRADE)
 		throw Bureacrat::GradeTooLowException();
+	return grade;
 }
+
+Bureacrat::Bureacrat(const std::string& name, int grade)
+: _name(name), _grade(validate_grade(grade))
+{}
 
 Bureacrat::Bureacrat(const Bureacrat &other) : _name(other._name), _grade(other._grade) {}
 

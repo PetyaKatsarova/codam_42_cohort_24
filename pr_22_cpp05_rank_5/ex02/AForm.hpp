@@ -25,6 +25,7 @@ class AForm {
         int getReqExecuteGrade() const;
         bool getIsSigned() const;
 
+		static int validate_grade(int gr);
         void setIsSigned(bool is_signed);
         void beSigned(const Bureacrat &b);
 

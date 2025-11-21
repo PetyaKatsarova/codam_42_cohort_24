@@ -4,6 +4,10 @@
 #include "PresidentialPardonForm.hpp"
 #include "SchrubberyCreationForm.hpp"
 
+
+/**
+ * nested try/catch is fine if each catch does meaningful handling. It's bad if you're just swallowing exceptions or duplicating work.
+ */
 int main() {
     RobotomyRequestForm robo_form("robo_form"); // sing  72, exec  45
     PresidentialPardonForm trump_form("trump_form"); //sign 25, exec 5

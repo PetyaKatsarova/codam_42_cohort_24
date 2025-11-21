@@ -27,6 +27,7 @@ class Bureacrat {
 
 		void incrementGrade();
 		void decrementGrade();
+		static int validate_grade(int grade);
 
 		void signForm(AForm &form);
 		void executeForm(AForm const & form) const;
