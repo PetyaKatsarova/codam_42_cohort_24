@@ -1,5 +1,5 @@
 NAME = ScalarConverter
-SRC = main.cpp ValidationHelper.cpp
+SRC = main.cpp ValidationHelper.cpp ScalarConverter.cpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++

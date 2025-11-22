@@ -1,8 +1,10 @@
 #include "ValidationHelper.hpp"
+#include "ScalarConverter.hpp"
 #include <iostream>
 
 int main() {
-	std::cout << "hello w\n";
+	const char* bla = "bla";
+	ScalarConverter::convert(bla);
 	//std::cout << "is digit: " << ValidationHelper::isInteger("42") << std::endl;
 	//std::cout << "is digit: " << ValidationHelper::isInteger("-42") << std::endl;
 	//std::cout << "is digit: " << ValidationHelper::isInteger("4+2") << std::endl;
