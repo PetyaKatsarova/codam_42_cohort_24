@@ -69,7 +69,7 @@ void ScalarConverter::printDouble(std::optional<double> opt_val) {
     std::cout << "double: ";
     if (std::isnan(val)) std::cout << "nan\n";
     else if (std::isinf(val)) std::cout << (val > 0 ? "+inf" : "-inf") << "\n";
-    else std::cout << std::fixed << std::setprecision(2) << val << std::endl;
+    else std::cout << std::fixed << std::setprecision(1) << val << std::endl;
 }
 
 void ScalarConverter::printFloat(std::optional<double> opt_val) {
@@ -82,7 +82,7 @@ void ScalarConverter::printFloat(std::optional<double> opt_val) {
     std::cout << "float: ";
     if (std::isnan(val)) std::cout << "nanf\n";
     else if (std::isinf(val)) std::cout << (val > 0 ? "+inff" : "-inff") << "\n";
-    else std::cout << std::fixed << std::setprecision(2) << static_cast<float>(val) <<  "f\n";
+    else std::cout << std::fixed << std::setprecision(1) << static_cast<float>(val) <<  "f\n";
 }
 
 void ScalarConverter::convert(const std::string& argv) {
