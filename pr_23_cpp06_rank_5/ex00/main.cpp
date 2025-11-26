@@ -1,18 +1,72 @@
-#include "ValidationHelper.hpp"
 #include "ScalarConverter.hpp"
 #include <iostream>
+#include <optional>
+#include <cmath> // nan staff
 
-int main() {
-	const char* bla = "bla";
-	ScalarConverter::convert(bla);
-	//std::cout << "is digit: " << ValidationHelper::isInteger("42") << std::endl;
-	//std::cout << "is digit: " << ValidationHelper::isInteger("-42") << std::endl;
-	//std::cout << "is digit: " << ValidationHelper::isInteger("4+2") << std::endl;
-	//std::cout << "is digit: " << ValidationHelper::isInteger("42b") << std::endl;
+/**
+cpp 17: optional<double> is a wrapper type(vocabulary type) represent val that my or may not be present, contains single element
+std::optional<int> divide(int a, int b) {
+    if (b == 0)
+        return std::nullopt;  // No value (error case)
+    return a / b;             // Has value (success)
+}
+*/
 
-	std::cout << "is float 42f: " << ValidationHelper::isFloat("42f") << std::endl; // no
-	std::cout << "is float: " << ValidationHelper::isFloat("-42.0000f") << std::endl; //y
-	std::cout << "is float: " << ValidationHelper::isFloat("4+2") << std::endl; // n
-	std::cout << "is float: " << ValidationHelper::isFloat("4.0o9f") << std::endl; //n
+/*
+ * SPECIAL VALUES REFERENCE
+ * ========================
+ * nan      : Not a Number (double)    - 0.0/0.0, sqrt(-1), inf-inf
+ * nanf     : Not a Number (float)     - Same as nan, but float type
+ * +inf/inf : Positive Infinity (dbl)  - 1.0/0.0, value too large
+ * +inff    : Positive Infinity (flt)  - Same as +inf, but float type
+ * -inf     : Negative Infinity (dbl)  - -1.0/0.0, value too small
+ * -inff    : Negative Infinity (flt)  - Same as -inf, but float type
+ */
+
+ /*
+ double value = 42.5;
+ Read from RIGHT to LEFT:
+*(long long*)&value
+           ^^^^^^  Step 1: &value - Get address of value
+  ^^^^^^^^^        Step 2: (long long*) - Cast to long long pointer
+ ^                 Step 3: * - Dereference to get the value
+
+ double value = 42.5;
+double* ptr = &value;  // "give me the ADDRESS where value is stored"
+
+double value = 42.5;
+void* generic_ptr = &value;           // Generic pointer
+long long* int_ptr = (long long*)&value;  // Cast to long long pointer
+This says: "treat this address as if it points to a long long"
+We're LYING to the compiler about what type is at that address
+ */
+
+//  static void nonValues() {
+// 	double nan1 = 0.0/0.0; // -nan
+// 	std::cout << "0/0 = " << nan1 << '\n';
+
+// 	double nan2 = std::sqrt(-1.0);
+// 	std::cout << "sqrt(-1.0) = " << nan2 << '\n';
+
+// 	double inf = 1.0 / 0.0;
+// 	double nan3 = inf - inf;
+// 	std::cout << "inf - inf = " << nan3 << '\n';  // nan
+// }
+
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: " << argv[0] << " <literal>\n";
+		return 1;
+	}
+	std::cout << "argv = " << argv[1] << "\n";
+	ScalarConverter::convert(argv[1]);
+	// std::optional<double> val = ScalarConverter::parse(argv[1]);
+	// ScalarConverter::printChar(val);
+	// ScalarConverter::printInt(val);
+	// ScalarConverter::printFloat(val);
+	// ScalarConverter::printDouble(val);
+
+	// nonValues();
 	return 0;
 }
