@@ -6,10 +6,11 @@
 */
 int main() {
     std::string bla = "blaBla";
+	std::cout << "Origiinal[" << bla << "]\n"; // original
     std::string erased = bla.erase(0, 2);
 
-    std::cout << "bla[" << bla << "]\n";
-    std::cout << "era[" << erased << "]\n";
+    std::cout << "After erase: [" << bla << "]\n"; // bla is changed: after erase
+    std::cout << "Returned from .erase: era[" << erased << "]\n"; // erased is sam as changed Bla
     std::cout << "&bla[" << &bla << "]\n";
     std::cout << "&era[" << &erased << "]\n";
 

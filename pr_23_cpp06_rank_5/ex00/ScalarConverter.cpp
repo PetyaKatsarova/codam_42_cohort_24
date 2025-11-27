@@ -5,7 +5,7 @@
 #include <iomanip>
 
 std::optional<double> ScalarConverter::parse(const std::string& literal) {
-    if (literal.empty())    return std::nullopt;
+    if (literal.empty())    return std::nullopt; // we protect this in main again
 
     if (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'') 
         return static_cast<double>(literal[1]);

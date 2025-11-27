@@ -16,7 +16,7 @@ class ScalarConverter {
 
         static void convert(const std::string& str);
 
-    // private:
+     private:
         static std::optional<double> parse(const std::string& literal);
         static void printChar(std::optional<double> value);
         static void printInt(std::optional<double> value);
