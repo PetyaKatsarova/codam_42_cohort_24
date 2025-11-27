@@ -50,8 +50,7 @@ double: 42.0
 Turn-in directory: ex01/
 Files to turn in: Makefile, *.cpp, *.{h, hpp}
 Forbidden functions: None
-Implement a class Serializer, which will not be initializable by the user in any way,
-with the following static methods:
+Implement a class Serializer, which will not be initializable by the user in any way, with the following static methods:
 uintptr_t serialize(Data* ptr);
 It takes a pointer and converts it to the unsigned integer type uintptr_t.
 Data* deserialize(uintptr_t raw);
