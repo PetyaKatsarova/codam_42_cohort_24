@@ -53,6 +53,9 @@ We're LYING to the compiler about what type is at that address
 // 	std::cout << "inf - inf = " << nan3 << '\n';  // nan
 // }
 
+/**
+ * argv is const char*
+ */
 int main(int argc, char** argv) {
 	if (argc != 2)
 	{
@@ -61,12 +64,5 @@ int main(int argc, char** argv) {
 	}
 	std::cout << "argv = " << argv[1] << "\n";
 	ScalarConverter::convert(argv[1]);
-	// std::optional<double> val = ScalarConverter::parse(argv[1]);
-	// ScalarConverter::printChar(val);
-	// ScalarConverter::printInt(val);
-	// ScalarConverter::printFloat(val);
-	// ScalarConverter::printDouble(val);
-
-	// nonValues();
 	return 0;
 }

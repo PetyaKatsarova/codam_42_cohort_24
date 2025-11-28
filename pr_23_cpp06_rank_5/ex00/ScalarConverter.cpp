@@ -21,6 +21,9 @@ std::optional<double> ScalarConverter::parse(const std::string& literal) {
         return -std::numeric_limits<double>::infinity();
 
     // numeric
+	//std::stod("123.4f", &pos) returns 123.4 and sets pos == 5 (the 'f' is at index 5)
+	//std::stod skips leading whitespace and handles sign (+/-).
+//If no numeric conversion is possible, std::stod throws; your code catches that and returns std::nullopt.
     try {
         size_t pos;
         double val =std::stod(literal, &pos);
@@ -32,6 +35,9 @@ std::optional<double> ScalarConverter::parse(const std::string& literal) {
     }
 }
 
+/**
+ * std::string(1, static_cast<char>(val)) calls the std::basic_string constructor basic_string(size_type n, CharT c). It creates a temporary std::string of length 1 whose single character is static_cast<char>(val).
+ */
 void ScalarConverter::printChar(std::optional<double> opt_val) {
     std::cout << "char: ";
     if (!opt_val.has_value()) {

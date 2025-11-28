@@ -1,0 +1,11 @@
+rm -rf ~/.vscode-server/data/logs/*
+rm -rf ~/.vscode-server/data/CachedExtensionVSIXs/*
+
+# C/C++ compilation cache
+rm -rf ~/.cache/ccache/*
+
+# General cache
+rm -rf ~/.cache/*
+
+rm -f ~/core.*
+rm -rf /tmp/*
