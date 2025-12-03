@@ -19,20 +19,29 @@ elements in your iter function.
 
 */
 
-// takes non-const reference
+template<typename T>
+void incrementTemplate(T& val) { ++val; }
+
+template<typename T>
+void doubleValTemplate(T& val) {val *= 2; }
+
+/* A func that takes const T& can accept BOTH const and non-const arguments. */
+template<typename T>
+void printTemplate (const T& val) { std::cout << val << " "; }
+
 template<typename T, typename F>
-void iter(T* arr, size_t arr_len, F func) {
+void iter(T* arr, const size_t arr_len, F func) {
     for (size_t i = 0; i < arr_len; i++) {
         func(arr[i]);
     }
 }
 
 // for const arr
-template<typename T, typename F>
-void iter(const T* arr, size_t len, F func) {
-    for (size_t i = 0; i < len; i++) {
-        func(arr[i]);
-    }
-}
+// template<typename T, typename F>
+// void iter(const T* arr, const size_t len, F func) {
+//     for (size_t i = 0; i < len; i++) {
+//         func(arr[i]);
+//     }
+// }
 
 #endif
