@@ -1,5 +1,6 @@
 NAME = iter
 SRC = main.cpp
+HEADERS = iter.hpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
@@ -10,7 +11,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-%.o: %.cpp
+%.o: %.cpp $(HEADERS) Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 valgrind: $(NAME)

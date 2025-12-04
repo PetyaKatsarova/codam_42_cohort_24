@@ -24,7 +24,7 @@ rand();  // Different sequence each run (based on time)
 rand();  // Actually "random"
 */
 
-#define MAX_VAL 7
+#define MAX_VAL 47 // if max val is > 42 will have core dump: out of bounds
 int main(int, char**)
 {
     Array<int> numbers(MAX_VAL);

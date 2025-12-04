@@ -1,5 +1,6 @@
 NAME = arrayTemplate
 SRC = main.cpp
+HEADERS = Array.hpp Array.tpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
@@ -10,7 +11,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-%.o: %.cpp
+%.o: %.cpp $(HEADERS) Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 valgrind: $(NAME)
@@ -25,3 +26,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re valgrind
+

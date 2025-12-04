@@ -2,30 +2,33 @@
 #define ITER_HPP
 
 #include <iostream>
+#include <type_traits> // is_same_v
 
 /**
-Implement a function template iter that takes 3 parameters and returns nothing.
-• The first parameter is the address of an array.
-• The second one is the length of the array, passed as a const value.
-• The third one is a function that will be called on every element of the array.
-Submit a main.cpp file that contains your tests. Provide enough code to generate a
-test executable.
-Your iter function template must work with any type of array. The third parameter
-can be an instantiated function template.
-The function passed as the third parameter may take its argument by const reference
-or non-const reference, depending on the context.
+The function passed as the third parameter may take its argument by const reference or non-const reference, depending on the context.
 Think carefully about how to support both const and non-const
 elements in your iter function.
 
 */
 
 template<typename T>
-void incrementTemplate(T& val) { ++val; }
+void incrementTemplate(T& val) {
+    static_assert(std::is_same_v<T, int> || std::is_same_v<T, float> || std::is_same_v<T, double>,
+                  "incrementTemplate only supports int, float, or double");
+    ++val;
+}
 
 template<typename T>
-void doubleValTemplate(T& val) {val *= 2; }
+void doubleValTemplate(T& val) {
+    static_assert(std::is_same_v<T, int> || std::is_same_v<T, float> || std::is_same_v<T, double>,
+                  "doubleValTemplate only supports int, float, or double");
+    val *= 2;
+}
 
-/* A func that takes const T& can accept BOTH const and non-const arguments. */
+/* A func that takes const T& can accept BOTH const and non-const arguments.
+The template automatically adapts based on whether is passed: a const or non-const array.
+No need of two separate overloads or any special handling—the type deduction does it all.
+*/
 template<typename T>
 void printTemplate (const T& val) { std::cout << val << " "; }
 
@@ -35,13 +38,5 @@ void iter(T* arr, const size_t arr_len, F func) {
         func(arr[i]);
     }
 }
-
-// for const arr
-// template<typename T, typename F>
-// void iter(const T* arr, const size_t len, F func) {
-//     for (size_t i = 0; i < len; i++) {
-//         func(arr[i]);
-//     }
-// }
 
 #endif

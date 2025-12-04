@@ -20,13 +20,14 @@ int main() {
     
     std::cout << "After:  ";
     iter(intArr, arrLen, printTemplate<int>);
-    std::cout << std::endl;
-    std::cout << "-- const int arr --\n";
+    std::cout << "\n\n";
+    std::cout << "-- const int arr --\n\n";
     const int constIntArr[] = {11, 22, 33, 44, 55};
     iter(constIntArr, arrLen, printTemplate<int>);
+	//iter(constIntArr, arrLen, doubleValTemplate<int>); // compile err(cant modify const)
     std::cout << "\n";
 
-    std::cout << "\n-- Test 2: double --\n";
+    std::cout << "\n-- Test 2: double --\n\n";
     double doubleArr[] = {1.42, 2.42, 3.4242, 4.42, 5.42};
 
     std::cout << "Before: ";
@@ -38,12 +39,12 @@ int main() {
     std::cout << "After:  ";
     iter(doubleArr, arrLen, printTemplate<double>);
     std::cout << std::endl;
-    std::cout << "-- const int arr --\n";
+    std::cout << "-- const int arr --\n\n";
     const double constdoubleArr[] = {11.42, 22.42, 33.42, 44.42, 55.42};
     iter(constdoubleArr, arrLen, printTemplate<double>);
     std::cout << "\n";
 
-    std::cout << "\n-- Test 3: string --\n";
+    std::cout << "\n-- Test 3: string --\n\n";
     std::string strArr[] = {"hello", "world", "we", "come", "happy"};
 
     std::cout << "Before: ";

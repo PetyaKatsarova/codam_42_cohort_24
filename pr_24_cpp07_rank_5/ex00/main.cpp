@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-// #include <Array.hpp>
 #include "whatever.hpp"
 
 int main( void ) {
