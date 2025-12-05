@@ -1,6 +1,6 @@
 NAME = easyFind
 SRC = main.cpp
-HEADERS = Array.hpp Array.tpp
+HEADERS = easyfind.hpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
