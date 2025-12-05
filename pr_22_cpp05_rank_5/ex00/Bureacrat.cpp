@@ -9,7 +9,7 @@ Bureacrat::Bureacrat(const std::string& name, int grade) : _name(name), _grade(0
 	this->_grade = grade;
 }
 
-Bureacrat::Bureacrat(const Bureacrat &other) : _name(other._name), _grade(other._grade) {};
+Bureacrat::Bureacrat(const Bureacrat &other) : _name(other._name), _grade(other._grade) {}
 
 Bureacrat::~Bureacrat() =  default;
 
