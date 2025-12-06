@@ -8,11 +8,8 @@ Forbidden functions: None
 A first easy exercise is the way to start off on the right foot.
 Write a function template easyfind that accepts a type T. It takes two parameters:
 the first one is of type T, and the second one is an integer.
-Assuming T is a container of integers, this function has to find the first occurrence
-of the second parameter in the first parameter.
-If no occurrence is found, you can either throw an exception or return an error value
-of your choice. If you need some inspiration, analyze how standard containers behave.
-Of course, implement and turn in your own tests to ensure everything works as expected.
+Assuming T is a container of integers, this function has to find the first occurrence of the second parameter in the first parameter.
+If no occurrence is found, you can either throw an exception or return an error value of your choice. If you need some inspiration, analyze how standard containers behave. Of course, implement and turn in your own tests to ensure everything works as expected.
 You don’t have to handle associative containers.
 ======================================================================
 Turn-in directory: ex01/
@@ -24,9 +21,7 @@ This class will have a member function called addNumber() to add a single number
 to the Span. It will be used in order to fill it. Any attempt to add a new element if there
 are already N elements stored should throw an exception.
 Next, implement two member functions: shortestSpan() and longestSpan()
-They will respectively find out the shortest span or the longest span (or distance, if
-you prefer) between all the numbers stored, and return it. If there are no numbers stored,
-or only one, no span can be found. Thus, throw an exception.
+They will respectively find out the shortest span or the longest span (or distance, if you prefer) between all the numbers stored, and return it. If there are no numbers stored, or only one, no span can be found. Thus, throw an exception.
 Of course, you will write your own tests, and they will be far more thorough than the
 ones below. Test your Span with at least 10,000 numbers. More would be even better.
 10
