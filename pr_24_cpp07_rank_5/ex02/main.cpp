@@ -1,6 +1,5 @@
 #include <iostream> // includes <ios>-> includes <exception>->includes <stdexception> on many libstdc++ implementations. compiler gets std::out_of_range indirectly.
 #include <string>
-// #include <stdexcept> //Relying on indirect includes is undefined by the standard and may break on another compiler.
 #include "Array.hpp"
 
 // int main() {
