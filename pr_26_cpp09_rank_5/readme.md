@@ -3,8 +3,7 @@ about 40 hrs
 Turn-in directory: ex00/
 Files to turn in: Makefile, main.cpp, BitcoinExchange.{cpp, hpp}
 Forbidden functions: None
-You have to create a program which outputs the value of a certain amount of bitcoin
-on a certain date.
+You have to create a program which outputs the value of a certain amount of bitcoin on a certain date.
 This program must use a database in csv format which will represent bitcoin price
 over time. This database is provided with this subject.
 The program will take as input a second database, storing the different prices/dates
@@ -15,11 +14,8 @@ Your program must respect these rules:
 • Each line in this file must use the following format: "date | value".
 • A valid date will always be in the following format: Year-Month-Day.
 • A valid value must be either a float or a positive integer, between 0 and 1000.
-You must use at least one container in your code to validate this
-exercise. You should handle possible errors with an appropriate
-error message.
-9
-C++ - Module 09 STL
+You must use at least one container in your code to validate this exercise. You should handle possible errors with an appropriate error message.
+
 Here is an example of an input.txt file:
 $> head input.txt
 date | value
