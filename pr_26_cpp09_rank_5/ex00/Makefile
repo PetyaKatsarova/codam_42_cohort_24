@@ -1,6 +1,6 @@
 NAME = btc
-SRC = main.cpp BitcoinExhcange.cpp
-HEADERS = BitcoinExhcange.hpp
+SRC = main.cpp BitcoinExchange.cpp
+HEADERS = BitcoinExchange.hpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
