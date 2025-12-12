@@ -11,7 +11,7 @@ Span::Span(unsigned int num) : N(num) {
 }
 
 Span::Span(const Span& other) : N(other.N), numbers(other.numbers) {
-	std::cout << "shallow cp constructor\n"; 
+	std::cout << "deep cp constructor\n"; 
 }
 
 Span::~Span() { std::cout << "End game\n"; }

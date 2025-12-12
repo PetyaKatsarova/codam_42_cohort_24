@@ -11,11 +11,9 @@ tar -xzf cpp_09.tgz
 // Your program must take a file as an argument.
 int main(int argc, char** argv) {
     if (argc != 2)
-        std::cout << "Error: could not open file.\n";
-    std::cout << "tra la la\n";
+        return (std::cout << "Error: could not open file.\n", 1);
     BitcoinExchange btc;
-    (void) argv;
-    btc.loadDb("test_data.csv");
+    btc.loadDb(argv[1]);
     // btc.processInput(argv[1]);
     return 0;
 }

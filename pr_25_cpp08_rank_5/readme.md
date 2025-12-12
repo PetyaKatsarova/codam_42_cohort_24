@@ -1,5 +1,6 @@
 about 25 hrs
 https://en.cppreference.com/w/cpp/container.html
+https://cplusplus.com/reference
 
 Turn-in directory: ex00/
 Files to turn in: Makefile, main.cpp, easyfind.{h, hpp}

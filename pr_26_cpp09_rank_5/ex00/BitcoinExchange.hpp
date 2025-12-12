@@ -7,7 +7,7 @@
 class BitcoinExchange {
     std::map<std::string, float> _db;
 
-    // bool isValidDate(const std::string& date) const;
+    bool isValidDate(const std::string& date) const;
     // bool isValidVal(const std::string& date) const;
     // float getRate(cosnt std::string& date) const;
     bool openFile(std::ifstream& file, const std::string& filename);

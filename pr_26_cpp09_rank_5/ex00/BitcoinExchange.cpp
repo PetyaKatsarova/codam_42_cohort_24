@@ -37,6 +37,21 @@ bool BitcoinExchange::openFile(std::ifstream& file, const std::string& filename)
     return true;
 }
 
+/**
+ * expected date format: 2022-03-16
+ */
+bool BitcoinExchange::isValidDate(const std::string& date) const {
+	// str.len = 10
+	//if string[4] && [7] are '-'
+	// if str[0] - 3 >= 1970 and < curr.date
+	// str[5] && 6 >= 1 <+ 12
+	// str[8] && 9 >= 1 <= 31 oh.. and depending on the month: 30, 31, 28, 29.... 
+
+}
+
+/**
+ * doesnt protect for invalid inputs(if wrong date format, etc)
+ */
 void BitcoinExchange::loadDb(const std::string& filename) {
     std::ifstream file;
     if (!openFile(file, filename)) return;

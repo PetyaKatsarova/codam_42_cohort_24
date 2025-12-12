@@ -14,7 +14,7 @@ $(NAME): $(OBJ)
 %.o: %.cpp $(HEADERS) Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-valgrind: $(NAME)
+valgrind_parse_fail: $(NAME)
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(NAME)
 
 clean:
