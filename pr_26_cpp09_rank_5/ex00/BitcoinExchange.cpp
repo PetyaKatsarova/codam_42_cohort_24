@@ -161,6 +161,8 @@ bool BitcoinExchange::validateLineInput(const std::string& line) const {
 	return true;
 }
 
+// in the dbFile where we get the date: it is in ascending order: going down the list:
+// will always have a bigger date
 std::string BitcoinExchange::getClosestDate(std::ifstream& dbFile, std::string& date) const {
 	std::string line, closestDate;
 	dbFile.clear(); // reset EOF flag
@@ -173,12 +175,10 @@ std::string BitcoinExchange::getClosestDate(std::ifstream& dbFile, std::string& 
 		if (index == std::string::npos) continue; // no ,
 
 		std::string dbDate = line.substr(0, index);
-		closestDate = dbDate;
 		if (dbDate == date) {
 			return dbDate;
 		}
 		if (dbDate < date) {
-			if 
 			closestDate = dbDate;
 		}
 	}
