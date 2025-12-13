@@ -8,6 +8,8 @@ You must use at least one container in your code to validate this exercise. You 
 #include "BitcoinExchange.hpp"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <string>
 
 BitcoinExchange::BitcoinExchange() {
     std::cout << "default constr\n";
@@ -39,14 +41,24 @@ bool BitcoinExchange::openFile(std::ifstream& file, const std::string& filename)
 
 /**
  * expected date format: 2022-03-16
+ * init std::string 3 ways:
+ * // 2. Constructor syntax
+std::string msg("Invalid date");
+
+// 3. Uniform initialization (C++11+)
+std::string msg{"Invalid date"};
  */
-bool BitcoinExchange::isValidDate(const std::string& date) const {
+bool BitcoinExchange::isValidDate(const std::string& dateStr) const {
+	std::string msg = "Ups, invalid date\n";
 	// str.len = 10
-	//if string[4] && [7] are '-'
+	if (dateStr.length() != 10 || dateStr[4] != '-' && dateStr[7] != '-')
+		return (std::cerr << msg, false);
+
 	// if str[0] - 3 >= 1970 and < curr.date
 	// str[5] && 6 >= 1 <+ 12
 	// str[8] && 9 >= 1 <= 31 oh.. and depending on the month: 30, 31, 28, 29.... 
 
+	return true;
 }
 
 /**

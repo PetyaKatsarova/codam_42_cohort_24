@@ -1,5 +1,7 @@
 about 40 hrs
 ================================================
+https://codam.notion.site/g-o-c-o-d-a-m-n-l-ae4ad699a1654ae892f294e52527428e?p=24e16ae2cc1a8103a2edc3ef8f03d241&pm=s
+=====================================================
 Turn-in directory: ex00/
 Files to turn in: Makefile, main.cpp, BitcoinExchange.{cpp, hpp}
 Forbidden functions: None
