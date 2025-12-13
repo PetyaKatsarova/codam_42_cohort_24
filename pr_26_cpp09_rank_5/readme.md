@@ -69,8 +69,6 @@ displayed on the standard error.
 • Your program must be able to handle operations with these tokens: "+ - / *".
 You must use at least one container in your code to validate this
 exercise.
-11
-C++ - Module 09 STL
 You don’t need to handle brackets or decimal numbers.
 Here is an example of standard usage:
 $> ./RPN "8 9 * 9 - 9 - 9 - 4 - 1 +"
@@ -139,8 +137,6 @@ $>
 The indication of the time is deliberately strange in this example.
 Of course you have to indicate the time used to perform all your
 operations, both the sorting part and the data management part.
-14
-C++ - Module 09 STL
 Warning: The container(s) you used in the previous exercises are
 forbidden here.
 The management of errors related to duplicates is left to your

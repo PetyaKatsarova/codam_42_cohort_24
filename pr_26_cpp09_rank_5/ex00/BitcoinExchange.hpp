@@ -7,10 +7,12 @@
 class BitcoinExchange {
     std::map<std::string, float> _db;
 
-    bool isValidDate(const std::string& date) const;
-    // bool isValidVal(const std::string& date) const;
+	bool initDateValidate(const std::string& dateStr) const;
+    bool isValidDate(const std::string& dateStr) const;
+	bool isDotorDigit(const std::string& strPrice) const;
+    bool isValidPrice(const std::string& strPrice) const;
     // float getRate(cosnt std::string& date) const;
-    bool openFile(std::ifstream& file, const std::string& filename);
+    static bool openFile(std::ifstream& file, const std::string& filename); // because doesnt use member var
 
     public:
         BitcoinExchange();
@@ -19,8 +21,9 @@ class BitcoinExchange {
 
         BitcoinExchange& operator=(const BitcoinExchange& other);
 
-        void loadDb(const std::string& filename);
-        // void processInput(const std::string& filename);
+		bool validateLineInput(const std::string& filename) const;
+        //void loadDb(const std::string& filename);
+        void processInput(const std::string& filename) const;
 };
 
 #endif
