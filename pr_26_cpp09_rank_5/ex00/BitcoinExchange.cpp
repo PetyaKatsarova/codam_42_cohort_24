@@ -140,12 +140,12 @@ bool BitcoinExchange::isValidPrice(const std::string& strPrice) const {
 bool BitcoinExchange::validateLineInput(const std::string& line) const {
 	if (line.empty()) return (std::cout << "Empty line\n", false);
 	if (line.length() < 14) {
-		std::cout << "Missing space or | between date and price\n";
+		std::cout << "Error: bad input => " << line << "\n";
 		return (false);
 	}
 	std::string dateStr = line.substr(0, 10);
 	if (line[10] != ' ' || line[11] != '|' || line[12] != ' ') {
-		std::cerr << "Missing space or | between date and price\n";
+		std::cerr << "Error: bad input => " << line << "\n";
 		return (false);
 	}
 	if (!BitcoinExchange::isValidDate(dateStr))
@@ -161,37 +161,51 @@ bool BitcoinExchange::validateLineInput(const std::string& line) const {
 	return true;
 }
 
-/**
- * doesnt protect for invalid inputs(if wrong date format, etc)
- */
-//void BitcoinExchange::loadDb(const std::string& filename) {
-//    std::ifstream file;
-//    if (!openFile(file, filename)) return; // err msg in func
-	
-//    std::string line;
-//    std::getline(file, line); // skip header(title): data, exchange_rate
-//    while (std::getline(file, line)) {
-//        size_t pos = line.find(',');
-//        if (pos == std::string::npos) continue; // it was already validated
+std::string BitcoinExchange::getClosestDate(std::ifstream& dbFile, std::string& date) const {
+	std::string line, closestDate;
+	dbFile.clear(); // reset EOF flag
+	dbFile.seekg(0, std::ios::beg); // go back to start
 
-//        std::string date = line.substr(0, pos);
-//        float rate = std::stof(line.substr(pos+1));
-//        _db[date] = rate;
-//        // temp for debug:
-//        std::cout << "_db[" << date << "]=" << rate << std::endl;
-//    }
-//    file.close();
-//}
+	std::getline(dbFile, line); // skip header
+	while (std::getline(dbFile, line)) {
+		if (line.empty()) continue;
+		size_t index = line.find(',');
+		if (index == std::string::npos) continue; // no ,
 
- void BitcoinExchange::processInput(const std::string& filename) const {
-    std::ifstream file;
-	if (!openFile(file, filename)) return;
+		std::string dbDate = line.substr(0, index);
+		closestDate = dbDate;
+		if (dbDate == date) {
+			return dbDate;
+		}
+		if (dbDate < date) {
+			if 
+			closestDate = dbDate;
+		}
+	}
+	return closestDate;
+}
+
+/*
+display on the standard output the result of the value multiplied
+by the exchange rate according to the date indicated in your database.
+If the date used in the input does not exist in your DB then you
+must use the closest date contained in your DB. Be careful to use the
+lower date and not the upper one.
+*/
+ void BitcoinExchange::printResult(const std::string& filename, const std::string& filename2) const {
+    std::ifstream inputFile, dbFile;
+	if (!openFile(inputFile, filename)) return;
+	if (!openFile(dbFile, filename2)) return;
 
 	std::string line;
-	std::getline(file, line); // skip header
-	while (std::getline(file, line)) {
-	if (BitcoinExchange::validateLineInput(line))
-		std::cout << line << "\n";
+	std::getline(inputFile, line); // skip header?? where i skip it??? todo
+	while (std::getline(inputFile, line)) {
+		if (validateLineInput(line)) {
+			std::string date = line.substr(0, 10);
+			//std::cout << line.substr(0, 10) << " => " << line.substr(13) << " = ..\n";
+			std::cout << "** tra la ** " << getClosestDate(dbFile, date) << "\n";
+		}
 	}
-	file.close();
+	inputFile.close();
+	dbFile.close();
  }
