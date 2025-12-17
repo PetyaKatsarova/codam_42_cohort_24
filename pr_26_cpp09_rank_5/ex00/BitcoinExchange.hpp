@@ -1,28 +1,29 @@
 #ifndef BITCOIN_EXCHANGE_HEADER
 #define BITCOIN_EXCHANGE_HEADER
 
-#include <map>
+#include <map> // unique key(if dup: replaces with last one), auto sorts on key
 #include <string>
 
 class BitcoinExchange {
-    std::map<std::string, float> _db;
+	
+		std::map<std::string, float> _db;
 
-	bool 		initDateValidate(const std::string& dateStr) const;
-    bool 		isValidDate(const std::string& dateStr) const;
-	bool 		isDotorDigit(const std::string& strPrice) const;
-    bool		isValidPrice(const std::string& strPrice) const;
-    static bool	openFile(std::ifstream& file, const std::string& filename); // because doesnt use member var
-	std::string	getClosestDate(std::ifstream& dbFileStream, std::string& date) const;
+		bool 		initDateValidate(const std::string& dateStr) const;
+		bool 		isValidDate(const std::string& dateStr) const;
+		bool		isValidFloat(const std::string& strValue) const;
+		static void	openFile(std::ifstream& file, const std::string& filename); // because doesnt use member var
+		float		getClosestDatePrice(const std::string& date) const;
+		void		loadDb(const std::string& filename);
 
     public:
-        BitcoinExchange();
+        BitcoinExchange(const std::string& filename);
         BitcoinExchange(const BitcoinExchange& other);
         ~BitcoinExchange();
 
         BitcoinExchange& operator=(const BitcoinExchange& other);
 
-		bool validateLineInput(const std::string& filename) const;
-        void printResult(const std::string& filename, const std::string& filename2) const;
+		bool 	validateLineInput(const std::string& filename) const;
+        void	printResult(const std::string& filename) const;
 };
 
 #endif

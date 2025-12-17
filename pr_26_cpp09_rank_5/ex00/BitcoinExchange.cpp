@@ -3,17 +3,17 @@
 #include <fstream> // ifstream: input means not copyable only pass by &
 #include <sstream>
 #include <string>
-#include <ctime>
+#include <ctime> // std::tm tm {} struct date/time
 #include <cctype>  // for std::isdigit()
 
-BitcoinExchange::BitcoinExchange() {
-    std::cout << "default constr\n";
+BitcoinExchange::BitcoinExchange(const std::string& filename) {
+    loadDb(filename); // exception propagate to main
 }
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange& other) : _db(other._db) { std::cout << "Cpy constr\n"; }
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other) : _db(other._db) {}
 
 BitcoinExchange::~BitcoinExchange() {
-    std::cout << "destruction\n"; // std::map destructor frees/manages mem
+   // std::cout << "destruction\n"; // std::map destructor frees/manages mem
 }
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other) {
@@ -30,18 +30,37 @@ std::fstream - both read and write
 
 Once you read a file stream, the position is at the end. You'd need to reset it each time.
 */
-bool BitcoinExchange::openFile(std::ifstream& file, const std::string& filename) {
+void BitcoinExchange::openFile(std::ifstream& file, const std::string& filename) {
     file.open(filename);
-    if (!file.is_open()) {
-        std::cerr << "Err: could not open file\n";
-        return false;
-    }
-    return true;
+    if (!file.is_open())
+        throw std::runtime_error("Error: could not open file");
+}
+
+// assume all input in filename.csv is valid(data,float)
+// Dynamic memory allocated with new or by containers
+void BitcoinExchange::loadDb(const std::string& filename) {
+	std::ifstream	inputFile;
+	openFile(inputFile, filename); // propage exception to catch in main
+
+	std::string		line;
+	std::getline(inputFile, line); // skip header
+
+	while (std::getline(inputFile, line)) {
+		if (line.empty()) continue;
+
+		size_t pos = line.find(',');
+		if (pos == std::string::npos) continue;
+
+		std::string date = line.substr(0, pos);
+		float val = std::stof(line.substr(pos + 1));
+		_db[date] = val; // heap: std::map manages heap internally
+	}
+	//inputFile.close(); no need, destructor does it
 }
 
 // check if string is all digits and pos 4 && 7 == '-'
 bool BitcoinExchange::initDateValidate(const std::string& dateStr) const {
-		std::string msg = "Ups, invalid format date: yyyy-mm-dd\n";
+		std::string msg = "Error: invalid format date: yyyy-mm-dd\n";
 
 	if (dateStr.length() != 10 || dateStr[4] != '-' || dateStr[7] != '-')
 		return (std::cerr << msg, false);
@@ -56,91 +75,68 @@ bool BitcoinExchange::initDateValidate(const std::string& dateStr) const {
 }
 
 // expected date format: 2022-03-16
+// std::stoi can throw exception:invalid_argument, out_of_range
 bool BitcoinExchange::isValidDate(const std::string& dateStr) const {
-	if (!BitcoinExchange::initDateValidate(dateStr))
+	if (!initDateValidate(dateStr))
 		return false;
 
-	int year  = std::stoi(dateStr.substr(0, 4));
-	int month = std::stoi(dateStr.substr(5, 2));
-	int day   = std::stoi(dateStr.substr(8, 2));
-
-	std::tm tm = {};
-    tm.tm_year = year - 1900;  // years is since 1900
-    tm.tm_mon = month - 1;     // months since January (0-11)
-    tm.tm_mday = day;
-    
-    // mktime validates and normalizes the date
-    std::time_t timestamp = std::mktime(&tm);
-    if (timestamp == -1)
-        return (std::cerr << "Error: bad input => " << dateStr << "\n", false);
-    
-    // Check if date was normalized (invalid dates get adjusted)
-    if (tm.tm_year != year - 1900 || tm.tm_mon != month - 1 || tm.tm_mday != day)
-        return (std::cerr << "Error: bad input => " << dateStr << "\n", false);
-    
-    // Check Bitcoin era + not future
-    std::time_t now = std::time(nullptr);
-    if (year < 2009 || timestamp > now) {
-        return (std::cerr << "Error: date out of range\n", false);
-	}
-	return true;
-}
-
-// a float or a positive integer, between 0 and 1000
-// 2025-11-29,47115.93
-/**
-int x = 42;             -> 4 bytes, whole numbers: -2,147,483,648 to 2,147,483,647
-float f = 3.14;         -> 4 bytes, decimals: ±3.4e38 (7 digits precision)
-double d = 3.14159265;  -> 8 bytes, decimals: ±1.7e308 (15 digits precision)
- */
-bool BitcoinExchange::isDotorDigit(const std::string& strPrice) const {
-	 if (strPrice.empty())
-        return (std::cerr << "Error: empty value.\n", false);
-    
-	bool isDot		= false;
-	bool isDigit	= false;
-	size_t start	= 0;
-
-	if (strPrice[0] == '-')
-		start = 1; // they want for -num diff err msg
-	for (size_t i = start; i < strPrice.length(); i++) {
-		if (std::isdigit(strPrice[i])) {
-			isDigit = true;
-		} else if (strPrice[i] == '.') {
-			if (isDot) {
-				return (std::cerr << "Error: bad input => " << strPrice << "\n", false);
-			}
-			isDot = true;
-		} else 
-			return (std::cerr << "Error: bad input => " << strPrice << "\n", false);
-	}
-	if (!isDigit) {
-		return (std::cerr << "Error: bad input => " << strPrice << "\n", false);
-	}
-
-	return true;
-}
-
-bool BitcoinExchange::isValidPrice(const std::string& strPrice) const {
-	if (!BitcoinExchange::isDotorDigit(strPrice))
-		return false;
-	
 	try {
-		float val = std::stof(strPrice);
+		int year  = std::stoi(dateStr.substr(0, 4));
+		int month = std::stoi(dateStr.substr(5, 2));
+		int day   = std::stoi(dateStr.substr(8, 2));
+
+		std::tm tm = {};
+		tm.tm_year = year - 1900;  // years is since 1900
+		tm.tm_mon = month - 1;     // months since January (0-11)
+		tm.tm_mday = day;
+		
+		// mktime validates and normalizes the date
+		std::time_t timestamp = std::mktime(&tm);
+		if (timestamp == -1)
+			return (std::cerr << "Error: bad input => " << dateStr << "\n", false);
+		
+		// Check if date was normalized (invalid dates get adjusted)
+		if (tm.tm_year != year - 1900 || tm.tm_mon != month - 1 || tm.tm_mday != day)
+			return (std::cerr << "Error: bad input => " << dateStr << "\n", false);
+
+		std::time_t now = std::time(nullptr);
+		if (year < 2009 || timestamp > now) {
+			return (std::cerr << "Error: date out of range\n", false);
+		}
+		return true;
+	} catch(const std::exception&) {
+		return (std::cerr << "Error: bad input => " << dateStr << "\n", false);
+	}
+}
+
+bool BitcoinExchange::isValidFloat(const std::string& strValue) const {
+	if (strValue.empty()) {
+		return (std::cerr << "Error: empty value.\n", false);
+	}
+	try {
+		size_t pos = 0;
+		float val = std::stof(strValue, &pos); // pos should be == str.len if valid float
+		// check if entire str was consumed, no trailing garbage
+		if (pos != strValue.length()) {
+			return (std::cerr << "Error: bad input => " << strValue << "\n", false);
+		}
 		if (val < 0)
 			return (std::cerr << "Error: not a positive number.\n", false);
         if (val > 1000)
             return (std::cerr << "Error: too large a number.\n", false);
         return true;
-	} catch(...) {
-		return (std::cerr << "Error: bad input => " << strPrice << "\n", false);
+	} catch(const std::invalid_argument&) {
+		return (std::cerr << "Error: bad input => " << strValue << "\n", false);
+	} catch(const std::out_of_range&) {
+		return (std::cerr << "Error: too large a number.\n", false);
 	}
 }
 
+// validate given externally .csv file line by line: format: 2012-01-11 | 2.22
 bool BitcoinExchange::validateLineInput(const std::string& line) const {
 	if (line.empty()) return (std::cout << "Empty line\n", false);
 	if (line.length() < 14) {
-		std::cout << "Error: bad input => " << line << "\n";
+		std::cerr << "Error: bad input => " << line << "\n";
 		return (false);
 	}
 	std::string dateStr = line.substr(0, 10);
@@ -148,41 +144,35 @@ bool BitcoinExchange::validateLineInput(const std::string& line) const {
 		std::cerr << "Error: bad input => " << line << "\n";
 		return (false);
 	}
-	if (!BitcoinExchange::isValidDate(dateStr))
+	if (!isValidDate(dateStr))
 		return (false);
-	std::string priceStr = line.substr(13); // till the end all
+	std::string strValue = line.substr(13); // till the end all
 	// trim end white spaces
-	size_t trimmedEnd = priceStr.find_last_not_of(" \t\n\r");
+	size_t trimmedEnd = strValue.find_last_not_of(" \t\n\r");
 	if (trimmedEnd != std::string::npos)
-		priceStr = priceStr.substr(0, trimmedEnd + 1);
+		strValue = strValue.substr(0, trimmedEnd + 1);
 
-	if (!BitcoinExchange::isValidPrice(priceStr))
+	if (!BitcoinExchange::isValidFloat(strValue))
 		return (false);
 	return true;
 }
 
-// in the dbFile where we get the date: it is in ascending order: going down the list:
-// will always have a bigger date
-std::string BitcoinExchange::getClosestDate(std::ifstream& dbFile, std::string& date) const {
-	std::string line, closestDate;
-	dbFile.clear(); // reset EOF flag
-	dbFile.seekg(0, std::ios::beg); // go back to start
-
-	std::getline(dbFile, line); // skip header
-	while (std::getline(dbFile, line)) {
-		if (line.empty()) continue;
-		size_t index = line.find(',');
-		if (index == std::string::npos) continue; // no ,
-
-		std::string dbDate = line.substr(0, index);
-		if (dbDate == date) {
-			return dbDate;
-		}
-		if (dbDate < date) {
-			closestDate = dbDate;
-		}
+float BitcoinExchange::getClosestDatePrice(const std::string& date) const {
+	if (_db.empty()) {
+        std::cerr << "Error: database is empty\n";
+        return -1;
+    }
+    
+	std::map<std::string, float>::const_iterator it = _db.lower_bound(date);
+	if (it != _db.end() && it->first == date) {
+		return it->second; // return val
 	}
-	return closestDate;
+	if (it == _db.begin()) {
+		std::cerr << "Error: no data available for this date\n";
+		return -1; // no == or lower match or???? todo
+	}
+	--it; // move 1 back to get closest lower/not bigger
+	return it->second;
 }
 
 /*
@@ -192,20 +182,27 @@ If the date used in the input does not exist in your DB then you
 must use the closest date contained in your DB. Be careful to use the
 lower date and not the upper one.
 */
- void BitcoinExchange::printResult(const std::string& filename, const std::string& filename2) const {
-    std::ifstream inputFile, dbFile;
-	if (!openFile(inputFile, filename)) return;
-	if (!openFile(dbFile, filename2)) return;
+
+ void BitcoinExchange::printResult(const std::string& filename) const {
+    std::ifstream inputFile;
+	openFile(inputFile, filename); // let exception propagate
 
 	std::string line;
-	std::getline(inputFile, line); // skip header?? where i skip it??? todo
+	std::getline(inputFile, line); // skip header
+
 	while (std::getline(inputFile, line)) {
 		if (validateLineInput(line)) {
 			std::string date = line.substr(0, 10);
-			//std::cout << line.substr(0, 10) << " => " << line.substr(13) << " = ..\n";
-			std::cout << "** tra la ** " << getClosestDate(dbFile, date) << "\n";
+			std::string valueStr = line.substr(13);
+
+			size_t trimmedEnd = valueStr.find_last_not_of(" \t\n\r");
+			if (trimmedEnd != std::string::npos)
+				valueStr = valueStr.substr(0, trimmedEnd + 1);
+			
+			float inputVal = std::stof(valueStr);
+			float exchangeRate = getClosestDatePrice(date);
+			if (exchangeRate >= 0)
+				std::cout << date << " => " << inputVal << " = " << inputVal * exchangeRate << "\n";
 		}
 	}
-	inputFile.close();
-	dbFile.close();
  }
