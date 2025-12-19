@@ -5,16 +5,18 @@
 #include <string>
 
 class RPN {
-    std::stack<std::string> _nums;
+    public: // for testing only rmv 
+    std::stack<char> _nums;
 
     public:
-        RPN(std::string& line);
+        RPN(const std::string& line);
         RPN(const RPN& other);
         ~RPN();
 
         RPN& operator=(const RPN& other);
 
-        bool validateInput(std::string& argv);// check if int, int < 10, or "+ - / *"
+        bool validateInput(const std::string& argv);// check if int, int < 10, or "+ - / *"
+        int calculate();
 };
 
 #endif
