@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stdexcept>
 
+
+// 1 2 * 2 / 2 * 2 4 - + = 0 => ((((1 * 2) / 2) * 2) + (2 - 4)) = 0
 int main(int argc, const char** argv) {
     if (argc != 2) {
         std::cout << "Please give input: 2 2 * 3 + \n";
@@ -11,7 +13,7 @@ int main(int argc, const char** argv) {
     RPN test;
 	try {
 		if (!test.validateInput(argv[1])) {
-			std::cerr << "Error: invalid input\n";
+			std::cerr << "Error\n";
 			return 1;
 		}
     	std::cout << "Result = " << test.calculate(argv[1]) << std::endl;

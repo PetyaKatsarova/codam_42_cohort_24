@@ -47,7 +47,7 @@ int RPN::calc(int num1, int num2, char sign) const {
 				throw std::runtime_error("Error: better not devide by 0\n");
 			return num1 / num2;
 		default:
-			throw std::runtime_error("Error: invalid operator");
+			throw std::runtime_error("Error");
 	}
 }
 
