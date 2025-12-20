@@ -4,19 +4,21 @@
 #include <stack>
 #include <string>
 
+// todo: make it static: will not use objects, i think
 class RPN {
     public: // for testing only rmv 
-    std::stack<char> _nums;
+    std::stack<int> _nums; // default constr: create empty stack
+	int calc(int num1, int num2, char sign) const;
 
     public:
-        RPN(const std::string& line);
+        RPN();
         RPN(const RPN& other);
         ~RPN();
 
         RPN& operator=(const RPN& other);
 
-        bool validateInput(const std::string& argv);// check if int, int < 10, or "+ - / *"
-        int calculate();
+        bool validateInput(const std::string& argv) const;
+        int calculate(const std::string& input);
 };
 
 #endif
