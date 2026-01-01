@@ -1,7 +1,7 @@
 #ifndef RPN_HEADER
 #define RPN_HEADER
 
-#include <stack>
+#include <stack> // filo: first in, last out
 #include <string>
 
 // todo: make it static: will not use objects, i think

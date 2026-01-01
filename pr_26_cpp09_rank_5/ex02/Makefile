@@ -1,5 +1,5 @@
 NAME = PmergeMe
-SRC = main.cpp RPN.cpp
+SRC = main.cpp PmergeMe.cpp
 HEADERS = BitcoinExchange.hpp
 
 OBJ = $(SRC:.cpp=.o)
