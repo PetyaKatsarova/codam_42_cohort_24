@@ -101,7 +101,7 @@ std::vector<int> PmergeMe::extractPendingElsVector(const std::vector<std::pair<i
  */
 void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
 	// auto pos = std::lower_bound(mainChain.begin(), mainChain.end(), num); // auto will be iterator, not int
-	auto pos = lowerBoundCount(mainChain, num);
+	auto pos = lowerBoundCount(mainChain.begin(), mainChain.end(), num);
 	mainChain.insert(pos, num);
 	_insertCounter++;
 }
@@ -110,7 +110,7 @@ void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
  * step 6: 
  */
 void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain) {
-	std::vector<size_t> order = buildJacobInsertionOrder(pendingChain.size());
+	std::vector<size_t> order = buildJacobInsertionOrderVector(pendingChain.size());
 	
 	std::cout << "Jackobsthal seq:\n";
 	for (size_t i : order) {
@@ -127,7 +127,7 @@ Fibonacci: a + b : 1, 1, 2, 3, 5
 Both: Start with small numbers, use the two previous numbers
 Jacobsthal multiplies one by 2
 */
-std::vector<size_t> PmergeMe::buildJacobInsertionOrder(size_t n) {
+std::vector<size_t> PmergeMe::buildJacobInsertionOrderVector(size_t n) {
 	std::vector<size_t> jacob;
 	jacob.push_back(1);
 	jacob.push_back(3);
@@ -170,7 +170,7 @@ void PmergeMe::fordJohnsonSortVector() {
 	std::cout << "comparisons : " << _compareCounter << "\n";
 }
 
-// deque
+// ** DEQUE **
 
 std::deque<std::pair<int, int>> PmergeMe::makePairsDeque(int& oddEl) {
     std::deque<std::pair<int, int>> pairs;
@@ -185,17 +185,37 @@ std::deque<std::pair<int, int>> PmergeMe::makePairsDeque(int& oddEl) {
 	return pairs;
 }
 
+std::deque<size_t> PmergeMe::buildJacobInsertionOrderDeque(size_t n) {
+	std::deque<size_t> jacob;
+	jacob.push_back(1);
+	jacob.push_back(3);
+
+	while (jacob.back() < n)
+		jacob.push_back(jacob[jacob.size()-1] + 2 * jacob[jacob.size() - 2]);
+
+	std::deque<size_t> order;
+	size_t prev = 0;
+	for (size_t j : jacob) {
+		for (size_t i = std::min(j, n); i > prev; --i)
+			order.push_back(i - 1);
+		prev = j;
+	}
+	return order;
+}
+
 void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val)
 {
-    std::deque<int>::iterator pos =
-        std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
+    std::deque<int>::iterator pos = lowerBoundCount(mainChainD.begin(), mainChainD.end(), val);
+        // std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
     mainChainD.insert(pos, val);
 	_insertCounter++;
 }
 
 void PmergeMe::fordJohnsonSortDeque() {
 	_insertCounter = 0;
+	_compareCounter = 0;
     int oddEl = -1;
+
     std::deque<std::pair<int, int>> pairs = makePairsDeque(oddEl);
     std::sort(pairs.begin(), pairs.end());
 
@@ -206,8 +226,9 @@ void PmergeMe::fordJohnsonSortDeque() {
         pendingChain.push_back(p.second);
     }
 
-    for (auto& p : pendingChain)
-        insertElDeque(mainChain, p);
+	std::deque<size_t> order = buildJacobInsertionOrderDeque(pendingChain.size());
+    for (size_t i : order)
+        insertElDeque(mainChain, pendingChain[i]);
     
     if (oddEl != -1)
         insertElDeque(mainChain, oddEl);
