@@ -20,7 +20,10 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
     return *this;
 }
 
-// avoid cpy: faster
+const std::vector<int>& PmergeMe::getArrV() const { return _arrVec; }
+
+const std::deque<int>& PmergeMe::getArrD() const { return _arrDeq; }
+
 void PmergeMe::setArrV(const std::string& input) {
 	_arrVec.clear();
 
@@ -29,7 +32,7 @@ void PmergeMe::setArrV(const std::string& input) {
 
 	while (iss >> token) {
 		for (char c : token) {
-			if (!std::isdigit(c) && c != '-' && c != '+') {
+			if (!std::isdigit(c) && c != '+') { // no negative nums allowed
 				throw std::invalid_argument("Invalid input");
 			}
 		}
@@ -48,9 +51,36 @@ void PmergeMe::setArrV(const std::string& input) {
 	}
 }
 
+void PmergeMe::setArrD(const std::string& input) {
+	_arrDeq.clear();
+
+	std::istringstream iss(input);
+	std::string token;
+
+	while (iss >> token) {
+		for (char c : token) {
+			if (!std::isdigit(c) && c != '+') { // no negative nums allowed
+				throw std::invalid_argument("Invalid input");
+			}
+		}
+
+		try {
+			int num = std::stoi(token);
+			_arrDeq.push_back(num);
+		} catch (const std::out_of_range&) {
+			throw std::out_of_range("Invalid input: int out of range");
+		} catch (const std::invalid_argument& e) {
+			throw std::invalid_argument("Invalid input: cant convert to int");
+		}
+	}
+	if (_arrDeq.empty()) {
+		throw std::invalid_argument("Invalid input: no nums provided");
+	}
+}
+
 // ** end basic set up class
 
- /**
+ /** VECTOR **
   * step 1: make pairs of each consequtive elements and
   * place on first place the bigger num
   */
@@ -112,12 +142,12 @@ void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
 void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain) {
 	std::vector<size_t> order = buildJacobInsertionOrderVector(pendingChain.size());
 	
-	std::cout << "Jackobsthal seq:\n";
+	// std::cout << "Jackobsthal seq:\n";
 	for (size_t i : order) {
-		std::cout << i << ", ";
+		// std::cout << i << ", ";
 		insertElVector(mainChain, pendingChain[i]);
 	}
-	std::cout << "\n";
+	// std::cout << "\n";
 }
 
 /**
@@ -150,24 +180,23 @@ void PmergeMe::fordJohnsonSortVector() {
 	_compareCounter = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
-	std::cout << "Vector:   ";
-	printPairs(pairs);
+	// std::cout << "Vector:   ";
+	// printPairs(pairs);
 	sortPairsVector(pairs); // 2
-	std::cout << "Sorted v: ";
-	printPairs(pairs);
+	// std::cout << "Sorted v: ";
+	// printPairs(pairs);
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
-	printContainer(mainChain);
+	// printContainer(mainChain);
 	std::vector<int> pendingEls = extractPendingElsVector(pairs); // 4
-	printContainer(pendingEls);
+	// printContainer(pendingEls);
 	insertPendingVector(mainChain, pendingEls); // 5
 
-	if (oddEl != -1) {
+	if (oddEl != -1)
 		insertElVector(mainChain, oddEl);
-	}
+	
 	_arrVec = mainChain;
-	printContainer(_arrVec);
-	std::cout << "insertions  : " << _insertCounter << "\n";
-	std::cout << "comparisons : " << _compareCounter << "\n";
+	// std::cout << "insertions  : " << _insertCounter << "\n";
+	// std::cout << "comparisons : " << _compareCounter << "\n";
 }
 
 // ** DEQUE **
@@ -212,14 +241,11 @@ void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val)
 }
 
 void PmergeMe::fordJohnsonSortDeque() {
-	_insertCounter = 0;
-	_compareCounter = 0;
-    int oddEl = -1;
-
+    int								oddEl = -1;
     std::deque<std::pair<int, int>> pairs = makePairsDeque(oddEl);
     std::sort(pairs.begin(), pairs.end());
 
-    std::deque<int> mainChain; // make 2 arrs with first and second nums from the arr of pairs
+    std::deque<int> mainChain;
     std::deque<int> pendingChain;
     for (auto& p : pairs) {
         mainChain.push_back(p.first);
@@ -234,8 +260,6 @@ void PmergeMe::fordJohnsonSortDeque() {
         insertElDeque(mainChain, oddEl);
     
     _arrDeq = mainChain;
-    printContainer(_arrDeq);
-	std::cout << "Number of insertions: " << _insertCounter << "\n";
 }
 
 long PmergeMe::elapsedUs(timespec start, timespec end)

@@ -14,16 +14,6 @@ class PmergeMe {
         size_t              _insertCounter;
         size_t              _compareCounter;
        
-        template <typename Container>
-        void printContainer(const Container& c) {
-            std::cout << "[";
-            for (size_t i = 0; i < c.size(); i++) {
-                std::cout << c[i];
-                if (i < c.size() - 1) std::cout << ", ";
-            }
-            std::cout << "]\n";
-        };
-
         template<typename Container>
         void printPairs(const Container& pairs) {
             std::cout << "Pairs: ";
@@ -71,10 +61,22 @@ class PmergeMe {
 
         PmergeMe&                           operator=(const PmergeMe& other);
         void                                setArrV(const std::string& input);
+        void                                setArrD(const std::string& input);
+        const std::vector<int>&             getArrV() const;
+        const std::deque<int>&              getArrD() const;
 
         void                                fordJohnsonSortVector();
         void                                fordJohnsonSortDeque();
-        static long                         elapsedUs(timespec start, timespec end);        
+        static long                         elapsedUs(timespec start, timespec end);      
+        
+        template <typename Container>
+        void printContainer(const Container& c) {
+            for (size_t i = 0; i < c.size(); i++) {
+                std::cout << c[i];
+                if (i < c.size() - 1) std::cout << " ";
+            }
+            std::cout << "\n";
+        };
 };
 
 #endif
