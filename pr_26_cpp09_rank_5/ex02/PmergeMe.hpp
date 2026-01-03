@@ -11,9 +11,8 @@ class PmergeMe {
     private:
         std::vector<int>    _arrVec;
         std::deque<int>     _arrDeq;
-
-        // void printArrV(const std::vector<int>& arrV);
-        void printPairsV(const std::vector<std::pair<int, int>>& pairs);
+        size_t              _insertCounter;
+        size_t              _compareCounter;
        
         template <typename Container>
         void printContainer(const Container& c) {
@@ -34,8 +33,23 @@ class PmergeMe {
             std::cout << "\n";
         }
 
+        template<typename T>
+        typename std::vector<T>::iterator lowerBoundCount(std::vector<T>& vec, T val) {
+            size_t left = 0;
+            size_t right = vec.size();
 
+            while (left < right) {
+                size_t mid = left+(right-left)/2;
+                _compareCounter++;
+                if (vec[mid] < val)
+                    left = mid + 1;
+                else
+                    right = mid;
+            }
+            return vec.begin() + left;
+        }
 
+         std::vector<size_t> buildJacobInsertionOrder(size_t n);
        // vectors
         std::vector<std::pair<int, int>> makePairsVector(int& oddEl);
         void sortPairsVector(std::vector<std::pair<int, int>>& pairs);
@@ -54,6 +68,8 @@ class PmergeMe {
         ~PmergeMe();
 
         PmergeMe& operator=(const PmergeMe& other);
+        void setArrV(const std::string& input);
+        
         void fordJohnsonSortVector();
         void fordJohnsonSortDeque();
         static long elapsedUs(timespec start, timespec end);

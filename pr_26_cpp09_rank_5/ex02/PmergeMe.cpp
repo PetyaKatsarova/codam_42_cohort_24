@@ -1,9 +1,10 @@
 #include "PmergeMe.hpp"
 #include <iostream>
 #include <algorithm>
+#include <sstream> // std::istringstream
 
 // basic set up class
-PmergeMe::PmergeMe(const std::vector<int>& arrV, const std::deque<int>& arrD) : _arrVec(arrV), _arrDeq(arrD){}
+PmergeMe::PmergeMe(const std::vector<int>& arrV, const std::deque<int>& arrD) : _arrVec(arrV), _arrDeq(arrD), _insertCounter(0), _compareCounter(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other) : _arrVec(other._arrVec), _arrDeq(other._arrDeq){}
 
@@ -13,8 +14,38 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
     if (this != &other) {
         _arrVec = other._arrVec;
         _arrDeq = other._arrDeq;
+		_insertCounter = other._insertCounter;
+		_compareCounter = other._compareCounter;
     }
     return *this;
+}
+
+// avoid cpy: faster
+void PmergeMe::setArrV(const std::string& input) {
+	_arrVec.clear();
+
+	std::istringstream iss(input);
+	std::string token;
+
+	while (iss >> token) {
+		for (char c : token) {
+			if (!std::isdigit(c) && c != '-' && c != '+') {
+				throw std::invalid_argument("Invalid input");
+			}
+		}
+
+		try {
+			int num = std::stoi(token);
+			_arrVec.push_back(num);
+		} catch (const std::out_of_range&) {
+			throw std::out_of_range("Invalid input: int out of range");
+		} catch (const std::invalid_argument& e) {
+			throw std::invalid_argument("Invalid input: cant convert to int");
+		}
+	}
+	if (_arrVec.empty()) {
+		throw std::invalid_argument("Invalid input: no nums provided");
+	}
 }
 
 // ** end basic set up class
@@ -69,20 +100,54 @@ std::vector<int> PmergeMe::extractPendingElsVector(const std::vector<std::pair<i
  * Insert element using binary search
  */
 void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
-	auto pos = std::lower_bound(mainChain.begin(), mainChain.end(), num); // auto will be iterator, not int
+	// auto pos = std::lower_bound(mainChain.begin(), mainChain.end(), num); // auto will be iterator, not int
+	auto pos = lowerBoundCount(mainChain, num);
 	mainChain.insert(pos, num);
+	_insertCounter++;
 }
 
 /**
  * step 6: 
  */
 void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain) {
-	for (auto& p : pendingChain) {
-		PmergeMe::insertElVector(mainChain, p);
+	std::vector<size_t> order = buildJacobInsertionOrder(pendingChain.size());
+	
+	std::cout << "Jackobsthal seq:\n";
+	for (size_t i : order) {
+		std::cout << i << ", ";
+		insertElVector(mainChain, pendingChain[i]);
 	}
+	std::cout << "\n";
+}
+
+/**
+* Jacobsthal sequence: next = previous(a) + 2 × one-before-previous(b)
+		           1, 3, 5, 11, 21, 43
+Fibonacci: a + b : 1, 1, 2, 3, 5
+Both: Start with small numbers, use the two previous numbers
+Jacobsthal multiplies one by 2
+*/
+std::vector<size_t> PmergeMe::buildJacobInsertionOrder(size_t n) {
+	std::vector<size_t> jacob;
+	jacob.push_back(1);
+	jacob.push_back(3);
+
+	while (jacob.back() < n)
+		jacob.push_back(jacob[jacob.size()-1] + 2 * jacob[jacob.size() - 2]);
+
+	std::vector<size_t> order;
+	size_t prev = 0;
+	for (size_t j : jacob) {
+		for (size_t i = std::min(j, n); i > prev; --i)
+			order.push_back(i - 1);
+		prev = j;
+	}
+	return order;
 }
 
 void PmergeMe::fordJohnsonSortVector() {
+	_insertCounter = 0; // clear from prev run
+	_compareCounter = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
 	std::cout << "Vector:   ";
@@ -91,9 +156,9 @@ void PmergeMe::fordJohnsonSortVector() {
 	std::cout << "Sorted v: ";
 	printPairs(pairs);
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
-	// printContainer(mainChain);
+	printContainer(mainChain);
 	std::vector<int> pendingEls = extractPendingElsVector(pairs); // 4
-	// printContainer(pendingEls);
+	printContainer(pendingEls);
 	insertPendingVector(mainChain, pendingEls); // 5
 
 	if (oddEl != -1) {
@@ -101,6 +166,8 @@ void PmergeMe::fordJohnsonSortVector() {
 	}
 	_arrVec = mainChain;
 	printContainer(_arrVec);
+	std::cout << "insertions  : " << _insertCounter << "\n";
+	std::cout << "comparisons : " << _compareCounter << "\n";
 }
 
 // deque
@@ -123,9 +190,11 @@ void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val)
     std::deque<int>::iterator pos =
         std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
     mainChainD.insert(pos, val);
+	_insertCounter++;
 }
 
 void PmergeMe::fordJohnsonSortDeque() {
+	_insertCounter = 0;
     int oddEl = -1;
     std::deque<std::pair<int, int>> pairs = makePairsDeque(oddEl);
     std::sort(pairs.begin(), pairs.end());
@@ -145,6 +214,7 @@ void PmergeMe::fordJohnsonSortDeque() {
     
     _arrDeq = mainChain;
     printContainer(_arrDeq);
+	std::cout << "Number of insertions: " << _insertCounter << "\n";
 }
 
 long PmergeMe::elapsedUs(timespec start, timespec end)
