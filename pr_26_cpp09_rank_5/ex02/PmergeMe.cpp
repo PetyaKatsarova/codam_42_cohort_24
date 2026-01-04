@@ -24,6 +24,22 @@ const std::vector<int>& PmergeMe::getArrV() const { return _arrVec; }
 
 const std::deque<int>& PmergeMe::getArrD() const { return _arrDeq; }
 
+void PmergeMe::validateToken(const std::string& token) {
+	if (token.empty())
+		throw std::invalid_argument("Invalid input");
+
+	size_t i = 0;
+	if (token[0] == '+' && token.size() == 1) {
+		throw std::invalid_argument("Invalid input");
+		i = 1;
+	}
+
+	for (; i < token.size(); ++i) {
+		if (!std::isdigit(static_cast<unsigned char>(token[i])))
+			throw std::invalid_argument("Invalid input");
+	}
+}
+
 void PmergeMe::setArrV(const std::string& input) {
 	_arrVec.clear();
 
@@ -31,19 +47,14 @@ void PmergeMe::setArrV(const std::string& input) {
 	std::string token;
 
 	while (iss >> token) {
-		for (char c : token) {
-			if (!std::isdigit(c) && c != '+') { // no negative nums allowed
-				throw std::invalid_argument("Invalid input");
-			}
-		}
-
 		try {
-			int num = std::stoi(token);
-			_arrVec.push_back(num);
+			validateToken(token);
+			_arrVec.push_back(std::stoi(token));
 		} catch (const std::out_of_range&) {
 			throw std::out_of_range("Invalid input: int out of range");
 		} catch (const std::invalid_argument& e) {
-			throw std::invalid_argument("Invalid input: cant convert to int");
+			// throw std::invalid_argument("Invalid input: cant convert to int");
+			std::cerr << e.what(); // todo: is it corrfect??
 		}
 	}
 	if (_arrVec.empty()) {
@@ -58,19 +69,15 @@ void PmergeMe::setArrD(const std::string& input) {
 	std::string token;
 
 	while (iss >> token) {
-		for (char c : token) {
-			if (!std::isdigit(c) && c != '+') { // no negative nums allowed
-				throw std::invalid_argument("Invalid input");
-			}
-		}
-
 		try {
+			validateToken(token);
 			int num = std::stoi(token);
 			_arrDeq.push_back(num);
 		} catch (const std::out_of_range&) {
 			throw std::out_of_range("Invalid input: int out of range");
 		} catch (const std::invalid_argument& e) {
-			throw std::invalid_argument("Invalid input: cant convert to int");
+			// throw std::invalid_argument("Invalid input: cant convert to int");
+			std::cerr << e.what();
 		}
 	}
 	if (_arrDeq.empty()) {
@@ -78,12 +85,19 @@ void PmergeMe::setArrD(const std::string& input) {
 	}
 }
 
-// ** end basic set up class
+// ** PARSE INPUT **
+std::string PmergeMe::joinArgs(int argc, char* argv[]) {
+    std::ostringstream oss;
+    for (int i = 1; i < argc; ++i) {
+        oss << argv[i] << " ";
+    }
+    return oss.str();
+}
 
- /** VECTOR **
+/** VECTOR **
   * step 1: make pairs of each consequtive elements and
   * place on first place the bigger num
-  */
+*/
 std::vector<std::pair<int, int>> PmergeMe::makePairsVector(int& oddEl) {
 			std::vector<std::pair<int, int>> pairs;
 

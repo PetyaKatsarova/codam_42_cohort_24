@@ -40,7 +40,8 @@ class PmergeMe {
             return left;
         }
 
-       // vectors
+        void                                validateToken(const std::string& s);
+       // VECTOR
         std::vector<size_t>                 buildJacobInsertionOrderVector(size_t n);
         std::vector<std::pair<int, int>>    makePairsVector(int& oddEl);
         void                                sortPairsVector(std::vector<std::pair<int, int>>& pairs);
@@ -49,7 +50,7 @@ class PmergeMe {
         void                                insertElVector(std::vector<int>& mainChain, int num);
         void                                insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain);
 
-        // DEQUE (mirrors vector)
+        // DEQUE
         std::deque<size_t>                  buildJacobInsertionOrderDeque(size_t n);
         std::deque<std::pair<int, int>>     makePairsDeque(int& oddEl);
         void                                insertElDeque(std::deque<int>& mainChainD, int val);
@@ -65,6 +66,7 @@ class PmergeMe {
         const std::vector<int>&             getArrV() const;
         const std::deque<int>&              getArrD() const;
 
+        std::string                         joinArgs(int argc, char* argv[]);
         void                                fordJohnsonSortVector();
         void                                fordJohnsonSortDeque();
         static long                         elapsedUs(timespec start, timespec end);      
