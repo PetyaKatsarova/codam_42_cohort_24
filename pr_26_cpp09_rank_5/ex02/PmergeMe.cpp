@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <sstream> // std::istringstream
 
-// basic set up class
 PmergeMe::PmergeMe(const std::vector<int>& arrV, const std::deque<int>& arrD) : _arrVec(arrV), _arrDeq(arrD), _insertCounter(0), _compareCounter(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other) : _arrVec(other._arrVec), _arrDeq(other._arrDeq){}
@@ -40,23 +39,17 @@ void PmergeMe::validateToken(const std::string& token) {
 	}
 }
 
+// let exception propagate to main
 void PmergeMe::setArrV(const std::string& input) {
 	_arrVec.clear();
 
-	std::istringstream iss(input);
-	std::string token;
+	std::istringstream 	iss(input);
+	std::string 		token;
 
 	while (iss >> token) {
-		try {
-			validateToken(token);
-			_arrVec.push_back(std::stoi(token));
-		} catch (const std::out_of_range&) {
-			throw std::out_of_range("Invalid input: int out of range");
-		} catch (const std::invalid_argument& e) {
-			// throw std::invalid_argument("Invalid input: cant convert to int");
-			std::cerr << e.what(); // todo: is it corrfect??
-		}
-	}
+		validateToken(token);
+		_arrVec.push_back(std::stoi(token));
+}
 	if (_arrVec.empty()) {
 		throw std::invalid_argument("Invalid input: no nums provided");
 	}
@@ -69,16 +62,8 @@ void PmergeMe::setArrD(const std::string& input) {
 	std::string token;
 
 	while (iss >> token) {
-		try {
 			validateToken(token);
-			int num = std::stoi(token);
-			_arrDeq.push_back(num);
-		} catch (const std::out_of_range&) {
-			throw std::out_of_range("Invalid input: int out of range");
-		} catch (const std::invalid_argument& e) {
-			// throw std::invalid_argument("Invalid input: cant convert to int");
-			std::cerr << e.what();
-		}
+			_arrDeq.push_back(std::stoi(token)); // exception propagate
 	}
 	if (_arrDeq.empty()) {
 		throw std::invalid_argument("Invalid input: no nums provided");
@@ -190,13 +175,13 @@ std::vector<size_t> PmergeMe::buildJacobInsertionOrderVector(size_t n) {
 }
 
 void PmergeMe::fordJohnsonSortVector() {
-	_insertCounter = 0; // clear from prev run
+	_insertCounter = 0;
 	_compareCounter = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
 	// std::cout << "Vector:   ";
 	// printPairs(pairs);
-	sortPairsVector(pairs); // 2
+	sortPairsVector(pairs);
 	// std::cout << "Sorted v: ";
 	// printPairs(pairs);
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
@@ -248,16 +233,18 @@ std::deque<size_t> PmergeMe::buildJacobInsertionOrderDeque(size_t n) {
 
 void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val)
 {
-    std::deque<int>::iterator pos = lowerBoundCount(mainChainD.begin(), mainChainD.end(), val);
-        // std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
+	auto pos = std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
     mainChainD.insert(pos, val);
 	_insertCounter++;
 }
 
+// sort() O(n log n) guranteed, uses diff sorts for diff cases
 void PmergeMe::fordJohnsonSortDeque() {
     int								oddEl = -1;
     std::deque<std::pair<int, int>> pairs = makePairsDeque(oddEl);
-    std::sort(pairs.begin(), pairs.end());
+    std::sort(pairs.begin(), pairs.end(), [](const auto& a, const auto& b) {
+		return a.first < b.first;
+	});
 
     std::deque<int> mainChain;
     std::deque<int> pendingChain;
@@ -276,6 +263,12 @@ void PmergeMe::fordJohnsonSortDeque() {
     _arrDeq = mainChain;
 }
 
+/* returns elapsed tim im microseconds(µs)
+but clock_gettime() returns in nanos.
+timespec has: tv_sec, tv_nsec; tv=time_value
+1 sec = 1.000.000 microseconds
+1 ms = 1,000 µs, 1 µs = 1,000 ns(smallest)
+*/
 long PmergeMe::elapsedUs(timespec start, timespec end)
 {
     return (end.tv_sec - start.tv_sec) * 1000000L +

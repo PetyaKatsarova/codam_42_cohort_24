@@ -23,7 +23,7 @@ class PmergeMe {
             std::cout << "\n";
         }
 
-        // manual binary search in order to count comparrisons from lower_bound
+        // manual binary search(=lower_bound) in order to count comparrisons on sorted arr, runs in O(log n) comparissons
         template<typename It, typename T>
         It lowerBoundCount(It begin, It end, T val) {
             It left = begin;

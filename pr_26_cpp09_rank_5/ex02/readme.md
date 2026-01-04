@@ -8,7 +8,7 @@ To clarify, yes, you need to use the Ford-Johnson algorithm.
 (source: Art Of Computer Programming, Vol.3. Merge Insertion,
 Page 184.)
 • If an error occurs during program execution, an error message should be displayed
-on the standard error. -> TODO!!
+on the standard error. ✔
 You must use at least two different containers in your code to
 validate this exercise. Your program must be able to handle at
 least 3000 different integers. ✔
@@ -43,9 +43,16 @@ Time to process a range of 3000 elements with std::[..] : 62.14389 us
 Time to process a range of 3000 elements with std::[..] : 69.27212 us
 $> ./PmergeMe "-1" "2"
 Error
-$> # For OSX USER:
+$> # For OSX USER: (jot is BSD tool, can use seq or shuf, tr: replace all '\n' with ' ')
 $> ./PmergeMe `jot -r 3000 1 100000 | tr '\n' ' '`
 [...]
+------------------------------------
+./PmergeMe $(shuf -i 1-100000 -n 3000)
+shuf → shuffle / random selection tool.
+-i 1-100000 → choose numbers in range 1 to 100000.
+-n 3000 → pick 3000 numbers.
+$(...) → inject output as arguments.
+--------------------------------------
 $>
 The indication of the time is deliberately strange in this example.
 Of course you have to indicate the time used to perform all your

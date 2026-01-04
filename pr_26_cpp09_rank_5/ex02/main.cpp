@@ -12,9 +12,10 @@ int main(int argc, char* argv[]) {
     PmergeMe bla(arrV, arrDeq);
     
     if (argc > 1) {
-        try {        
-            bla.setArrV(bla.joinArgs(argc, argv));
-            bla.setArrD(bla.joinArgs(argc, argv));
+        try {
+            std::string input = bla.joinArgs(argc, argv); // in case input like: 42 2 24 22
+            bla.setArrV(input);
+            bla.setArrD(input);
         } catch (const std::exception& e) {
                 std::cerr << "Error\n";
                 return 1;
