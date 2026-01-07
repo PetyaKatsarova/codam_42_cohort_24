@@ -3,7 +3,12 @@
 #include <algorithm>
 #include <sstream> // std::istringstream
 
-PmergeMe::PmergeMe(const std::vector<int>& arrV, const std::deque<int>& arrD) : _arrVec(arrV), _arrDeq(arrD), _insertCounter(0), _compareCounter(0) {}
+/**
+If you don't need the original containers after construction, moving is better because:
+Avoids allocating new memory, only transfers ownership of the internal buffer, O(1) instead of O(n)
+*/
+
+PmergeMe::PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD) : _arrVec(std::move(arrV)), _arrDeq(std::move(arrD)), _insertCounter(0), _compareCounter(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other) : _arrVec(other._arrVec), _arrDeq(other._arrDeq){}
 

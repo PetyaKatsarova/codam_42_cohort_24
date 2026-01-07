@@ -22,10 +22,10 @@ int main(int argc, char* argv[]) {
         }
     } 
     
-    timespec start, end;
     std::cout << "Before: ";
     bla.printContainer(bla.getArrV()); // end with "\n"
  
+    timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
     bla.fordJohnsonSortVector();
     clock_gettime(CLOCK_MONOTONIC, &end);

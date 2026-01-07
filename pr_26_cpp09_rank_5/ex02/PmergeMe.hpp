@@ -17,7 +17,7 @@ class PmergeMe {
         template<typename Container>
         void printPairs(const Container& pairs) {
             std::cout << "Pairs: ";
-            for (const auto& p : pairs) { // doesnt take in int
+            for (const auto& p : pairs) {
                 std::cout << "(" << p.first << ", " << p.second << ")";
             }
             std::cout << "\n";
@@ -56,7 +56,7 @@ class PmergeMe {
         void                                insertElDeque(std::deque<int>& mainChainD, int val);
 
     public:
-        PmergeMe(const std::vector<int>& arrV, const std::deque<int>& arrD);
+        PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD);
         PmergeMe(const PmergeMe& other);
         ~PmergeMe();
 
