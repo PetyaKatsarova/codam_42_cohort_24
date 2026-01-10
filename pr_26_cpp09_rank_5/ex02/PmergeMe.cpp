@@ -8,7 +8,7 @@ If you don't need the original containers after construction, moving is better b
 Avoids allocating new memory, only transfers ownership of the internal buffer, O(1) instead of O(n)
 */
 
-PmergeMe::PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD) : _arrVec(std::move(arrV)), _arrDeq(std::move(arrD)), _insertCounter(0), _compareCounter(0) {}
+PmergeMe::PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD) : _arrVec(std::move(arrV)), _arrDeq(std::move(arrD)), __binarySearchComparison(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other) : _arrVec(other._arrVec), _arrDeq(other._arrDeq){}
 
@@ -18,8 +18,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
     if (this != &other) {
         _arrVec = other._arrVec;
         _arrDeq = other._arrDeq;
-		_insertCounter = other._insertCounter;
-		_compareCounter = other._compareCounter;
+		__binarySearchComparison = other.__binarySearchComparison;
     }
     return *this;
 }
@@ -127,17 +126,6 @@ std::vector<int> PmergeMe::extractPendingElsVector(const std::vector<std::pair<i
 	return result;
 }
 
-/*
-helper func: used later for merging pending element into main chain: not loop through all array but only untill the paired Maxima 
-*/
-int PmergeMe::getPairedMax(std::vector<std::pair<int, int>> pairedV, int lowerNum) {
-	for (size_t i = 0; i < pairedV.size(); i++) {
-		if (pairedV[i].second == lowerNum)
-			return pairedV[i].first;
-	}
-	throw std::logic_error("Paired max not found for given element");
-}
-
 /**
  * step 5:
  * std::lower_bound is a standard algorithm that finds the first position in a sorted range where a given value can be inserted
@@ -149,7 +137,6 @@ void PmergeMe::insertElVector(std::vector<int>& mainChain, int num, int pairedMa
 	// bounded binary search
 	auto insertPos = lowerBoundCount(mainChain.begin(), maxPos, num);
 	mainChain.insert(insertPos, num);
-	_insertCounter++;
 }
 
 /**
@@ -158,9 +145,7 @@ void PmergeMe::insertElVector(std::vector<int>& mainChain, int num, int pairedMa
 void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
 	auto insertPos = lowerBoundCount(mainChain.begin(), mainChain.end(), num);
 	mainChain.insert(insertPos, num);
-	_insertCounter++;
 }
-
 
 /**
 * Jacobsthal sequence: next = previous(a) + 2 × one-before-previous(b)
@@ -198,8 +183,7 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 }
 
 void PmergeMe::fordJohnsonSortVector() {
-	_insertCounter = 0;
-	_compareCounter = 0;
+	__binarySearchComparison = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
 	sortPairsVector(pairs);
@@ -211,8 +195,7 @@ void PmergeMe::fordJohnsonSortVector() {
 		insertElVector(mainChain, oddEl);
 	
 	_arrVec = mainChain;
-	std::cout << "insertions  : " << _insertCounter << "\n";
-	std::cout << "comparisons : " << _compareCounter << "\n";
+	std::cout << "bounded binary search comparisons : " << __binarySearchComparison << "\n";
 }
 
 // ** DEQUE **
@@ -248,11 +231,19 @@ std::deque<size_t> PmergeMe::buildJacobInsertionOrderDeque(size_t n) {
 	return order;
 }
 
-void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val)
+void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val, int pairedMax)
 {
-	auto pos = std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
-    mainChainD.insert(pos, val);
-	_insertCounter++;
+	auto maxPos = std::find(mainChainD.begin(), mainChainD.end(), pairedMax);
+	auto insertPos = std::lower_bound(mainChainD.begin(), maxPos, val);
+    mainChainD.insert(insertPos, val);
+}
+
+/**
+ * Overloaded version for odd element - searches entire deque main chain
+ */
+void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val) {
+	auto insertPos = std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
+	mainChainD.insert(insertPos, val);
 }
 
 // sort() O(n log n) guranteed, uses diff sorts for diff cases
@@ -271,8 +262,10 @@ void PmergeMe::fordJohnsonSortDeque() {
     }
 
 	std::deque<size_t> order = buildJacobInsertionOrderDeque(pendingChain.size());
-    for (size_t i : order)
-        insertElDeque(mainChain, pendingChain[i]);
+    for (size_t i : order) {
+		int pairedMax = getPairedMax(pairs, pendingChain[i]);
+		insertElDeque(mainChain, pendingChain[i], pairedMax);
+	}
     
     if (oddEl != -1)
         insertElDeque(mainChain, oddEl);

@@ -18,5 +18,5 @@ Pairs: [(3,1), (44445,3), (43,8)]
 4. Save the Pending Numbers
 [1, 8, 3]
 
-5. Insert Pending Numbers Using Binary Search
+5. Insert Pending Numbers Using Binary Search but up to the pair Max number
 

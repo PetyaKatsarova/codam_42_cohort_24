@@ -11,8 +11,7 @@ class PmergeMe {
     private:
         std::vector<int>    _arrVec;
         std::deque<int>     _arrDeq;
-        size_t              _insertCounter;
-        size_t              _compareCounter;
+        size_t              __binarySearchComparison;
        
         template<typename Container>
         void printPairs(const Container& pairs) {
@@ -23,7 +22,20 @@ class PmergeMe {
             std::cout << "\n";
         }
 
-        // manual binary search(=lower_bound) in order to count comparrisons on sorted arr, runs in O(log n) comparissons
+        
+        /*
+        helper func: used later for merging pending element into main chain: not loop through all array but only untill the paired Maxima 
+        */
+        template<typename T>
+        int getPairedMax(const T& pairedV, int lowerNum) {
+            for (size_t i = 0; i < pairedV.size(); i++) {
+                if (pairedV[i].second == lowerNum)
+                    return pairedV[i].first;
+            }
+            throw std::logic_error("Paired max not found for given element");
+        }
+
+        // manual binary search(=lower_bound) in order to count comparrisons on sorted arr up to the paired Maxima(from pairs the first el), runs in O(log n) comparissons
         template<typename It, typename T>
         It lowerBoundCount(It begin, It end, T val) {
             It left = begin;
@@ -31,7 +43,7 @@ class PmergeMe {
 
             while (left < right) {
                 It mid = left+(right-left)/2;
-                _compareCounter++;
+                __binarySearchComparison++;
                 if (*mid < val)
                     left = mid + 1;
                 else
@@ -46,7 +58,6 @@ class PmergeMe {
         void                                sortPairsVector(std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractMainChainVector(const std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractPendingElsVector(const std::vector<std::pair<int, int>>& pairs);
-        int                                 getPairedMax(std::vector<std::pair<int, int>> pairedV, int lowerNum);
         std::vector<size_t>                 buildJacobInsertionOrderVector(size_t n);
         void                                insertElVector(std::vector<int>& mainChain, int num, int pairedMax);
         void                                insertElVector(std::vector<int>& mainChain, int num);
@@ -55,6 +66,7 @@ class PmergeMe {
         // DEQUE
         std::deque<size_t>                  buildJacobInsertionOrderDeque(size_t n);
         std::deque<std::pair<int, int>>     makePairsDeque(int& oddEl);
+        void                                insertElDeque(std::deque<int>& mainChainD, int val, int pairedMax);
         void                                insertElDeque(std::deque<int>& mainChainD, int val);
 
     public:
