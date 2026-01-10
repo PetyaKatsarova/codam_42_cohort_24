@@ -24,8 +24,11 @@ bool RPN::validateInput(const std::string& argv) const {
 		char c = argv[i];
 		
 		if (c == ' ') { continue; }
-		if (isdigit(c))
+		if (isdigit(c)) {
 			numCount++;
+			if (argv[i+1] && isdigit(argv[i+1]))
+				return false;
+		}
 		else if (c == '+' || c == '-' || c == '*' || c == '/') {
 			opCount++;
 			if (numCount < opCount + 1)
