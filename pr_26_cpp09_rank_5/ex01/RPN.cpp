@@ -61,7 +61,7 @@ int RPN::calc(int num1, int num2, char sign) const {
 int RPN::calculate(const std::string& input) {
 	//clear stack from prev calculations:
 	while (!_nums.empty())
-		_nums.pop();
+		_nums.pop(); // empty stack from prev input
 		
 	for (size_t i = 0; input[i]; ++i) {
 		char c = input[i];
@@ -70,7 +70,6 @@ int RPN::calculate(const std::string& input) {
 		if (std::isdigit(c)) {
 			_nums.push(c - '0');
 		} else {
-			//std::cout << "sign\n";
 			if (_nums.size() < 2) {
 				throw std::runtime_error("Error: insufficient operands\n");
 			}

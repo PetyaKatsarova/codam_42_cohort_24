@@ -160,6 +160,7 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 Fibonacci: a + b : 1, 1, 2, 3, 5
 Both: Start with small numbers, use the two previous numbers
 Jacobsthal multiplies one by 2
+this func: tells which element to insert next.
 */
 std::vector<size_t> PmergeMe::buildJacobInsertionOrderVector(size_t n) {
 	std::vector<size_t> jacob;
