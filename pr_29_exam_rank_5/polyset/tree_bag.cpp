@@ -1,7 +1,7 @@
 #include "tree_bag.hpp"
 #include <iostream>
 
-tree_bag::tree_bag() : tree(0) {}
+tree_bag::tree_bag() : tree(nullptr) {}
 
 tree_bag::tree_bag(const tree_bag &other)
 {
@@ -9,8 +9,10 @@ tree_bag::tree_bag(const tree_bag &other)
 }
 
 tree_bag &tree_bag::operator=(const tree_bag &other) {
-	this->clear();
-	this->tree = copy_node(other.tree);
+	if (this != &other) {
+		this->clear();
+		this->tree = copy_node(other.tree);
+	}
 	return *this;
 }
 
@@ -20,7 +22,7 @@ tree_bag::~tree_bag() {
 
 tree_bag::node *tree_bag::extract_tree() {
 	node *ret = this->tree;
-	this->tree = 0;
+	this->tree = nullptr;
 	return ret;
 }
 
@@ -69,11 +71,11 @@ void tree_bag::print_node(node *n) {
 
 tree_bag::node *tree_bag::copy_node(node *n) {
 	if (!n)
-		return 0;
+		return nullptr;
 	return new node((node){copy_node(n->l), copy_node(n->r), n->value});
 }
 
 void tree_bag::clear() {
 	this->destroy_tree(this->tree);
-	this->tree = NULL;
+	this->tree = nullptr;
 }

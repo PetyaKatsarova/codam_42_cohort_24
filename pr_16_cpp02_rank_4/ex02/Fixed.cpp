@@ -94,8 +94,7 @@ Fixed Fixed::operator*(const Fixed& other) const {
 }
 
 /*
-num / 0 causes a runtime error (division by zero), which usually results in a crash or undefined behavior.
-returns  a new obj
+num / 0 causes a runtime error (division by zero), which usually results in a crash or undefined behavior. returns  a new obj
 In fixed-point arithmetic, when you divide two numbers that are already scaled by 2^8, you need to compensate:
 Fixed Fixed::operator/(const Fixed& other) const {
 	if (other._raw_bits == 0)
