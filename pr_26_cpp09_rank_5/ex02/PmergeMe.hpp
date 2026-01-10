@@ -42,13 +42,15 @@ class PmergeMe {
 
         void                                validateToken(const std::string& s);
        // VECTOR
-        std::vector<size_t>                 buildJacobInsertionOrderVector(size_t n);
         std::vector<std::pair<int, int>>    makePairsVector(int& oddEl);
         void                                sortPairsVector(std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractMainChainVector(const std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractPendingElsVector(const std::vector<std::pair<int, int>>& pairs);
+        int                                 getPairedMax(std::vector<std::pair<int, int>> pairedV, int lowerNum);
+        std::vector<size_t>                 buildJacobInsertionOrderVector(size_t n);
+        void                                insertElVector(std::vector<int>& mainChain, int num, int pairedMax);
         void                                insertElVector(std::vector<int>& mainChain, int num);
-        void                                insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain);
+        void                                insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain, const std::vector<std::pair<int, int>>& pairs);
 
         // DEQUE
         std::deque<size_t>                  buildJacobInsertionOrderDeque(size_t n);

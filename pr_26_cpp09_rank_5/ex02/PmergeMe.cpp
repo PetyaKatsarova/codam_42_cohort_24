@@ -127,32 +127,40 @@ std::vector<int> PmergeMe::extractPendingElsVector(const std::vector<std::pair<i
 	return result;
 }
 
+/*
+helper func: used later for merging pending element into main chain: not loop through all array but only untill the paired Maxima 
+*/
+int PmergeMe::getPairedMax(std::vector<std::pair<int, int>> pairedV, int lowerNum) {
+	for (size_t i = 0; i < pairedV.size(); i++) {
+		if (pairedV[i].second == lowerNum)
+			return pairedV[i].first;
+	}
+	throw std::logic_error("Paired max not found for given element");
+}
+
 /**
  * step 5:
  * std::lower_bound is a standard algorithm that finds the first position in a sorted range where a given value can be inserted
  *  without violating the ordering, i.e., it returns an iterator to the first element that is not less than the specified value.
- * Insert element using binary search
+ * Insert element using binary search with bounded search up to pairedMax
  */
-void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
-	// auto pos = std::lower_bound(mainChain.begin(), mainChain.end(), num); // auto will be iterator, not int
-	auto pos = lowerBoundCount(mainChain.begin(), mainChain.end(), num);
-	mainChain.insert(pos, num);
+void PmergeMe::insertElVector(std::vector<int>& mainChain, int num, int pairedMax) {
+	auto maxPos = std::find(mainChain.begin(), mainChain.end(), pairedMax);
+	// bounded binary search
+	auto insertPos = lowerBoundCount(mainChain.begin(), maxPos, num);
+	mainChain.insert(insertPos, num);
 	_insertCounter++;
 }
 
 /**
- * step 6: 
+ * Overloaded version for odd element - searches entire main chain
  */
-void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain) {
-	std::vector<size_t> order = buildJacobInsertionOrderVector(pendingChain.size());
-	
-	// std::cout << "Jackobsthal seq:\n";
-	for (size_t i : order) {
-		// std::cout << i << ", ";
-		insertElVector(mainChain, pendingChain[i]);
-	}
-	// std::cout << "\n";
+void PmergeMe::insertElVector(std::vector<int>& mainChain, int num) {
+	auto insertPos = lowerBoundCount(mainChain.begin(), mainChain.end(), num);
+	mainChain.insert(insertPos, num);
+	_insertCounter++;
 }
+
 
 /**
 * Jacobsthal sequence: next = previous(a) + 2 × one-before-previous(b)
@@ -180,28 +188,31 @@ std::vector<size_t> PmergeMe::buildJacobInsertionOrderVector(size_t n) {
 	return order;
 }
 
+void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pendingChain, const std::vector<std::pair<int, int>>& pairs) {
+	std::vector<size_t> order = buildJacobInsertionOrderVector(pendingChain.size());
+	
+	for (size_t i : order) {
+		int pairedMax = getPairedMax(pairs, pendingChain[i]);
+		insertElVector(mainChain, pendingChain[i], pairedMax);
+	}
+}
+
 void PmergeMe::fordJohnsonSortVector() {
 	_insertCounter = 0;
 	_compareCounter = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
-	// std::cout << "Vector:   ";
-	// printPairs(pairs);
 	sortPairsVector(pairs);
-	// std::cout << "Sorted v: ";
-	// printPairs(pairs);
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
-	// printContainer(mainChain);
 	std::vector<int> pendingEls = extractPendingElsVector(pairs); // 4
-	// printContainer(pendingEls);
-	insertPendingVector(mainChain, pendingEls); // 5
+	insertPendingVector(mainChain, pendingEls, pairs); // 5
 
 	if (oddEl != -1)
 		insertElVector(mainChain, oddEl);
 	
 	_arrVec = mainChain;
-	// std::cout << "insertions  : " << _insertCounter << "\n";
-	// std::cout << "comparisons : " << _compareCounter << "\n";
+	std::cout << "insertions  : " << _insertCounter << "\n";
+	std::cout << "comparisons : " << _compareCounter << "\n";
 }
 
 // ** DEQUE **

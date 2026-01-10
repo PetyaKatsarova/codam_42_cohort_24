@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
             bla.setArrD(input);
         } catch (const std::exception& e) {
                 std::cerr << "Error\n";
+                // std::cerr << e.what();
                 return 1;
         }
     } 
