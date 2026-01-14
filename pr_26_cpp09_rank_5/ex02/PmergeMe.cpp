@@ -8,7 +8,7 @@ If you don't need the original containers after construction, moving is better b
 Avoids allocating new memory, only transfers ownership of the internal buffer, O(1) instead of O(n)
 */
 
-PmergeMe::PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD) : _arrVec(std::move(arrV)), _arrDeq(std::move(arrD)), __binarySearchComparison(0) {}
+PmergeMe::PmergeMe(const std::vector<int> arrV, const std::deque<int> arrD) : _arrVec(std::move(arrV)), _arrDeq(std::move(arrD)), __totalComparisons(0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other) : _arrVec(other._arrVec), _arrDeq(other._arrDeq){}
 
@@ -18,7 +18,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
     if (this != &other) {
         _arrVec = other._arrVec;
         _arrDeq = other._arrDeq;
-		__binarySearchComparison = other.__binarySearchComparison;
+		__totalComparisons = other.__totalComparisons;
     }
     return *this;
 }
@@ -91,6 +91,7 @@ std::vector<std::pair<int, int>> PmergeMe::makePairsVector(int& oddEl) {
 			std::vector<std::pair<int, int>> pairs;
 
 	for (size_t i = 0; i < _arrVec.size() - 1; i += 2) {
+		__totalComparisons++; // Count pair comparison
 		if (_arrVec[i] < _arrVec[i+1]) {
 			pairs.push_back({_arrVec[i+1], _arrVec[i]}); 
 		} else {
@@ -103,7 +104,10 @@ std::vector<std::pair<int, int>> PmergeMe::makePairsVector(int& oddEl) {
 
 // step 2: sort pairs by their first(larger) el
 void PmergeMe::sortPairsVector(std::vector<std::pair<int, int>>& pairs) {
-	std::sort(pairs.begin(), pairs.end());
+	std::sort(pairs.begin(), pairs.end(), [this](const auto& a, const auto& b) {
+		__totalComparisons++;
+		return a.first < b.first;
+	});
 }
 
 // step 3: make new vector: only from the all first els from the vector of pairs
@@ -183,7 +187,7 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 }
 
 void PmergeMe::fordJohnsonSortVector() {
-	__binarySearchComparison = 0;
+	__totalComparisons = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
 	sortPairsVector(pairs);
@@ -195,7 +199,7 @@ void PmergeMe::fordJohnsonSortVector() {
 		insertElVector(mainChain, oddEl);
 	
 	_arrVec = mainChain;
-	std::cout << "bounded binary search comparisons : " << __binarySearchComparison << "\n";
+	std::cout << "Total comparisons: " << __totalComparisons << " (n=" << _arrVec.size() << ")\n";
 }
 
 // ** DEQUE **

@@ -11,7 +11,7 @@ class PmergeMe {
     private:
         std::vector<int>    _arrVec;
         std::deque<int>     _arrDeq;
-        size_t              __binarySearchComparison;
+        size_t              __totalComparisons;
        
         template<typename Container>
         void printPairs(const Container& pairs) {
@@ -43,7 +43,7 @@ class PmergeMe {
 
             while (left < right) {
                 It mid = left+(right-left)/2;
-                __binarySearchComparison++;
+                __totalComparisons++;
                 if (*mid < val)
                     left = mid + 1;
                 else
