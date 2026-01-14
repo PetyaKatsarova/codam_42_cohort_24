@@ -1,6 +1,6 @@
 NAME = PmergeMe
-SRC = main.cpp PmergeMe.cpp
-HEADERS = BitcoinExchange.hpp
+SRC = main.cpp PmergeMe.cpp PmergeMeDeque.cpp
+HEADERS = PmergeMe.hpp
 
 OBJ = $(SRC:.cpp=.o)
 CXX = c++

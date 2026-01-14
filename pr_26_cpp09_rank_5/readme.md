@@ -130,10 +130,7 @@ Time to process a range of 3000 elements with std::[..] : 62.14389 us
 Time to process a range of 3000 elements with std::[..] : 69.27212 us
 $> ./PmergeMe "-1" "2"
 Error
-$> # For OSX USER:
-$> ./PmergeMe `jot -r 3000 1 100000 | tr '\n' ' '`
-[...]
-$>
+
 The indication of the time is deliberately strange in this example.
 Of course you have to indicate the time used to perform all your
 operations, both the sorting part and the data management part.

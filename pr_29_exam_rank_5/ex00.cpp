@@ -3,7 +3,7 @@ class Awesome
   public:
     Awesome(void) : _n(0) {}
     Awesome( int n ) : _n( n ) {}
-    Awesome & operator= (Awesome & a) { _n = a._n; return *this; }
+    Awesome & operator= (Awesome & a) { _n = a._n; return *this; } // copy assignment operator.
     bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
     bool operator!=( Awesome const & rhs ) const{ return (this->_n != rhs._n); }
     bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }

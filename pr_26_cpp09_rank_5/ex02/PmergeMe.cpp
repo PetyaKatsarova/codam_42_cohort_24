@@ -1,5 +1,4 @@
 #include "PmergeMe.hpp"
-#include <iostream>
 #include <algorithm>
 #include <sstream> // std::istringstream
 
@@ -102,12 +101,107 @@ std::vector<std::pair<int, int>> PmergeMe::makePairsVector(int& oddEl) {
 	return pairs;
 }
 
-// step 2: sort pairs by their first(larger) el
-void PmergeMe::sortPairsVector(std::vector<std::pair<int, int>>& pairs) {
-	std::sort(pairs.begin(), pairs.end(), [this](const auto& a, const auto& b) {
+// Step 2: make pairrs of each consequtive els and place on first place the bigger num: recursion for optiomal comparisson count
+std::vector<std::pair<int, int>> PmergeMe::recursiveSortOnBigger(std::vector<std::pair<int, int>> pairs) {
+	if (pairs.size() <= 1)
+		return pairs;
+	
+	// Step 1: Make meta-pairs (pairs of pairs), larger first
+	std::pair<int,int> oddPair;
+	std::vector<std::pair<std::pair<int,int>, std::pair<int,int>>> metaPairs;
+	
+	for (size_t i = 0; i < pairs.size() - 1; i += 2) {
 		__totalComparisons++;
-		return a.first < b.first;
-	});
+		if (pairs[i].first < pairs[i+1].first) {
+			metaPairs.push_back({pairs[i+1], pairs[i]});
+		} else {
+			metaPairs.push_back({pairs[i], pairs[i+1]});
+		}
+	}
+	
+	bool hasOdd = (pairs.size() % 2 == 1);
+	if (hasOdd) {
+		oddPair = pairs.back();
+	}
+
+	// Step 2: Recursively sort larger pairs
+	if (metaPairs.size() > 0) {
+		std::vector<std::pair<int,int>> largerPairs;
+		for (auto& mp : metaPairs)
+			largerPairs.push_back(mp.first);
+		
+		largerPairs = recursiveSortOnBigger(largerPairs);
+		
+		// Rebuild metaPairs in sorted order
+		std::vector<std::pair<std::pair<int,int>, std::pair<int,int>>> sortedMeta;
+		for (auto& sorted : largerPairs) {
+			for (auto& mp : metaPairs) {
+				if (mp.first.first == sorted.first && mp.first.second == sorted.second) {
+					sortedMeta.push_back(mp);
+					break;
+				}
+			}
+		}
+		metaPairs = sortedMeta;
+	}
+	
+	// Step 3: Build main chain (larger pairs) and pending (smaller pairs)
+	std::vector<std::pair<int,int>> mainChain;
+	std::vector<std::pair<int,int>> pending;
+	
+	for (auto& mp : metaPairs) {
+		mainChain.push_back(mp.first);
+		pending.push_back(mp.second);
+	}
+	
+	// Step 4: Insert pending pairs using Jacobsthal order
+	if (!pending.empty()) {
+		std::vector<size_t> order = buildJacobInsertionOrderVector(pending.size());
+		
+		for (size_t idx : order) {
+			// Find paired max for bounded binary search
+			std::pair<int,int> pairedMax;
+			for (auto& mp : metaPairs) {
+				if (mp.second.first == pending[idx].first && mp.second.second == pending[idx].second) {
+					pairedMax = mp.first;
+					break;
+				}
+			}
+			
+			// Binary search up to pairedMax
+			auto maxPos = std::find(mainChain.begin(), mainChain.end(), pairedMax);
+			auto left = mainChain.begin();
+			auto right = maxPos;
+			
+			while (left < right) {
+				auto mid = left + (right - left) / 2;
+				__totalComparisons++;
+				if (mid->first < pending[idx].first)
+					left = mid + 1;
+				else
+					right = mid;
+			}
+			mainChain.insert(left, pending[idx]);
+		}
+	}
+	
+	// Step 5: Insert odd pair if exists
+	if (hasOdd) {
+		auto left = mainChain.begin();
+		auto right = mainChain.end();
+		
+		while (left < right) {
+			auto mid = left + (right - left) / 2;
+			__totalComparisons++;
+			if (mid->first < oddPair.first)
+				left = mid + 1;
+			else
+				right = mid;
+		}
+		mainChain.insert(left, oddPair);
+	}
+	
+	return mainChain;
 }
 
 // step 3: make new vector: only from the all first els from the vector of pairs
@@ -190,7 +284,7 @@ void PmergeMe::fordJohnsonSortVector() {
 	__totalComparisons = 0;
 	int oddEl = -1;
 	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
-	sortPairsVector(pairs);
+	recursiveSortOnBigger(pairs);
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
 	std::vector<int> pendingEls = extractPendingElsVector(pairs); // 4
 	insertPendingVector(mainChain, pendingEls, pairs); // 5
@@ -200,81 +294,6 @@ void PmergeMe::fordJohnsonSortVector() {
 	
 	_arrVec = mainChain;
 	std::cout << "Total comparisons: " << __totalComparisons << " (n=" << _arrVec.size() << ")\n";
-}
-
-// ** DEQUE **
-
-std::deque<std::pair<int, int>> PmergeMe::makePairsDeque(int& oddEl) {
-    std::deque<std::pair<int, int>> pairs;
-
-    for (size_t i = 0; i < _arrDeq.size() - 1; i += 2) {
-        if (_arrDeq[i] < _arrDeq[i + 1])
-            pairs.push_back({_arrDeq[i+1], _arrDeq[i]});
-        else
-            pairs.push_back({_arrDeq[i], _arrDeq[i+1]});
-    }
-	oddEl = (_arrDeq.size() % 2 == 1 ? _arrDeq.back() : -1);
-	return pairs;
-}
-
-std::deque<size_t> PmergeMe::buildJacobInsertionOrderDeque(size_t n) {
-	std::deque<size_t> jacob;
-	jacob.push_back(1);
-	jacob.push_back(3);
-
-	while (jacob.back() < n)
-		jacob.push_back(jacob[jacob.size()-1] + 2 * jacob[jacob.size() - 2]);
-
-	std::deque<size_t> order;
-	size_t prev = 0;
-	for (size_t j : jacob) {
-		for (size_t i = std::min(j, n); i > prev; --i)
-			order.push_back(i - 1);
-		prev = j;
-	}
-	return order;
-}
-
-void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val, int pairedMax)
-{
-	auto maxPos = std::find(mainChainD.begin(), mainChainD.end(), pairedMax);
-	auto insertPos = std::lower_bound(mainChainD.begin(), maxPos, val);
-    mainChainD.insert(insertPos, val);
-}
-
-/**
- * Overloaded version for odd element - searches entire deque main chain
- */
-void PmergeMe::insertElDeque(std::deque<int>& mainChainD, int val) {
-	auto insertPos = std::lower_bound(mainChainD.begin(), mainChainD.end(), val);
-	mainChainD.insert(insertPos, val);
-}
-
-// sort() O(n log n) guranteed, uses diff sorts for diff cases
-void PmergeMe::fordJohnsonSortDeque() {
-    int								oddEl = -1;
-    std::deque<std::pair<int, int>> pairs = makePairsDeque(oddEl);
-    std::sort(pairs.begin(), pairs.end(), [](const auto& a, const auto& b) {
-		return a.first < b.first;
-	});
-
-    std::deque<int> mainChain;
-    std::deque<int> pendingChain;
-    for (auto& p : pairs) {
-        mainChain.push_back(p.first);
-        pendingChain.push_back(p.second);
-    }
-
-	std::deque<size_t> order = buildJacobInsertionOrderDeque(pendingChain.size());
-    for (size_t i : order) {
-		int pairedMax = getPairedMax(pairs, pendingChain[i]);
-		insertElDeque(mainChain, pendingChain[i], pairedMax);
-	}
-    
-    if (oddEl != -1)
-        insertElDeque(mainChain, oddEl);
-    
-    _arrDeq = mainChain;
 }
 
 /* returns elapsed tim im microseconds(µs)

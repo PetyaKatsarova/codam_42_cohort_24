@@ -55,7 +55,7 @@ class PmergeMe {
         void                                validateToken(const std::string& s);
        // VECTOR
         std::vector<std::pair<int, int>>    makePairsVector(int& oddEl);
-        void                                sortPairsVector(std::vector<std::pair<int, int>>& pairs);
+        std::vector<std::pair<int, int>>    recursiveSortOnBigger(std::vector<std::pair<int, int>> pairs);
         std::vector<int>                    extractMainChainVector(const std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractPendingElsVector(const std::vector<std::pair<int, int>>& pairs);
         std::vector<size_t>                 buildJacobInsertionOrderVector(size_t n);

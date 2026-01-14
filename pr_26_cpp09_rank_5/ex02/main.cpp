@@ -34,14 +34,14 @@ int main(int argc, char* argv[]) {
     std::cout << "After:  ";
     bla.printContainer(bla.getArrV());
 
-    std::cout << "Time to process a range of " << bla.getArrV().size()
-              << " elements with std::vector : " << PmergeMe::elapsedUs(start, end) << " us\n";
+    //std::cout << "Time to process a range of " << bla.getArrV().size()
+    //          << " elements with std::vector : " << PmergeMe::elapsedUs(start, end) << " us\n";
 
-    clock_gettime(CLOCK_MONOTONIC, &start);
-    bla.fordJohnsonSortDeque();
-    clock_gettime(CLOCK_MONOTONIC, &end);
+    //clock_gettime(CLOCK_MONOTONIC, &start);
+    //bla.fordJohnsonSortDeque();
+    //clock_gettime(CLOCK_MONOTONIC, &end);
 
-    std::cout << "Time to process a range of " << bla.getArrD().size()
-              << " elements with std::deque : " << PmergeMe::elapsedUs(start, end) << " us\n";
+    //std::cout << "Time to process a range of " << bla.getArrD().size()
+    //          << " elements with std::deque : " << PmergeMe::elapsedUs(start, end) << " us\n";
     return 0;
 }
