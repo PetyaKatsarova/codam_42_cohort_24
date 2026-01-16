@@ -3,7 +3,7 @@
 #include <sstream> // std::istringstream
 
 /**
-If you don't need the original containers after construction, moving is better because:
+use move if dont need original container
 Avoids allocating new memory, only transfers ownership of the internal buffer, O(1) instead of O(n)
 */
 
@@ -90,27 +90,21 @@ std::vector<std::pair<int, int>> PmergeMe::makePairsVector(int& oddEl) {
 			std::vector<std::pair<int, int>> pairs;
 
 	for (size_t i = 0; i < _arrVec.size() - 1; i += 2) {
-		__totalComparisons++; // Count pair comparison
+		__totalComparisons++;
 		if (_arrVec[i] < _arrVec[i+1]) {
 			pairs.push_back({_arrVec[i+1], _arrVec[i]}); 
 		} else {
 			pairs.push_back({_arrVec[i], _arrVec[i+1]});
 		}
 	}
-	oddEl = (_arrVec.size() % 2 == 1 ? _arrVec.back() : -1); // save odd el if _arrV has odd len
+	oddEl = (_arrVec.size() % 2 == 1 ? _arrVec.back() : -1);
 	return pairs;
 }
 
-// Step 2: make pairrs of each consequtive els and place on first place the bigger num: recursion for optiomal comparisson count
-std::vector<std::pair<int, int>> PmergeMe::recursiveSortOnBigger(std::vector<std::pair<int, int>> pairs) {
-	if (pairs.size() <= 1)
-		return pairs;
-	
-	// Step 1: Make meta-pairs (pairs of pairs), larger first
-	std::pair<int,int> oddPair;
+// recursion helpers:
+std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> PmergeMe::makeMetaPairs(std::vector<std::pair<int,int>>& pairs) {
 	std::vector<std::pair<std::pair<int,int>, std::pair<int,int>>> metaPairs;
-	
-	for (size_t i = 0; i < pairs.size() - 1; i += 2) {
+		for (size_t i = 0; i < pairs.size() - 1; i += 2) {
 		__totalComparisons++;
 		if (pairs[i].first < pairs[i+1].first) {
 			metaPairs.push_back({pairs[i+1], pairs[i]});
@@ -118,17 +112,28 @@ std::vector<std::pair<int, int>> PmergeMe::recursiveSortOnBigger(std::vector<std
 			metaPairs.push_back({pairs[i], pairs[i+1]});
 		}
 	}
+	return metaPairs;
+}
+
+/** Step 2:take the vector of pairs with bigger number first.
+* 	Returns sorted on first num the vector of pairs
+*/
+std::vector<std::pair<int, int>> PmergeMe::recursiveSortOnBigger(std::vector<std::pair<int, int>> pairs) {
+	if (pairs.size() <= 1)
+		return pairs;
 	
+	std::pair<int,int> oddPair;
 	bool hasOdd = (pairs.size() % 2 == 1);
-	if (hasOdd) {
+	if (hasOdd)
 		oddPair = pairs.back();
-	}
+
+	std::vector<std::pair<std::pair<int,int>, std::pair<int,int>>> metaPairs = makeMetaPairs(pairs);
 
 	// Step 2: Recursively sort larger pairs
 	if (metaPairs.size() > 0) {
 		std::vector<std::pair<int,int>> largerPairs;
-		for (auto& mp : metaPairs)
-			largerPairs.push_back(mp.first);
+		for (auto& meta : metaPairs)
+			largerPairs.push_back(meta.first);
 		
 		largerPairs = recursiveSortOnBigger(largerPairs);
 		
@@ -283,8 +288,8 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 void PmergeMe::fordJohnsonSortVector() {
 	__totalComparisons = 0;
 	int oddEl = -1;
-	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl); // 1
-	recursiveSortOnBigger(pairs);
+	std::vector<std::pair<int, int>> pairs = PmergeMe::makePairsVector(oddEl);
+	recursiveSortOnBigger(pairs); // sorts pairs by first num of each pair
 	std::vector<int> mainChain = extractMainChainVector(pairs); // 3 
 	std::vector<int> pendingEls = extractPendingElsVector(pairs); // 4
 	insertPendingVector(mainChain, pendingEls, pairs); // 5

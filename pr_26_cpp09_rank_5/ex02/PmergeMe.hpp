@@ -22,7 +22,6 @@ class PmergeMe {
             std::cout << "\n";
         }
 
-        
         /*
         helper func: used later for merging pending element into main chain: not loop through all array but only untill the paired Maxima 
         */
@@ -55,6 +54,8 @@ class PmergeMe {
         void                                validateToken(const std::string& s);
        // VECTOR
         std::vector<std::pair<int, int>>    makePairsVector(int& oddEl);
+		// helper for recursion sort on pairs
+		std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> makeMetaPairs(std::vector<std::pair<int,int>>& pairs);
         std::vector<std::pair<int, int>>    recursiveSortOnBigger(std::vector<std::pair<int, int>> pairs);
         std::vector<int>                    extractMainChainVector(const std::vector<std::pair<int, int>>& pairs);
         std::vector<int>                    extractPendingElsVector(const std::vector<std::pair<int, int>>& pairs);
