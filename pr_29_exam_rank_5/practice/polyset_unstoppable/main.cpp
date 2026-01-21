@@ -4,6 +4,8 @@
 #include <iostream>
 #include "set.hpp"
 
+
+//c++ main.cpp searchable_array_bag.cpp searchable_tree_bag.cpp tree_bag.cpp array_bag.cpp
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -17,32 +19,32 @@ int main(int ac, char **av)
 	}
 	t->print();
 	a->print();
-	for (int i = 1; i < ac; i++)
-	{
-		std::cout << t->has(atoi(av[i])) << std::endl;
-		std::cout << a->has(atoi(av[i])) << std::endl;
-		std::cout << t->has(atoi(av[i]) - 1) << std::endl;
-		std::cout << a->has(atoi(av[i]) - 1) << std::endl;
-	}
-	t->clear();
-	a->clear();
-	const searchable_array_bag tmp(static_cast<searchable_array_bag &>(*a));
-	tmp.print();
-	tmp.has(1);
-	set sa(*a);
-	set st(*a);
-	for (int i = 1; i < ac; i++)
-	{
-		st.insert(atoi(av[i]));
-		sa.insert(atoi(av[i]));
-	}
-	sa.has(atoi(av[1]));
-	sa.print();
-	sa.get_bag().print();
-	st.print();
-	sa.clear();
- 	int arr[] = {1, 2, 3, 4,};
-	sa.insert(arr, 4);
+	//for (int i = 1; i < ac; i++)
+	//{
+	//	std::cout << t->has(atoi(av[i])) << std::endl;
+	//	std::cout << a->has(atoi(av[i])) << std::endl;
+	//	std::cout << t->has(atoi(av[i]) - 1) << std::endl;
+	//	std::cout << a->has(atoi(av[i]) - 1) << std::endl;
+	//}
+	//t->clear();
+	//a->clear();
+	//const searchable_array_bag tmp(static_cast<searchable_array_bag &>(*a));
+	//tmp.print();
+	//tmp.has(1);
+	//set sa(*a);
+	//set st(*a);
+	//for (int i = 1; i < ac; i++)
+	//{
+	//	st.insert(atoi(av[i]));
+	//	sa.insert(atoi(av[i]));
+	//}
+	//sa.has(atoi(av[1]));
+	//sa.print();
+	//sa.get_bag().print();
+	//st.print();
+	//sa.clear();
+ 	//int arr[] = {1, 2, 3, 4,};
+	//sa.insert(arr, 4);
 }
 
 // Here's how wikipedia define sets and bags:
@@ -76,7 +78,7 @@ int main(int ac, char **av)
 
 // #### First part ####
 
-// Since a bag without a searching function is not very useful, implement two
+//implement two
 // classes, searchable_array_bag and searchable_tree_bag, that will inherit from
 // array_bag and tree_bag, respectively, and implement the searchable_bag abstract
 // class.

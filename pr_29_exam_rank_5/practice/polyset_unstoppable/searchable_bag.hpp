@@ -1,6 +1,3 @@
-//
-// Created by citron on 01/03/23.
-//
 
 #ifndef EXAM_ASSIGNMENTS_SORTABLE_HPP
 #define EXAM_ASSIGNMENTS_SORTABLE_HPP
@@ -12,4 +9,4 @@ public:
 };
 
 
-#endif //EXAM_ASSIGNMENTS_SORTABLE_HPP
+#endif

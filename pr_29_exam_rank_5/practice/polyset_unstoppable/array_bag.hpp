@@ -18,4 +18,4 @@ public:
 };
 
 
-#endif //EXAM_ASSIGNMENTS_ARRAY_BAG_HPP
+#endif
