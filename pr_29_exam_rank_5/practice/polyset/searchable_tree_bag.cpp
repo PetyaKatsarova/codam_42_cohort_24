@@ -12,9 +12,9 @@ searchable_tree_bag &searchable_tree_bag::operator=(const searchable_tree_bag &o
 searchable_tree_bag::~searchable_tree_bag() {}
 
 bool searchable_tree_bag::has(int val) const {
-	node *n = this->tree;
+	node *n = tree;
 	while (n) {
-		if (val == n->value)
+		if (n->value == val)
 			return true;
 		else if (val < n->value)
 			n = n->l;
@@ -23,3 +23,4 @@ bool searchable_tree_bag::has(int val) const {
 	}
 	return false;
 }
+

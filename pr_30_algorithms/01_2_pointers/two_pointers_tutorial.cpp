@@ -34,6 +34,16 @@ TWO MAIN PATTERNS:
 
 using namespace std;
 
+/* bool std::isalnum(char); tolower() from <cctype> or:  <string> or <algorithm> which internally include <cctype>
+Non-zero (true) if the character is:
+A letter: a-z or A-Z
+A digit: 0-9
+Zero (false) for anything else:
+Spaces:  
+Punctuation: ., ,, !, ?, ;, :
+Special characters: @, #, $, %, &, etc.
+*/
+
 /*
 ================================================================================
 PATTERN 1: OPPOSITE DIRECTION (LEFT & RIGHT POINTERS)
@@ -88,8 +98,8 @@ bool isPalindrome(string s) {
     
     while (left < right) {
         // Skip non-alphanumeric characters
-        while (left < right && !isalnum(s[left])) left++;
-        while (left < right && !isalnum(s[right])) right--;
+        //while (left < right && !isalnum(s[left])) left++;
+        //while (left < right && !isalnum(s[right])) right--;
         
         if (tolower(s[left]) != tolower(s[right])) {
             return false;
@@ -219,24 +229,24 @@ int lengthOfLongestSubstring(string s) {
 // EXAMPLE 9: Minimum Size Subarray Sum
 // Time Complexity: O(n)
 // Space Complexity: O(1)
-int minSubArrayLen(int target, vector<int>& nums) {
-    int left = 0;
-    int sum = 0;
-    int minLen = INT_MAX;
+//int minSubArrayLen(int target, vector<int>& nums) {
+//    int left = 0;
+//    int sum = 0;
+//    int minLen = INT_MAX;
     
-    for (int right = 0; right < nums.size(); right++) {
-        sum += nums[right];
+//    for (int right = 0; right < nums.size(); right++) {
+//        sum += nums[right];
         
-        // Shrink window while sum >= target
-        while (sum >= target) {
-            minLen = min(minLen, right - left + 1);
-            sum -= nums[left];
-            left++;
-        }
-    }
+//        // Shrink window while sum >= target
+//        while (sum >= target) {
+//            minLen = min(minLen, right - left + 1);
+//            sum -= nums[left];
+//            left++;
+//        }
+//    }
     
-    return minLen == INT_MAX ? 0 : minLen;
-}
+//    return minLen == INT_MAX ? 0 : minLen;
+//}
 
 /*
 ================================================================================
@@ -361,7 +371,9 @@ void testTwoPointers() {
 }
 
 int main() {
-    testTwoPointers();
+    //testTwoPointers();
+
+	std::cout << "isPalindrome('blalb') = " << isPalindrome(".2blalb2.") << std::endl;
     return 0;
 }
 

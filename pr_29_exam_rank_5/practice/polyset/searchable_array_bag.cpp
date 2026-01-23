@@ -12,9 +12,10 @@ searchable_array_bag &searchable_array_bag::operator=(const searchable_array_bag
 searchable_array_bag::~searchable_array_bag() {}
 
 bool searchable_array_bag::has(int val) const {
-	for (int i = 0; i < this->size; i++) {
-		if (this->data[i] == val)
+	for (int i = 0; i < size; ++i) {
+		if (data[i] == val)
 			return true;
 	}
 	return false;
 }
+
