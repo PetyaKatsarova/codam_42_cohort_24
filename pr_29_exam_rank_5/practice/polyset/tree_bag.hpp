@@ -11,6 +11,7 @@ protected:
 		int value;
 	};
 	node *tree;
+	
 public:
 	tree_bag();
 	tree_bag(const tree_bag &);
