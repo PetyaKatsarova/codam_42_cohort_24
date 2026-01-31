@@ -16,18 +16,19 @@ std::ostream & operator<<( std::ostream & o, Awesome const & rhs )
 }
 
 template< typename T >
-void print( T& x )
+void print(const T& x )
 {
   std::cout << x << std::endl;
   return;
 }
 
-template<typename T, typename F>
-void iter(T* arr, int len, F func) {
-	for (int i = 0; i < len; i++) {
-		func(arr[i]);
+template < typename T >
+void iter(T* arr, unsigned int len, void (*f)(const T&)) {
+	for (unsigned int i = 0; i < len; i++) {
+		f(arr[i]);
 	}
 }
+
 
 int main() {
   int tab[] = { 0, 1, 2, 3, 4 };

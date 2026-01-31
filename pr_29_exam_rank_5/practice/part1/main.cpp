@@ -1,7 +1,7 @@
 #include <iostream>
-#include <Array.hpp>
+#include "Array.hpp"
 
-#define MAX_VAL 750
+#define MAX_VAL 7
 int main(int, char**)
 {
     Array<int> numbers(MAX_VAL);
@@ -33,7 +33,7 @@ int main(int, char**)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "index is negative num, naughty, naughty... " << e.what() << '\n';
     }
     try
     {
@@ -41,13 +41,15 @@ int main(int, char**)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "out fo bounds index; " << e.what() << '\n';
     }
 
     for (int i = 0; i < MAX_VAL; i++)
     {
         numbers[i] = rand();
+		std::cout << numbers[i] << " ";
     }
-    delete [] mirror;//
+	std::cout << "\n";
+    delete [] mirror;
     return 0;
 }

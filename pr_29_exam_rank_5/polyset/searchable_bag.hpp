@@ -1,9 +1,6 @@
-//
-// Created by citron on 01/03/23.
-//
 
-#ifndef EXAM_ASSIGNMENTS_SORTABLE_HPP
-#define EXAM_ASSIGNMENTS_SORTABLE_HPP
+#ifndef SORTABLE_HPP
+#define SORTABLE_HPP
 #include "bag.hpp"
 
 class searchable_bag : virtual public bag {
@@ -12,4 +9,4 @@ public:
 };
 
 
-#endif //EXAM_ASSIGNMENTS_SORTABLE_HPP
+#endif //SORTABLE_HPP

@@ -1,5 +1,5 @@
-#ifndef EXAM_ASSIGNMENTS_BAG_HPP
-#define EXAM_ASSIGNMENTS_BAG_HPP
+#ifndef BAG_HPP
+#define BAG_HPP
 
 class bag
 {

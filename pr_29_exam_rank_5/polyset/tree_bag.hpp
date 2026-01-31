@@ -1,9 +1,6 @@
-//
-// Created by citron on 01/03/23.
-//
 
-#ifndef EXAM_ASSIGNMENTS_TREE_BAG_HPP
-#define EXAM_ASSIGNMENTS_TREE_BAG_HPP
+#ifndef TREE_BAG_HPP
+#define TREE_BAG_HPP
 #include "bag.hpp"
 
 
@@ -33,4 +30,4 @@ private:
 };
 
 
-#endif //EXAM_ASSIGNMENTS_TREE_BAG_HPP
+#endif //TREE_BAG_HPP

@@ -1,6 +1,6 @@
 
-#ifndef BAG_HPP
-#define BAG_HPP
+#ifndef TREE_BAG_HPP
+#define TREE_BAG_HPP
 #include "bag.hpp"
 
 
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif
+#endif //TREE_BAG_HPP

@@ -1,6 +1,6 @@
 
-#ifndef EXAM_ASSIGNMENTS_SORTABLE_HPP
-#define EXAM_ASSIGNMENTS_SORTABLE_HPP
+#ifndef SORTABLE_HPP
+#define SORTABLE_HPP
 #include "bag.hpp"
 
 class searchable_bag : virtual public bag {
