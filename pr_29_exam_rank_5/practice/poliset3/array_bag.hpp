@@ -19,4 +19,4 @@ public:
 };
 
 
-#endif
+#endif //ARRAY_BAG_HPP

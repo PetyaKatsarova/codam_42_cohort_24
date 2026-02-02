@@ -17,4 +17,19 @@ delete a;
  Then frees the object itself
 
  * std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as Red–black trees.
+ -----------------------------------------------------------------------------------
+ Compiler generates: default constructor, copy constructor, copy assignment operator, and destructor
+These defaults will call the parent class constructors/destructors in order
+With multiple inheritance from tree_bag and searchable_bag, if both have constructors that need initialization, the defaults might not do what you need
+
+Diamond problem: If tree_bag and searchable_bag both inherit from a common base (like bag), you may get duplicate base class instances unless using virtual inheritance
+
+Rule of Zero: If you don't manage resources directly, don't declare any of them - let compiler generate all:
+
+class searchable_tree_bag : public tree_bag, public searchable_bag {
+public:
+    bool has(int) const;
+};
+
+Rule of Five: If you need custom behavior for any, declare all five:
  

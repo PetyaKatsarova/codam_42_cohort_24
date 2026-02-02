@@ -2,9 +2,10 @@
 #include "searchable_array_bag.hpp"
 #include <cstdlib>
 #include <iostream>
-//#include "set.hpp"
+#include "set.hpp"
 
-//c++ main.cpp array_bag.cpp searchable_array_bag.cpp searchable_tree_bag.cpp tree_bag.cpp
+
+// c++ tree_bag.cpp array_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp set.cpp main.cpp
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -18,32 +19,34 @@ int main(int ac, char **av)
 	}
 	t->print();
 	a->print();
-	for (int i = 1; i < ac; i++)
-	{
-		std::cout << t->has(atoi(av[i])) << std::endl;
-		std::cout << a->has(atoi(av[i])) << std::endl;
-		std::cout << t->has(atoi(av[i]) - 1) << std::endl;
-		std::cout << a->has(atoi(av[i]) - 1) << std::endl;
-	}
+	//for (int i = 1; i < ac; i++)
+	//{
+	//	std::cout << t->has(atoi(av[i])) << std::endl;
+	//	std::cout << a->has(atoi(av[i])) << std::endl;
+	//	std::cout << t->has(atoi(av[i]) - 1) << std::endl;
+	//	std::cout << a->has(atoi(av[i]) - 1) << std::endl;
+	//}
 	t->clear();
 	a->clear();
 	const searchable_array_bag tmp(dynamic_cast<searchable_array_bag &>(*a));
 	tmp.print();
 	tmp.has(1);
-	//set sa(*a);
-	//set st(*a);
-	//for (int i = 1; i < ac; i++)
-	//{
-	//	st.insert(atoi(av[i]));
-	//	sa.insert(atoi(av[i]));
-	//}
-	//sa.has(atoi(av[1]));
-	//sa.print();
-	//sa.get_bag().print();
-	//st.print();
-	//sa.clear();
- 	//int arr[] = {1, 2, 3, 4,};
-	//sa.insert(arr, 4);
+	set sa(*a);
+	set st(*a);
+	for (int i = 1; i < ac; i++)
+	{
+		st.insert(atoi(av[i]));
+		sa.insert(atoi(av[i]));
+	}
+	sa.has(atoi(av[1]));
+	sa.print();
+	sa.get_bag().print();
+	st.print();
+	sa.clear();
+ 	int arr[] = {1, 2, 3, 4,};
+	sa.insert(arr, 4);
+	delete a;
+	delete t;
 }
 
 // Here's how wikipedia define sets and bags:
