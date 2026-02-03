@@ -17,3 +17,7 @@ Remove Duplicates, Move Zeroes
 Longest Substring Without Repeating
 Container With Most Water, Sort Colors
 And more with full implementations
+---------------------------------
+in leetcode done:
+1. sort colors
+2. merge 2 sorted arrays

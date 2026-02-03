@@ -5,7 +5,7 @@
 #include "set.hpp"
 
 
-// c++ tree_bag.cpp array_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp set.cpp main.cpp
+// c++ tree_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp array_bag.cpp main.cpp
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -19,13 +19,13 @@ int main(int ac, char **av)
 	}
 	t->print();
 	a->print();
-	//for (int i = 1; i < ac; i++)
-	//{
-	//	std::cout << t->has(atoi(av[i])) << std::endl;
-	//	std::cout << a->has(atoi(av[i])) << std::endl;
-	//	std::cout << t->has(atoi(av[i]) - 1) << std::endl;
-	//	std::cout << a->has(atoi(av[i]) - 1) << std::endl;
-	//}
+	for (int i = 1; i < ac; i++)
+	{
+		std::cout << t->has(atoi(av[i])) << std::endl;
+		std::cout << a->has(atoi(av[i])) << std::endl;
+		std::cout << t->has(atoi(av[i]) - 1) << std::endl;
+		std::cout << a->has(atoi(av[i]) - 1) << std::endl;
+	}
 	t->clear();
 	a->clear();
 	const searchable_array_bag tmp(dynamic_cast<searchable_array_bag &>(*a));

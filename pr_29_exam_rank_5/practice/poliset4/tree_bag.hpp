@@ -9,7 +9,7 @@ protected:
 	struct node {
 		node *l;
 		node *r;
-		int value;
+		int  value;
 	};
 	node *tree;
 public:
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //TREE_BAG_HPP
+#endif

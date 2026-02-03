@@ -54,7 +54,7 @@ PATTERN 1: OPPOSITE DIRECTION (LEFT & RIGHT POINTERS)
 // Problem: Find two numbers that add up to target
 // Time Complexity: O(n) - single pass through array
 // Space Complexity: O(1) - only two pointers used
-vector<int> twoSum(vector<int>& nums, int target) {
+vector<int> twoSumInsortedArr(vector<int>& nums, int target) {
     int left = 0;
     int right = nums.size() - 1;
     
@@ -342,7 +342,7 @@ void testTwoPointers() {
     
     // Test 1: Two Sum
     vector<int> arr1 = {1, 2, 3, 4, 5, 6};
-    vector<int> result = twoSum(arr1, 9);
+    vector<int> result = twoSumInsortedArr(arr1, 9);
     cout << "Two Sum (target=9): [" << result[0] << ", " << result[1] << "]\n";
     
     // Test 2: Reverse String
