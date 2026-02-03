@@ -23,18 +23,19 @@ void print( T& x )
 }
 
 template<typename T>
-void iter(T* arr, int len, void (*f)(const T&)) {
+void iter(T* arr, const int len, void (*f)(T const&)) {
 	for (int i = 0; i < len; i++) {
 		f(arr[i]);
 	}
 }
 
 template<typename T>
-void iter(T* arr, int len, void (*f)(T&)) {
+void iter(T* arr, const int len, void (*f)(T&)) {
 	for (int i = 0; i < len; i++) {
 		f(arr[i]);
 	}
 }
+
 
 int main() {
   int tab[] = { 0, 1, 2, 3, 4 };

@@ -17,17 +17,18 @@ class Awesome
     int _n;
 };
 std::ostream & operator<<(std::ostream & o, const Awesome &a) { o << a.get_n(); return o; }
+
 void swap(Awesome& a, Awesome& b) {
 	Awesome temp = a;
 	a = b;
 	b = temp;
 }
 
-Awesome& max(Awesome& a, Awesome& b) {
+Awesome& max(Awesome&a, Awesome& b) {
 	return (a > b ? a : b);
 }
 
-Awesome& min(Awesome& a, Awesome& b) {
+Awesome& min(Awesome&a, Awesome& b) {
 	return (a < b ? a : b);
 }
 

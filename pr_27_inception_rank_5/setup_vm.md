@@ -1,3 +1,5 @@
+https://www.notion.so/Inception-2507bc29ae7180108447dbde19ddf6be
+
 1. I use Oracle VirtualBox
 (sudo apt update
 sudo apt install virtualbox)
@@ -14,7 +16,7 @@ Example: debian-12.5.0-amd64-netinst.iso
 .VDI File (Virtual Disk Image)
 What it is: A virtual hard drive
 Purpose: The actual installed operating system lives here
-Like: Your computer's hard drive/SSD
+Like: Your computer's hard drive/SSDhttps://www.notion.so/Inception-2507bc29ae7180108447dbde19ddf6be
 Use case: This IS your VM's storage (OS + your files)
 Can modify: Reads/writes data, saves your changes
 Example: Debian_Inception.vdi
