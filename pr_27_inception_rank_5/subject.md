@@ -2,10 +2,7 @@ solo abt 210 hrs
 
 Inception
 Summary: This document is a System Administration related exercise.
-
-Introduction
-This project aims to broaden your knowledge of system administration through the use
-of Docker technology. You will virtualize several Docker images by creating them in your
+You will virtualize several Docker images by creating them in your
 new personal virtual machine.
 
 General guidelines
@@ -15,9 +12,7 @@ folder.
 • A Makefile is also required and must be located at the root of your directory. It
 must set up your entire application (i.e., it has to build the Docker images using
 docker-compose.yml).
-• This subject requires putting into practice concepts that, depending on your background, you may not have learned yet. Therefore, we advise you to read extensive
-documentation related to Docker usage, as well as any other resources you find
-helpful to complete this assignment.
+
 ============================================================
 This project involves setting up a small infrastructure composed of different services under specific rules. The whole project has to be done in a virtual machine. You must use
 Docker Compose.
@@ -151,8 +146,3 @@ is excluded). For example, a showcase site or a site for presenting your resume.
 will have to justify your choice.
 To complete the bonus part, you have the possibility to set up extra
 services. In this case, you may open more ports to suit your needs.
-The bonus part will only be assessed if the mandatory part is
-completed perfectly. Perfect means the mandatory part has been
-fully completed and functions without any malfunctions. If you have
-not passed ALL the mandatory requirements, your bonus part will not
-be evaluated at all.
