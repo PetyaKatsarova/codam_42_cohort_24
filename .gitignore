@@ -5,6 +5,9 @@
 
 ## Other
 .DS_STORE
+secrets/
+.env
+data/
 
 ## Template from https://github.com/github/gitignore
 # Prerequisites

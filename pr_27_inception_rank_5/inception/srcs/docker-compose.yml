@@ -1,59 +1,89 @@
-version: "3.8"
+version: "3.3"
 
 services:
-	mariadb:
-		image: mariadb
-		build: ./requirements/mariadb
-		env_file:
-			- .env
-		volumes:
-			- db:/var/lib/mysql
-		networks:
-			- inception
-		restart: unless-stopped
+  mariadb:
+    image: mariadb
+    build: ./requirements/mariadb
+    env_file:
+      - .env
+    environment:
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - inception
+    secrets:
+      - db_password
+      - db_root_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
-	wordpress:
-		image: wordpress
-		build: ./requirements/wordpress
-		env_file:
-			- .env
-		depends_on:
-			- mariadb
-		volumes:
-			- wp:/var/www/html
-		networks:
-			- inception
-		restart: unless-stopped
+  wordpress:
+    image: wordpress
+    build: ./requirements/wordpress
+    env_file:
+      - .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - wp:/var/www/html
+    networks:
+      - inception
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9000"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 40s
+    restart: unless-stopped
 
-	nginx:
-		image: nginx
-		build: ./requirements/nginx
-		env_file:
-			- .env
-		depends_on:
-			- wordpress
-		ports:
-			- "443:443"
-		volumes:
-			- wp:/var/www/html
-		networks:
-			- inception
-		restart: unless-stopped
+  nginx:
+    image: nginx
+    build: ./requirements/nginx
+    env_file:
+      - .env
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    ports:
+      - "443:443"
+    volumes:
+      - wp:/var/www/html
+    networks:
+      - inception
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "https://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
-	db:
-		driver: local
-		driver_opts:
-			type: none
-			o: bind
-			device: /home/${USER}/data/mariadb
-	wp:
-		driver: local
-		driver_opts:
-			type: none
-			o: bind
-			device: /home/${USER}/data/wordpress
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/mariadb
+  wp:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/wordpress
 
 networks:
-	inception:
-		driver: bridge
+  inception:
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
