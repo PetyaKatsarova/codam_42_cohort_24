@@ -27,8 +27,10 @@ _check_docker:
 	@docker ps > /dev/null 2>&1 || (echo "Docker not accessible. Run: newgrp docker" && exit 1)
 
 up: _check_docker
-	@printf "$(GREEN)Starting Inception containers...$(END)\n"
-	$(COMPOSE) up -d --build
+	@printf "$(GREEN)Building images (no cache)...$(END)\n"
+	$(COMPOSE) build --no-cache
+	@printf "$(GREEN)Starting containers...$(END)\n"
+	$(COMPOSE) up -d
 	@printf "$(GREEN)✓ Containers started$(END)\n"
 
 down:
