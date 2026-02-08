@@ -152,3 +152,43 @@ The www-data user doesn't exist in your Alpine container! That's why the entrypo
 Done! Added www-data user creation to the Dockerfile. Now try:
 
 The WordPress container should start successfully now that the www-data user exists.
+==================================
+test: ["CMD", "nc", "-z", "localhost", "9000"]
+nc = netcat(network utility)
+-z = zero-I/O mode (just check if port is open)
+-z = zero-I/O mode (scan for listening daemons without sending data)
+localhost = target host
+9000 = port number (PHP-FPM default port)
+
+Checks if PHP-FPM is listening on port 9000 inside the WordPress container.
+
+!!NB!!
+Service dependency: Your nginx service depends on wordpress with condition: service_healthy (line 50-51)
+Prevents premature connections: Without this, nginx might start before PHP-FPM is ready, causing 502 Bad Gateway errors
+Orchestration: Docker Compose waits for this healthcheck to succeed before starting dependent services
+
+!!NB!!
+MariaDB starts → runs healthcheck every 10s
+WordPress waits (line 32-33) until MariaDB is healthy (database accepting connections)
+WordPress starts → runs healthcheck every 5s
+Nginx waits (line 50-51) until WordPress is healthy (PHP-FPM ready)
+Nginx starts → serves requests
+
+depends_on = "Don't start me until X is ready"
+healthcheck = "Here's how to tell if I'm actually ready"
+Together = Proper service orchestration with readiness guarantees
+
+!!NB!!
+_check_docker:
+    @docker ps > /dev/null 2>&1 || (echo "Docker not accessible. Run: newgrp docker" && exit 1)
+1: @docker ps > /dev/null 2>&1
+@ = Don't print the command itself (silent)
+docker ps = List running containers (requires Docker daemon access)
+> /dev/null = Redirect stdout to trash (discard output)
+2>&1 = Redirect stderr to stdout (also to trash)
+Result: Runs silently, only exit code matters
+
+Part 2: ||
+Logical OR = "If left command fails, run right command"
+docker ps succeeds (exit 0) → nothing happens ✅
+docker ps fails (exit 1) → run the error message ❌

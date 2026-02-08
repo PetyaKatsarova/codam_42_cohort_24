@@ -32,8 +32,8 @@ else
     # Try different methods to start docker
     if command -v systemctl &> /dev/null; then
         sudo systemctl start docker 2>/dev/null || echo "systemctl not available (non-systemd system)"
-    elif command -v service &> /dev/null; then
-        sudo service docker start 2>/dev/null || echo "service command failed"
+    # elif command -v service &> /dev/null; then
+    #     sudo service docker start 2>/dev/null || echo "service command failed"
     elif command -v dockerd &> /dev/null; then
         sudo dockerd > /dev/null 2>&1 & 
         sleep 2
