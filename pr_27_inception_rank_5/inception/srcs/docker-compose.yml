@@ -55,7 +55,7 @@ services:
       wordpress:
         condition: service_healthy
     ports:
-      - "8443:443" # had to add 8 because if run as not root: have to be port > 1024
+      - "8443:443" # had to add 8 because if run as not root: have to be port > 1024, if u type localhost by default it will be 433, now have to do: inception.42.fr:8443
     volumes:
       - wp:/var/www/html
     networks:
