@@ -1,4 +1,4 @@
-version: "3.3"
+#version: "3.3"
 
 services:
   mariadb:
@@ -55,7 +55,7 @@ services:
       wordpress:
         condition: service_healthy
     ports:
-      - "8443:443" # had to add 8 because if run as not root: have to be port > 1024
+      - "443:443"
     volumes:
       - wp:/var/www/html
     networks:
