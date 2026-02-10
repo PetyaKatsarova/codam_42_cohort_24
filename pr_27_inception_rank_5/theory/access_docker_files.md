@@ -16,3 +16,6 @@ sudo ls -la /var/lib/docker/
 sudo ls -la /var/lib/docker/volumes/
 Warning: Requires sudo, and these are Docker internals - don't modify directly.
 --------------------------
+!NB!!
+
+scp -P 2222 -r inception pekatsar@localhost:/home/pekatsar/
