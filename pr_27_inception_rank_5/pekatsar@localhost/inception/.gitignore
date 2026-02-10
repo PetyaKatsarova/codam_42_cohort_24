@@ -1,0 +1,17 @@
+# Secrets and credentials
+# secrets/ keep it for training purpose:using on school and own device
+.env
+
+# Docker volumes (local data)
+data/
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
+*.log
