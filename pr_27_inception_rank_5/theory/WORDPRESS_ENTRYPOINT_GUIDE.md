@@ -178,7 +178,7 @@ Correct: php-fpm -F     → Stays in foreground → Docker keeps running
 ### **In Dockerfile**
 
 ```dockerfile
-FROM alpine:3.16
+FROM alpine:latest
 
 RUN apk update && apk add --no-cache \
     php-fpm \
@@ -375,7 +375,7 @@ Container = Cooking the Recipe
 Dockerfile is built in layers:
 
 ```dockerfile
-FROM alpine:3.16
+FROM alpine:latest
      ↓ Layer 1: Alpine OS
 
 RUN apk add php-fpm

@@ -20,4 +20,5 @@ mysql -u root -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '$
 mysql -u root -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';"
 mysql -u root -e "FLUSH PRIVILEGES;"
 
+
 wait $MARIADB_PID

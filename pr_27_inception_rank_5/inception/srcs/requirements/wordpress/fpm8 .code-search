@@ -1,0 +1,8 @@
+# Query: fpm8 
+# ContextLines: 1
+
+1 result - 1 file
+
+pr_27_inception_rank_5/inception/srcs/requirements/wordpress/tools/entrypoint.sh:
+  23  echo "[WordPress] Starting PHP-FPM..."
+  24: exec /usr/sbin/php-fpm83 -F

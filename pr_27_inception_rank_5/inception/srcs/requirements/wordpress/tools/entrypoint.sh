@@ -21,4 +21,4 @@ echo "[WordPress] Setting permissions..."
 chown -R www-data:www-data /var/www/html
 
 echo "[WordPress] Starting PHP-FPM..."
-exec /usr/sbin/php-fpm8 -F
+exec /usr/sbin/php-fpm83 -F
