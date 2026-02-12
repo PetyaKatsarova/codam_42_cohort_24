@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.21
 
 Uses the latest Alpine Linux as the base image (a minimal, fast Linux distribution).
 RUN apk update && apk add --no-cache ...
