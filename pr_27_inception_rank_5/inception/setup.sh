@@ -64,9 +64,9 @@ else
 fi
 
 # Add hostname to /etc/hosts
-if ! grep -q "inception.42.fr" /etc/hosts; then
-    echo "Adding inception.42.fr to /etc/hosts..."
-    echo "127.0.0.1 inception.42.fr" | sudo tee -a /etc/hosts > /dev/null
+if ! grep -q "pekatsar.42.fr" /etc/hosts; then
+    echo "Adding pekatsar.42.fr to /etc/hosts..."
+    echo "127.0.0.1 pekatsar.42.fr" | sudo tee -a /etc/hosts > /dev/null
 fi
 
 echo ""
