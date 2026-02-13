@@ -9,8 +9,8 @@ VOLUME_DIR=$(HOME)/data/mariadb
 all: _create_dirs up 
 
 _create_dirs:
-	@mkdir -p $(HOME)/data/mariadb
-	@mkdir -p $(HOME)/data/wordpress
+	@mkdir -p /home/pekatsar/data/db
+	@mkdir -p /home/pekatsar/data/wp
 
 _check_docker:
 	@docker ps > /dev/null 2>&1 || (echo "Docker not accessible. Run: newgrp docker" && exit 1)

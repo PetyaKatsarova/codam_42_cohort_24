@@ -72,13 +72,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/data/db # for eval with /home/pekatsar/data
+      device: /home/pekatsar/data/db
   wp:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/data/wp # for eval with /home/pekatsar/data
+      device: /home/pekatsar/data/wp
 
 
 networks:
