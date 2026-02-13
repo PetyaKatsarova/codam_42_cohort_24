@@ -28,6 +28,8 @@ The infrastructure must be set up using Docker Compose, with custom Dockerfiles 
 2. **Configure environment variables:**
    - Edit `srcs/.env` with your credentials
    - Update domain name to match your login (e.g., `pekatsar.42.fr`)
+   - create secrets dir with files: db_password.txt and db_root_password.txt and populate
+   example: echo "wordpress_example_987" > secrets/db_password.txt
 
 3. **Set up hosts file (on your local machine):**
    ```bash
