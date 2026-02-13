@@ -38,3 +38,23 @@ cd ~/inception_no_setup && mkdir -p secrets && echo "wordpress_password_123" > s
 
 https://localhost:8443/
 https://localhost:8443/wp-admin/
+
+
+// text-based browser
+sudo apt update && sudo apt install lynx
+
+Open your terminal.
+Type: lynx example.com (replace example.com with your target site).
+Use the arrow keys to navigate.
+Press Q to quit, Y to confirm exit.
+Basic navigation in lynx:
+Up/Down arrows: Move between links.
+Right arrow/Enter: Follow a link.
+Left arrow: Go back.
+G: Go to a new URL.
+/: Search for text on the page.
+
+lynx https://localhost
+// got certificate is not trusted
+
+docker logs nginx
