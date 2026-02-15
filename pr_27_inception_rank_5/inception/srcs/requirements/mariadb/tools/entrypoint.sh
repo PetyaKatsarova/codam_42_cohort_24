@@ -1,24 +1,30 @@
 #!/bin/sh
+set -e
 
-# this is inside the container, entrypoint.sh is exec when the container starts
-# When you use Docker volumes in your docker-compose.yml, the /var/lib/mysql/ directory inside the container is mapped to a folder on your host machine. But the entrypoint script only sees the container's internal filesystem.
+echo "[MariaDB] Starting initialization..."
+
+# Read secrets
+DB_PASSWORD=$(cat /run/secrets/db_password)
+DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+
+# Initialize if needed
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-    echo "Initializing MariaDB..."
+    echo "[MariaDB] Installing database..."
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
+    
+    echo "[MariaDB] Configuring database..."
+    mysqld --user=mysql --bootstrap << EOF
+USE mysql;
+FLUSH PRIVILEGES;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+FLUSH PRIVILEGES;
+EOF
+    
+    echo "[MariaDB] Database initialized successfully"
 fi
 
-mysqld_safe --no-defaults --bind-address=0.0.0.0 &
-MARIADB_PID=$!
-
-sleep 5
-
-# Read password from secret file
-DB_PASSWORD=$(cat /run/secrets/db_password)
-
-mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
-mysql -u root -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';"
-mysql -u root -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';"
-mysql -u root -e "FLUSH PRIVILEGES;"
-
-
-wait $MARIADB_PID
+echo "[MariaDB] Starting MariaDB server..."
+exec mysqld --user=mysql --bind-address=0.0.0.0 --port=3306

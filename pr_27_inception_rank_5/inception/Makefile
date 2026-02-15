@@ -1,23 +1,12 @@
-NAME=inception
 COMPOSE=docker-compose -f srcs/docker-compose.yml --env-file srcs/.env
 GREEN=\033[0;32m
 END=\033[0m
 VOLUME_DIR=$(HOME)/data/mariadb
 SETUP_MARKER=.setup_done
 
-.PHONY: all up down clean fclean re setup
+.PHONY: all up down clean fclean re
 
-setup:
-	@printf "$(GREEN)Running Docker setup...$(END)\n"
-	@bash setup.sh && touch $(SETUP_MARKER)
-
-all: _check_setup _create_dirs up 
-
-_check_setup:
-	@if [ ! -f "$(SETUP_MARKER)" ] || [ ! -d "$(VOLUME_DIR)" ]; then \
-		printf "$(GREEN)Running initial setup...$(END)\n"; \
-		bash setup.sh && touch $(SETUP_MARKER); \
-	fi
+all: _create_dirs up 
 
 _create_dirs:
 	@mkdir -p $(HOME)/data/mariadb
