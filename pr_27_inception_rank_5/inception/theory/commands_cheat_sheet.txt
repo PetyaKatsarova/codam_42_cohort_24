@@ -1,0 +1,36 @@
+docker volume inspect inception_db
+
+# 1. Check no 'latest' tags
+grep -r ":latest" srcs/requirements/*/Dockerfile
+# Should be empty
+
+# 2. Check no passwords in Dockerfiles
+grep -ir "password\s*=" srcs/requirements/*/Dockerfile
+# Should be empty
+
+# 3. Check .env has no passwords
+grep -i password srcs/.env
+# Should be empty
+
+# 4. Check secrets directory exists
+ls -la secrets/
+# Should show .txt files with 600 permissions
+
+# 5. Check secrets in .gitignore
+grep secrets .gitignore
+# Should show: secrets/*.txt or secrets/
+
+# 6. Check only port 443
+docker ps | grep nginx
+# Should show: 0.0.0.0:443->443/tcp (not 80)
+
+# 7. Check TLS version
+docker exec nginx grep ssl_protocols /etc/nginx/nginx.conf
+# Should show: TLSv1.2 TLSv1.3
+
+# 8. Verify secrets mounted
+docker exec mariadb ls /run/secrets/
+# Should show: db_password, db_root_password
+
+docker exec wordpress ls /run/secrets/
+# Should show: db_password, wp_admin_password, wp_user_password

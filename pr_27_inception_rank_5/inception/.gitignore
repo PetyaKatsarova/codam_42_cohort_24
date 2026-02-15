@@ -1,5 +1,6 @@
 # Secrets and credentials
-# secrets/ keep it for training purpose:using on school and own device
+secrets/
+secrets/*.txt
 .env
 
 # Docker volumes (local data)

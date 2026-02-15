@@ -41,3 +41,12 @@ for table in $(docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_passwo
     echo ""; echo "=== $table ==="; 
     docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "DESCRIBE $table;";
 done
+----------------------------------
+The subject says: "The latest tag is prohibited"
+Why You See latest Tag
+The latest tag is automatically added by Docker when you don't specify a tag in your docker-compose.yml.
+Your docker-compose.yml:
+yamlservices:
+  mariadb:
+    image: mariadb    # ← No tag specified, Docker adds :latest
+Docker interprets this as mariadb:latest and tags your built image as latest.

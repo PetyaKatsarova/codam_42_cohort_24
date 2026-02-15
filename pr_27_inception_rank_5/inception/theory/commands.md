@@ -1,6 +1,15 @@
 # Check system
 cat /etc/os-release
 
+// TLSv1.2 or TLSv1.3 only
+grep ssl_protocols srcs/requirements/nginx/conf/nginx.conf
+
+grep -r "latest" srcs/requirements/*/Dockerfile
+# Should show nothing
+
+docker images | grep latest
+# Should only show your images (mariadb, wordpress, nginx)
+
 # Show project structure
 tree -L 3 inception/
 
@@ -12,6 +21,14 @@ cat srcs/.env | grep -i pass
 docker history mariadb | head -5
 docker history wordpress | head -5
 docker history nginx | head -5
+
+docker inspect mariadb | grep MYSQL_ROOT_PASSWORD
+docker exec mariadb ls -la /run/secrets/
+docker exec mariadb cat /run/secrets/db_password
+# Secrets are in tmpfs (RAM, not disk)
+docker exec mariadb mount | grep secrets
+
+docker exec mariadb env | grep MYSQL
 
 docker network ls
 
