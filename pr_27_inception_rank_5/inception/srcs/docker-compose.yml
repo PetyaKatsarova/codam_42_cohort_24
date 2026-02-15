@@ -61,13 +61,12 @@ services:
       wordpress:
         condition: service_healthy
     ports:
-      - "443:443" # had to add 8 because if run as not root: have to be port > 1024, if u type localhost by default it will be 433, now have to do: inception.42.fr:8443
+      - "443:443" # had to add 8 because if run as not root: have to be port > 1024(if windows: blocks smaller num ports), if u type localhost by default it will be 433, now have to do: inception.42.fr:8443
     volumes:
       - wp:/var/www/html
     networks:
       - inception
     healthcheck:
-      #test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "https://localhost"]
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider https://localhost:443 --no-check-certificate || exit 1"]
       interval: 10s
       timeout: 5s
@@ -90,6 +89,7 @@ volumes:
 
 networks:
   inception:
+    name: inception
     driver: bridge
 
 secrets:

@@ -1,32 +1,43 @@
-docker ps -a   
-docker stop nginx wordpress mariadb   
-docker rm nginx wordpress mariadb     
+Flush DNS = Clear the DNS cache (Windows stores domain name lookups in memory).
 
-or:
-docker rm -f $(docker ps -aq)
+//Your browser can't resolve pekatsar.42.fr yet because Windows DNS cache still doesn't know about it.
+//Open PowerShell as Administrator and run:
+ipconfig /flushdns
+---------------------------------------
+These 3 are built-in networks and recreated automatically. Don't delete them.
 
-rmv all unused volumes:
-docker volume prune
+bridge    # Default network for containers
+host      # Container shares host network
+none      # No networking
+-----------------------------------------
+docker exec mariadb mariadb -uwordpress -p$(cat secrets/db_password.txt) -h mariadb -e "SHOW DATABASES;"
+docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) -e "USE wordpress; SHOW TABLES;"
 
-hostname
+Database
+information_schema    # System database - metadata about all databases
+mysql                 # System database - user accounts, permissions, config
+performance_schema    # System database - performance monitoring data
+sys                   # System database - performance views (readable format)
+wordpress             # YOUR database - WordPress content (posts, users, etc.)
 
-sudo hostnamectl set-hostname inception
 
-sudo nano /etc/hostname
+# Show structure of each table
+docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) -e "USE wordpress; SHOW TABLES;" | tail -n +2 | while read table; do
+    echo "=== Table: $table ==="
+    docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) -e "DESCRIBE wordpress.$table;"
+    echo ""
+done
 
-sudo nano /etc/hosts
-```
-Change the line with 127.0.1.1 from old hostname to new:
-```
-127.0.1.1    inception
+# Show users in wp_users table
+docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "SELECT ID, user_login, user_email FROM wp_users;"
 
-scp -P 2222 -r inception/ pekatsar@localhost:~/
+# Show posts
+docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "SELECT ID, post_title, post_status, post_date FROM wp_posts WHERE post_type='post';"
 
-docker logs wordpress
-
-// secrets:
-
-cd ~/inception && mkdir -p secrets && echo "wordpress_password_123" > secrets/db_password.txt && echo "root_password_456" > secrets/db_root_password.txt && echo "admin_password_123" > secrets/wp_admin_password.txt && echo "user_password_456" > secrets/wp_user_password.txt && ls -la secrets/
-
-https://localhost:8443/
-https://localhost:8443/wp-admin/
+---------------------------------
+# quick check of all
+docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "SHOW TABLES;" && \
+for table in $(docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "SHOW TABLES;" | tail -n +2); do
+    echo ""; echo "=== $table ==="; 
+    docker exec mariadb mariadb -uroot -p$(cat secrets/db_root_password.txt) wordpress -e "DESCRIBE $table;";
+done
