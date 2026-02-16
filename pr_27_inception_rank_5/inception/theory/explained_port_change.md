@@ -16,7 +16,8 @@ Access: https://localhost:9443
 -----------------------------------------
 MariaDB: 5432:5306
 docker-compose.yml:
-yamlports: ["5432:5306"]
+ports:
+	"5432:5306"
 healthcheck:
   test: ["CMD", "mysqladmin", "ping", "-P", "5306"]
 Dockerfile: EXPOSE 5306
@@ -24,7 +25,7 @@ my.cnf:
 ini[mysqld]
 port = 5306
 .env: DB_HOST=mariadb:5306
-entrypoint.sh: while ! nc -z mariadb 5306; do sleep 1; done
+entrypoint.sh in wordpress: while ! nc -z mariadb 5306; do sleep 1; done
 Access: mysql -h localhost -P 5432
 
 -------------------------------------------
@@ -67,3 +68,42 @@ docker-compose ports: Expose to host (optional, usually not needed for PHP-FPM)
 healthcheck: Must check container's internal port (10900)
 php-fpm.conf: Makes PHP-FPM listen on 10900 instead of 9000
 nginx.conf: Tells nginx where to forward PHP requests
+--------------------------------------
+
+
+ports:
+  - "5432:5306"
+```
+
+---
+
+## Why Two Ports - Explained Simply
+
+### The Two Worlds
+
+1. **Your VM (host)** - where you run commands
+2. **Container (internal)** - isolated environment inside Docker
+
+They're **separate** - container can't be accessed directly from host.
+
+---
+
+## Port Mapping: `5432:5306`
+
+**Format:** `HOST:CONTAINER`
+
+- **5306** = MariaDB listens on this port **inside** the container
+- **5432** = Docker exposes it on this port **on your VM**
+
+---
+
+## Why You Need Both
+
+### Without Port Mapping
+```
+You (on VM) → Can't reach container at all ❌
+```
+
+### With Port Mapping `5432:5306`
+```
+You (on VM) → localhost:5432 → Docker maps to → Container port 5306 → MariaDB ✓
