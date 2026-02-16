@@ -1,77 +1,130 @@
 #!/bin/bash
 set -e
 
-echo "Setting up Docker permissions and volumes..."
-# Check if docker is installed
-if ! command -v docker &> /dev/null; then
-    echo "Docker is not installed"
-    exit 1
+echo "=== Inception Docker Setup Script ==="
+echo ""
+
+# Detect if running in WSL
+if grep -qi microsoft /proc/version; then
+    echo "Detected WSL environment"
+    WSL=true
+else
+    echo "Detected native Linux"
+    WSL=false
 fi
 
-echo "Starting docker\n"
-# start running docker
-sudo dockerd &
-
-# Check if user already in docker group
-if groups "$USER" | grep -q docker; then
-    echo "✓ $USER already in docker group"
+# Check if running on Debian/Ubuntu
+if [ -f /etc/debian_version ]; then
+    echo "Detected Debian-based system"
 else
-    echo "Adding $USER to docker group (requires sudo)..."
+    echo "Warning: This script is designed for Debian/Ubuntu"
+fi
+
+# Install Docker and Docker Compose if not present
+if ! command -v docker &> /dev/null || ! command -v docker-compose &> /dev/null; then
+    echo ""
+    echo "Installing Docker and Docker Compose..."
+    sudo apt update
+    sudo apt install -y docker.io docker-compose
+    echo "Docker and Docker Compose installed"
+else
+    echo "Docker and Docker Compose already installed"
+fi
+
+# Add user to docker group
+echo ""
+echo "Configuring Docker permissions..."
+if groups "$USER" | grep -q docker; then
+    echo "$USER already in docker group"
+else
+    echo "Adding $USER to docker group..."
     sudo groupadd docker 2>/dev/null || true
     sudo usermod -aG docker "$USER"
-    echo "User added - must log out/in or run: newgrp docker"
+    echo "User added to docker group"
+    NEED_RELOGIN=true
 fi
 
-# Check if docker daemon is running
-echo "Checking Docker daemon..."
-if docker ps &> /dev/null; then
-    echo "✓ Docker daemon is running"
-else
-    echo "Starting Docker daemon..."
-    
-    # Try different methods to start docker
-    if command -v systemctl &> /dev/null; then
-        sudo systemctl start docker 2>/dev/null || echo "systemctl not available (non-systemd system)"
-    # elif command -v service &> /dev/null; then
-    #     sudo service docker start 2>/dev/null || echo "service command failed"
-    elif command -v dockerd &> /dev/null; then
-        sudo dockerd > /dev/null 2>&1 & 
-        sleep 2
-        echo "Started dockerd in background - may need manual restart"
+# Start Docker daemon based on environment
+echo ""
+echo "Starting Docker daemon..."
+
+if [ "$WSL" = true ]; then
+    # WSL - use service or dockerd directly
+    if pgrep -x dockerd > /dev/null; then
+        echo "Docker daemon already running"
     else
-        echo "Could not find docker startup method"
+        echo "Starting dockerd for WSL..."
+        sudo dockerd > /dev/null 2>&1 &
+        sleep 3
     fi
-    
-    # Verify docker is now running
-    if docker ps &> /dev/null; then
-        echo "✓ Docker daemon started successfully"
-    else
-        echo "Docker daemon still not responding - try: sudo docker system prune"
-    fi
-fi
-
-# Create and validate volumes
-echo ""
-echo "Creating volume directories..."
-VOLUME_DIR="$HOME/data"
-
-if mkdir -p "$VOLUME_DIR"/{mariadb,wordpress}; then
-    echo "✓ Volume directories created:"
-    ls -ld "$VOLUME_DIR"/mariadb "$VOLUME_DIR"/wordpress
 else
-    echo "Failed to create volume directories"
-    exit 1
+    # Native Linux - use systemctl
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sleep 2
 fi
 
-# Add hostname to /etc/hosts
-if ! grep -q "pekatsar.42.fr" /etc/hosts; then
-    echo "Adding pekatsar.42.fr to /etc/hosts..."
-    echo "127.0.0.1 pekatsar.42.fr" | sudo tee -a /etc/hosts > /dev/null
+# Verify docker is running
+if docker ps &> /dev/null 2>&1; then
+    echo "Docker daemon is running"
+else
+    echo "Docker daemon not responding, trying alternative method..."
+    
+    # Kill any existing dockerd
+    sudo pkill dockerd 2>/dev/null || true
+    sleep 1
+    
+    # Start dockerd manually
+    sudo dockerd > /dev/null 2>&1 &
+    sleep 4
+    
+    if docker ps &> /dev/null 2>&1; then
+        echo "Docker daemon is running"
+    else
+        echo "Docker daemon failed to start"
+        echo "Try manually: sudo dockerd"
+        exit 1
+    fi
 fi
 
+# Add hostname to /etc/hosts: can substitude pekatsar with ${USER}
 echo ""
-echo "✓ Setup complete!"
+echo "Configuring hostname..."
+HOSTNAME="pekatsar.42.fr"
+if grep -q "$HOSTNAME" /etc/hosts; then
+    echo "$HOSTNAME already in /etc/hosts"
+else
+    echo "Adding $HOSTNAME to /etc/hosts..."
+    echo "127.0.0.1 $HOSTNAME" | sudo tee -a /etc/hosts > /dev/null
+    echo "$HOSTNAME added to /etc/hosts"
+fi
+
+
+# Add hostname to /etc/hosts (if not already present) todo: check if already exists
+echo "127.0.0.1 pekatsar.42.fr" | sudo tee -a /etc/hosts
+
+# Summary
 echo ""
+echo "================================================"
+echo "Setup complete!"
+echo "================================================"
+echo ""
+echo "Configuration summary:"
+echo "  - Docker version: $(docker --version)"
+echo "  - Docker Compose version: $(docker-compose --version)"
+echo ""
+
+if [ "$WSL" = true ]; then
+    echo "WSL Note: Docker daemon started in background"
+    echo "If docker stops working, run: sudo dockerd &"
+    echo ""
+fi
+
+if [ "$NEED_RELOGIN" = true ]; then
+    echo "IMPORTANT: Run 'newgrp docker' or log out and log back in"
+    echo ""
+fi
+
 echo "Next steps:"
-echo "1. Log out and back in (or run: newgrp docker)"
-echo "2. Run: make all"
+echo "  make        # Build and start all services"
+echo ""
