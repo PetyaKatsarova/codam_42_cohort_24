@@ -3,11 +3,20 @@
 set -e
 
 echo "[WordPress] Waiting for MariaDB to be ready..."
-while ! nc -z mariadb 3306; do
-    echo "Waiting for mariadb:3306..."
+while ! nc -z mariadb 5306; do
+    echo "Waiting for mariadb:5306..."
     sleep 1
 done
+
 echo "[WordPress] MariaDB is ready!"
+
+echo "[WordPress] Waiting for Redis to be ready..."
+while ! nc -z redis 6379; do
+    echo "Waiting for redis:6379..."
+    sleep 1
+done
+
+echo "[WordPress] Redis is ready!"
 
 echo "[WordPress] Checking for WordPress files..."
 if [ ! -f /var/www/html/wp-load.php ]; then
@@ -63,6 +72,21 @@ fi
 
 echo "[WordPress] Final permission check..."
 chown -R www-data:www-data /var/www/html
+
+# Install and enable Redis Object Cache
+if ! wp plugin is-installed redis-cache --allow-root 2>/dev/null; then
+    echo "[WordPress] Installing Redis Object Cache plugin..."
+    wp plugin install redis-cache --activate --allow-root
+    wp config set WP_REDIS_HOST redis --allow-root
+    wp config set WP_REDIS_PORT 6379 --raw --allow-root
+    wp config set WP_CACHE true --raw --allow-root
+    
+    # Enable Redis cache (requires FLUSHDB command)
+    wp redis enable --allow-root || echo "[WordPress] Redis enable failed, will enable manually"
+    echo "[WordPress] Redis plugin configured"
+else
+    echo "[WordPress] Redis cache already installed"
+fi
 
 echo "[WordPress] Starting PHP-FPM..."
 exec /usr/sbin/php-fpm83 -F

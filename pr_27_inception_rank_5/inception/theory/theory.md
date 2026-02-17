@@ -1,3 +1,6 @@
+set -e
+Exit script immediately if any command fails. Prevents running broken setup
+-----------------------
 Flush DNS = Clear the DNS cache (Windows stores domain name lookups in memory).
 
 //Your browser can't resolve pekatsar.42.fr yet because Windows DNS cache still doesn't know about it.

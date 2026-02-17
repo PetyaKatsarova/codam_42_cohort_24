@@ -28,4 +28,4 @@ EOF
 fi
 
 echo "[MariaDB] Starting MariaDB server..."
-exec mysqld --user=mysql --bind-address=0.0.0.0 --port=3306
+exec mysqld --user=mysql --bind-address=0.0.0.0 --port=5306
