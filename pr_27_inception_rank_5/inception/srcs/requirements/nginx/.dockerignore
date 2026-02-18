@@ -1,0 +1,18 @@
+# Ignore version control
+.git
+
+# Ignore secrets and environment files
+*.env
+secrets/
+
+# Ignore OS and editor files
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+
+# Ignore build and temp files
+__pycache__/
+node_modules/
+*.log

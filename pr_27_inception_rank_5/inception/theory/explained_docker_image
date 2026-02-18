@@ -1,0 +1,14 @@
+A Docker image is not a single file, but a set of layers stored by Docker, usually as compressed files and metadata. You cannot simply open it like a regular file, but you can inspect its contents.
+
+To see the contents of a Docker image, you can:
+
+Create a container from the image (without running it):
+docker create --name temp_redis redis:latest
+
+Copy files from the container to your host:
+docker cp temp_redis:/path/in/container /path/on/host
+
+Or, start a shell inside the container:
+docker run -it --rm redis:latest sh
+
+This lets you browse the filesystem inside the image.

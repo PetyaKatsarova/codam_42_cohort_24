@@ -15,6 +15,42 @@ User requests page →
 
 With Redis Cache:
 -------------------------------------------
+1. redis_cache container:
+This is your standalone Redis server. It runs the Redis database, which is a fast, in-memory key-value store. Other services (like WordPress) connect to it to store and retrieve cached data.
+
+2. Redis in WordPress:
+You installed the Redis Cache plugin in WordPress. This plugin lets WordPress use Redis (the redis_cache container) to cache database queries, objects, and other data, making your site faster by reducing database load.
+
+3. redis volume:
+This Docker volume is attached to your redis_cache container. It stores Redis’ persistent data (the actual key-value database files). This way, if the container restarts or is recreated, your cached data isn’t lost.
+
+
+redis_cache = runs Redis server
+Redis plugin in WordPress = lets WordPress use Redis for caching
+redis volume = stores Redis data on disk for persistence
+-----------------------------------------------
+Without Redis:
+User → Nginx → WordPress → MySQL (50ms query) → Response
+
+With Redis:
+User → Nginx → WordPress → Redis (0.1ms lookup) → Response
+                          ↓ (if miss)
+                        MySQL (50ms) → Store in Redis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------
 
 Common Use Cases
 1. Session Storage

@@ -1,11 +1,5 @@
-# Check vm system
-cat /etc/os-release
-
 # TLSv1.2 or TLSv1.3 only
 docker exec nginx grep ssl_protocols /etc/nginx/nginx.conf
-
-# Should show nothing
-grep -r "latest" srcs/requirements/*/Dockerfile
 
 # Should only show your images (mariadb, wordpress, nginx)
 docker images | grep latest
@@ -13,18 +7,11 @@ docker images | grep latest
 # Show project structure
 tree -L 3 inception/
 
-# Show no passwords in .env
-cat srcs/.env | grep -i pass
-# Should show nothing
-
 # Verify images built from Dockerfile
 docker history mariadb | head -5
 docker history wordpress | head -5
 docker history nginx | head -5
 
-docker inspect mariadb | grep MYSQL_ROOT_PASSWORD
-docker exec mariadb ls -la /run/secrets/
-docker exec mariadb cat /run/secrets/db_password
 # Secrets are in tmpfs (RAM, not disk)
 docker exec mariadb mount | grep secrets
 
@@ -35,9 +22,6 @@ docker network ls
 # Test inter-container connectivity
 docker exec wordpress nc -zv mariadb 3306
 docker exec nginx nc -zv wordpress 9000
-
-# port
-netstat -tlnp
 
 docker volume ls
 # Check volume mount points on host

@@ -58,9 +58,12 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
         --user_pass="${WP_USER_PASSWORD}" \
         --allow-root
     echo "[WordPress] Second user created successfully"
+
 else
     echo "[WordPress] WordPress already installed"
 fi
+
+echo "[WordPress] Final permission check..."
 
 echo "[WordPress] Final permission check..."
 chown -R www-data:www-data /var/www/html

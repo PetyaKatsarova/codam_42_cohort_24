@@ -5,14 +5,12 @@ RUN apk update && apk add --no-cache \
     php83-mysqli \
     php83-curl \
     php83-gd \
-	php83-redis \
     php83-json \
     php83-xml \
     php83-mbstring \
     php83-openssl \
     php83-phar \
     netcat-openbsd \
-	php83-tokenizer \
     curl
 
 RUN mkdir -p /run/php /var/www/html && \
