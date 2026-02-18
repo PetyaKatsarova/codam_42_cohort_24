@@ -7,7 +7,7 @@ RUN apk update && apk add --no-cache \
 RUN mkdir -p /run/mysqld && \
     chown -R mysql:mysql /run/mysqld
 
-EXPOSE 5306
+EXPOSE 3306
 
 COPY ./conf/mariadb.cnf /etc/mysql/my.cnf
 RUN chmod 644 /etc/mysql/my.cnf

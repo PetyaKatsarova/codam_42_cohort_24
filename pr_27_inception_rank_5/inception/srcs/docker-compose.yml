@@ -18,9 +18,9 @@ services:
       - db_password
       - db_root_password
     ports:
-      - "5432:5306"
+      - "5432:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-P", "5306"]
+      test: ["CMD", "mysqladmin", "ping", "-P", "3306"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,8 +39,6 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-      redis:
-        condition: service_started	
     volumes:
       - wp:/var/www/html
     networks:
@@ -75,15 +73,15 @@ services:
       retries: 5
     restart: unless-stopped
 
-    redis:
-      image: redis
-      build: ./requirements/bonus/redis_cache
-      container_name: redis
-      volumes:
-        - redis_data:/data
-      networks:
-        - inception
-      restart: unless-stopped
+  redis:
+    image: redis
+    build: ./requirements/bonus/redis_cache
+    container_name: redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - inception
+    restart: unless-stopped
 
 volumes:
   db:
@@ -98,7 +96,7 @@ volumes:
       type: none
       o: bind
       device: /home/${USER}/data/wordpress
-  redis_data:  # ADD THIS
+  redis_data:
     driver: local
     driver_opts:
       type: none
