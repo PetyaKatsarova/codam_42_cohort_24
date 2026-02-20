@@ -1,4 +1,4 @@
-COMPOSE=docker-compose -f srcs/docker-compose.yml --env-file srcs/.env
+COMPOSE=docker compose -f srcs/docker-compose.yml --env-file srcs/.env
 GREEN=\033[0;32m
 END=\033[0m
 VOLUME_DIR=$(HOME)/data/mariadb

@@ -76,16 +76,8 @@ services:
 volumes:
   db:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${USER}/data/mariadb
   wp:
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${USER}/data/wordpress
 
 networks:
   inception:

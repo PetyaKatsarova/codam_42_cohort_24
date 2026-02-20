@@ -1,6 +1,11 @@
 # Check vm system
 cat /etc/os-release
 
+docker volume inspect srcs_db
+docker volume inspect srcs_wp
+
+docker info | grep "Docker Root Dir"
+
 # TLSv1.2 or TLSv1.3 only
 docker exec nginx grep ssl_protocols /etc/nginx/nginx.conf
 
@@ -13,9 +18,23 @@ docker images | grep latest
 # Show project structure
 tree -L 3 inception/
 
-# Show no passwords in .env
-cat srcs/.env | grep -i pass
-# Should show nothing
+# Verify certificate is self-signed
+curl -vk https://pekatsar.42.fr 2>&1 | grep -i "subject\|issuer"
+
+-------------------------------
+db
+-------------------------------
+docker exec -it mariadb mariadb -uroot -p
+docker exec -it mariadb mariadb -uwordpress -p -h127.0.0.1
+
+SELECT user, host FROM mysql.user;
+
+USE wordpress;
+SHOW TABLES;
+
+select ID, post_author from wp_posts;
+
+-------------------------
 
 # Verify images built from Dockerfile
 docker history mariadb | head -5
@@ -30,23 +49,18 @@ docker exec mariadb mount | grep secrets
 
 docker exec mariadb env | grep MYSQL
 
+docker network rm srcs_inception
+
 docker network ls
 
 # Test inter-container connectivity
 docker exec wordpress nc -zv mariadb 3306
 docker exec nginx nc -zv wordpress 9000
 
-# port
-netstat -tlnp
-
 docker volume ls
 # Check volume mount points on host
 ls -la ~/data/mariadb
 ls -la ~/data/wordpress
-
-
-# Verify certificate is self-signed
-curl -vk https://pekatsar.42.fr 2>&1 | grep -i "subject\|issuer"
 
 
 # Verify port 3306 listening
@@ -90,6 +104,7 @@ docker exec wordpress wp option get siteurl --allow-root
 docker image prune -a -f
 
 
+You can remove unused volumes using docker volume prune.
 ------------------------------------------
 # Simulate a crash (exit code 1 inside container)
 docker exec wordpress sh -c "kill 1"
@@ -145,3 +160,45 @@ cd ~/inception && mkdir -p secrets && echo "wordpress_password_123" > secrets/db
 
 https://localhost:8443/
 https://localhost:8443/wp-admin/
+
+----------------------------------------
+docker volume rm inception_db inception_wp
+----------------------------------------
+wp:
+// no pwd, press only enter
+docker exec -it mariadb mariadb -uwordpress -p -h127.0.0.1
+
+SHOW DATABASES;
+USE wordpress;
+SHOW TABLES;
+
+// login as root:
+docker exec -it mariadb mariadb -uroot -p
+
+SELECT user, host FROM mysql.user;
+ALTER USER 'wordpress'@'%' IDENTIFIED BY 'Bla42@';
+FLUSH PRIVILEGES;
+EXIT;
+
+SELECT * FROM wp_users;
+SELECT * FROM wp_posts;
+SELECT * FROM wp_comments;
+----------------------------------------
+// -i is interactive, -t tty(allocate a pseudo-TTY)
+docker exec -it wordpress ls -l
+docker exec -it wordpress ls -l /var/www/html
+docker exec -it mariadb ls -l /var/lib/mysql
+
+docker exec -it nginx ls -l /var/www/html
+-----------------------------------------
+
+// all containers should be having root processes with PID 1 (the main process of the container)
+docker exec -it mariadb ps aux
+docker exec -it wordpress ps aux
+docker exec -it nginx ps aux
+
+docker exec mariadb mount | grep secrets
+
+docker exec mariadb env | grep MYSQL
+
+docker network ls

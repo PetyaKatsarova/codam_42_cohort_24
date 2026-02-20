@@ -1,14 +1,19 @@
-A Docker image is not a single file, but a set of layers stored by Docker, usually as compressed files and metadata. You cannot simply open it like a regular file, but you can inspect its contents.
+A Docker image is a read-only template that defines everything needed to run a container:
 
-To see the contents of a Docker image, you can:
+The OS base (like Alpine or Ubuntu)
+Installed software and dependencies
+Configuration files
+Environment variables
+Startup commands
+It’s like a snapshot or recipe for creating containers.
 
-Create a container from the image (without running it):
-docker create --name temp_redis redis:latest
+It is stored on your local machine: stored in Docker’s internal storage (usually /var/lib/docker).
+On remote registries: like Docker Hub, GitHub Container Registry, or private registries. You can pull images from these or push your own.
 
-Copy files from the container to your host:
-docker cp temp_redis:/path/in/container /path/on/host
+It is used to create containers: Each container is an instance of an image.
+To share environments: You can distribute your image so others can run the exact same setup.
+To ensure consistency: Every container from the same image is identical.
 
-Or, start a shell inside the container:
-docker run -it --rm redis:latest sh
-
-This lets you browse the filesystem inside the image.
+Containers keep running until stopped, regardless of your terminal.
+Images are templates for containers, containing everything needed to run your app.
+Images live locally and/or in registries, and are used to create containers.

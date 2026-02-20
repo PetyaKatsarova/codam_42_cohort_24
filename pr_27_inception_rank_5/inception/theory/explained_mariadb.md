@@ -1,1 +1,0 @@
-Bootstrap mode is a special MariaDB/MySQL startup mode for initial configuration.

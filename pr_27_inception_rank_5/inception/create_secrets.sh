@@ -10,7 +10,7 @@ chmod 700 secrets
 #openssl rand -base64 32 > secrets/wp_admin_password.txt
 #openssl rand -base64 32 > secrets/wp_user_password.txt
 
-# for eval only:
+# for testing only:
 
 echo "Bla42@" > secrets/db_password.txt
 echo "Bla42@" > secrets/db_root_password.txt
