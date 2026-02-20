@@ -1,0 +1,74 @@
+1. mkdir -p srcs/requirements/bonus/redis
+mkdir -p srcs/requirements/bonus/redis/conf
+mkdir -p srcs/requirements/bonus/redis/tools
+
+2. srcs/requirements/bonus/redis/Dockerfile
+FROM alpine:3.21
+
+RUN apk update && apk add --no-cache redis
+
+EXPOSE 6379
+
+CMD ["redis-server", "--bind", "0.0.0.0", "--protected-mode", "no"]
+
+3. add in srcs/docker-compose.yml
+services:
+  # ... existing services ...
+
+  redis:
+    image: redis
+    build: ./requirements/bonus/redis
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - inception
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+4. 
+srcs/requirements/wordpress/tools/entrypoint.sh
+
+//add after wordress install:
+# Install Redis plugin
+if ! wp plugin is-installed redis-cache --allow-root; then
+    wp plugin install redis-cache --activate --allow-root
+    wp redis enable --allow-root
+fi
+
+5. srcs/requirements/wordpress/Dockerfile
+
+RUN apk add --no-cache \
+    php83-redis \
+    # ... other packages and tokanizer
+
+5.5 IN docker-compose.yml wordpress environment add:
+REDIS_HOST: redis
+
+6. verify:
+# Check Redis is running
+docker exec redis redis-cli ping
+# Should output: PONG
+
+# Check WordPress can connect
+docker exec wordpress wp redis status --allow-root
+
+docker exec wordpress wp plugin deactivate redis-cache --allow-root
+docker exec wordpress wp plugin activate redis-cache --allow-root
+--------------------------
+
+Everything is done in WordPress container
+Nothing to configure inside Redis container.
+
+Why?
+
+ Redis container = just memory database (port 6379)
+
+ WordPress = the client that uses Redis
+
+So:
+Redis runs
+WordPress connects to it
+

@@ -1,0 +1,44 @@
+# Query: 5306
+# ContextLines: 1
+
+14 results - 2 files
+
+pr_27_inception_rank_5/inception/srcs/docker-compose.yml:
+  20      ports:
+  21:       - "5432:3306"
+  22      healthcheck:
+  23:       test: ["CMD", "mysqladmin", "ping", "-P", "3306"]
+  24        interval: 10s
+
+pr_27_inception_rank_5/inception/theory/explained_port_change.md:
+   16  -----------------------------------------
+   17: MariaDB: 5432:5306
+   18  docker-compose.yml:
+   19  ports:
+   20: 	"5432:5306"
+   21  healthcheck:
+   22:   test: ["CMD", "mysqladmin", "ping", "-P", "5306"]
+   23: Dockerfile: EXPOSE 5306
+   24  my.cnf:
+   25  ini[mysqld]
+   26: port = 5306
+   27: .env: DB_HOST=mariadb:5306
+   28: entrypoint.sh in wordpress: while ! nc -z mariadb 5306; do sleep 1; done
+   29  Access: mysql -h localhost -P 5432
+
+   74  ports:
+   75:   - "5432:5306"
+   76  ```
+
+   90  
+   91: ## Port Mapping: `5432:5306`
+   92  
+
+   94  
+   95: - **5306** = MariaDB listens on this port **inside** the container
+   96  - **5432** = Docker exposes it on this port **on your VM**
+
+  106  
+  107: ### With Port Mapping `5432:5306`
+  108  ```
+  109: You (on VM) → localhost:5432 → Docker maps to → Container port 5306 → MariaDB ✓

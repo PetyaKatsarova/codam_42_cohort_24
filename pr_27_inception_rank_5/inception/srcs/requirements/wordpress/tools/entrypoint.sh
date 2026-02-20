@@ -35,6 +35,13 @@ if [ ! -f /var/www/html/wp-config.php ]; then
         --dbhost="${DB_HOST}" \
         --allow-root
     echo "[WordPress] wp-config.php created"
+
+    wp plugin install redis-cache --activate --allow-root
+
+    # Configure Redis (use .env variable)
+    wp config set WP_REDIS_HOST "${WP_REDIS_HOST}" --allow-root
+    wp config set WP_REDIS_PORT 6379 --raw --allow-root
+    wp config set WP_CACHE true --raw --allow-root
 fi
 
 # Install WordPress if not already installed
@@ -48,7 +55,15 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
         --admin_email="${WP_ADMIN_EMAIL}" \
         --allow-root
     echo "[WordPress] WordPress installed successfully"
-    
+
+    ## Now install Redis plugin (WP fully installed)
+    if ! wp plugin is-installed redis-cache --allow-root; then
+        wp plugin install redis-cache --activate --allow-root
+    fi
+
+    # Enable Redis caching
+    wp redis enable --allow-root || echo "[WordPress] Redis plugin not active yet"
+
     # Create second user (regular user, not admin)
     echo "[WordPress] Creating second user..."
     wp user create \
@@ -69,4 +84,15 @@ echo "[WordPress] Final permission check..."
 chown -R www-data:www-data /var/www/html
 
 echo "[WordPress] Starting PHP-FPM..."
-exec /usr/sbin/php-fpm83 -F
+exec /usr/sbin/php-fpm83 -F &
+
+# Wait until WordPress responds
+until curl -s http://localhost/wp-admin >/dev/null 2>&1; do
+  echo "[WordPress] Waiting for HTTP..."
+  sleep 2
+done
+
+echo "[WordPress] WordPress is ready"
+
+# Keep container running
+wait

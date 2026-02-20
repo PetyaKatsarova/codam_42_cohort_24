@@ -32,12 +32,16 @@ services:
     container_name: wordpress
     env_file:
       - .env
+    environment:
+      - WP_REDIS_HOST=${WP_REDIS_HOST}
     secrets:
       - db_password
       - wp_admin_password
       - wp_user_password
     depends_on:
       mariadb:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - wp:/var/www/html
@@ -73,11 +77,23 @@ services:
       retries: 5
     restart: unless-stopped
 
+  redis:
+    image: redis
+    build: ./requirements/bonus/redis_cache
+    container_name: wp_redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - inception
+    restart: unless-stopped
+
 volumes:
   db:
-    driver: local
+  
   wp:
-    driver: local
+   
+  redis_data:
+    
 
 networks:
   inception:

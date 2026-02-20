@@ -1,7 +1,7 @@
 COMPOSE=docker compose -f srcs/docker-compose.yml --env-file srcs/.env
 GREEN=\033[0;32m
 END=\033[0m
-VOLUME_DIR=$(HOME)/data/mariadb
+VOLUME_DIR=/home/data/mariadb
 SETUP_MARKER=.setup_done
 
 .PHONY: all up down clean fclean re
@@ -9,8 +9,10 @@ SETUP_MARKER=.setup_done
 all: _create_dirs up 
 
 _create_dirs:
-	@mkdir -p $(HOME)/data/mariadb
-	@mkdir -p $(HOME)/data/wordpress
+	@mkdir -p /home/data/mariadb
+	@mkdir -p /home/data/wordpress
+	@mkdir -p /home/data/redis
+	
 
 _check_docker:
 	@docker ps > /dev/null 2>&1 || (echo "Docker not accessible. Run: newgrp docker" && exit 1)
@@ -21,6 +23,9 @@ up: _check_docker
 	@printf "$(GREEN)Starting containers...$(END)\n"
 	$(COMPOSE) up -d
 	@printf "$(GREEN)✓ Containers started$(END)\n"
+	@printf "$(GREEN)Testing Redis...$(END)\n"
+	@sleep 2
+	@docker exec redis redis-cli ping && echo "✓ Redis is running" || echo "✗ Redis failed"
 	
 down:
 	@printf "$(GREEN)Stopping containers...$(END)\n"
@@ -31,6 +36,6 @@ clean: down
 fclean: down
 	@printf "$(GREEN)Cleaning volumes...$(END)\n"
 	$(COMPOSE) down -v
-	sudo rm -rf ~/data/mariadb ~/data/wordpress
+	sudo rm -rf ~/data/mariadb ~/data/wordpress ~/data/redis
 
 re: fclean all

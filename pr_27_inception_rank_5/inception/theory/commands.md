@@ -4,6 +4,22 @@ cat /etc/os-release
 docker volume inspect srcs_db
 docker volume inspect srcs_wp
 
+docker exec wordpress wp redis status --allow-root
+docker exec wordpress wp plugin list --allow-root
+// after make do:
+docker exec wordpress wp config set WP_REDIS_HOST redis --allow-root
+docker exec wordpress wp redis enable --allow-root
+
+
+docker exec wordpress wp plugin status --allow-root | grep redis-cache
+docker exec wordpress wp redis status --allow-root
+docker exec redis redis-cli KEYS "*"
+
+docker info | grep "Docker Root Dir"
+docker volume inspect srcs_db | grep Mountpoint
+
+sudo mv /var/lib/docker/* /home/pekatsar/data/
+
 docker info | grep "Docker Root Dir"
 
 # TLSv1.2 or TLSv1.3 only
