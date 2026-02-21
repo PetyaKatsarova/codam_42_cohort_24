@@ -1,3 +1,5 @@
+Subjects requires to use named and specifically no bind mounts for volumes.
+Decision was made to move all docker files to /home/pekatsar/data and change the docker data-root to that path. This way we can use named volumes and still have the data on the host machine, which is required for the project.
 
 sudo mkdir -p /home/pekatsar/data
 

@@ -23,6 +23,8 @@ scp -P 2222 -r inception pekatsar@localhost:/home/pekatsar
 6. if you would like to access vm from host terminal
 ssh -p 2222 pekatsar@localhost
 
+7. if you would like to use as root for docker /home/pekatsar/data as per subject requirements for the volumes: not bind, named but in that dir: follow volumes_path_set.sh: u run commands in terminal, not the script.
+
 
 
 
