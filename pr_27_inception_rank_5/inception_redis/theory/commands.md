@@ -4,11 +4,33 @@ cat /etc/os-release
 docker volume inspect srcs_db
 docker volume inspect srcs_wp
 
+docker exec wordpress wp redis status --allow-root
+docker exec wordpress wp plugin list --allow-root
+// after make do:
+docker exec wordpress wp config set WP_REDIS_HOST redis --allow-root
+docker exec wordpress wp redis enable --allow-root
+docker exec wordpress wp redis disable --allow-root
+
+
+
+docker exec wordpress wp plugin status --allow-root | grep redis-cache
+docker exec wp_redis redis-cli KEYS "*"
 --------------------
 
+docker exec wordpress mount | grep /var/www/html
+docker exec mariadb mount | grep /var/lib/mysql
+docker exec wp_redis mount | grep /data
+
+
+docker exec wordpress mount | grep /var/www/html
+-------------------
+
+docker info | grep "Docker Root Dir"
 docker volume inspect srcs_db | grep Mountpoint
 
 sudo mv /var/lib/docker/* /home/pekatsar/data/
+
+docker info | grep "Docker Root Dir"
 
 # TLSv1.2 or TLSv1.3 only
 docker exec nginx grep ssl_protocols /etc/nginx/nginx.conf
@@ -25,28 +47,18 @@ tree -L 3 inception/
 # Verify certificate is self-signed
 curl -vk https://pekatsar.42.fr 2>&1 | grep -i "subject\|issuer"
 
----------------------------------
-container filesystems
----------------------------------
-docker exec -it wordpress ls -l
-docker exec -it wordpress ls -l /var/www/html
-
-docker exec wordpress mount | grep /var/www/html
-docker volume inspect srcs_wp | grep Mountpoint
-
-docker info | grep "Docker Root Dir"
 -------------------------------
 db
 -------------------------------
 docker exec -it mariadb mariadb -uroot -p
+docker exec -it mariadb mariadb -uwordpress -p -h127.0.0.1
 
 SELECT user, host FROM mysql.user;
 
 USE wordpress;
 SHOW TABLES;
 
-select ID, post_author, post_date, post_type, post_name from wp_posts;
-select post_content from wp_posts;
+select ID, post_author from wp_posts;
 
 -------------------------
 

@@ -216,6 +216,15 @@ With Redis: In RAM (100x faster)
 
 3. What Each Cached Key Does
 KeyWhat It CachesPerformance Impactwp:options:alloptionsAll WordPress settingsMASSIVE - avoids 100+ DB querieswp:translation_files:*Language/translation dataMedium - faster for multilingual siteswp:transient:doing_cronScheduled tasks statusSmall - reduces DB writeswp:site-transient:*Theme/plugin patternsMedium - faster admin panelwp:redis-cache:metricsCache statisticsSmall - tracks performance
+=================================================
+The output you see is from running docker exec wp_redis redis-cli KEYS "*", which lists all keys currently stored in your Redis instance. These keys are used by WordPress and its Redis Object Cache plugin to store various types of cached data.
+
+The key ending with mwp:options:notoptions is a WordPress cache key. It stores a list of option names that do not exist in the wp_options table, so WordPress can avoid unnecessary database queries for missing options. This improves performance by caching negative lookups.
+
+In summary:
+
+These keys confirm that Redis is actively caching WordPress data.
+The mwp:options:notoptions key is normal and indicates WordPress is optimizing option lookups.
 
 
 

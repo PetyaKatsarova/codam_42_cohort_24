@@ -35,13 +35,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
         --dbhost="${DB_HOST}" \
         --allow-root
     echo "[WordPress] wp-config.php created"
-
-    wp plugin install redis-cache --activate --allow-root
-
-    # Configure Redis (use .env variable)
-    wp config set WP_REDIS_HOST "${WP_REDIS_HOST}" --allow-root
-    wp config set WP_REDIS_PORT 6379 --raw --allow-root
-    wp config set WP_CACHE true --raw --allow-root
 fi
 
 # Install WordPress if not already installed
