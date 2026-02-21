@@ -17,8 +17,6 @@ services:
     secrets:
       - db_password
       - db_root_password
-    ports:
-      - "5432:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-P", "3306"]
       interval: 10s
@@ -65,12 +63,12 @@ services:
       wordpress:
         condition: service_healthy
     ports:
-      - "443:443" # had to add 8 because if run as not root: have to be port > 1024(if windows: blocks smaller num ports), if u type localhost by default it will be 433, now have to do: inception.42.fr:8443
+      - "443:443"
     volumes:
       - wp:/var/www/html
     networks:
       - inception
-    healthcheck: # rmv 8 in test
+    healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider https://localhost:443 --no-check-certificate || exit 1"]
       interval: 10s
       timeout: 5s
@@ -89,11 +87,23 @@ services:
 
 volumes:
   db:
-  
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/pekatsar/data/mariadb
   wp:
-   
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/pekatsar/data/wordpress
   redis_data:
-    
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/pekatsar/data/redis
 
 networks:
   inception:
