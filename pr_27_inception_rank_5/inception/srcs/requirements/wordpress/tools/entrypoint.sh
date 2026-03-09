@@ -62,7 +62,7 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
     wp user create \
         "${WP_USER}" \
         "${WP_USER_EMAIL}" \
-        --role=author \
+        --role=subscriber \
         --user_pass="${WP_USER_PASSWORD}" \
         --allow-root
     echo "[WordPress] Second user created successfully"

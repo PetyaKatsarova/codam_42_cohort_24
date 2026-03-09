@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+NEED_RELOGIN=false
+
 echo "=== Inception Docker Setup Script ==="
 echo ""
 
@@ -60,8 +62,8 @@ if [ "$WSL" = true ]; then
 else
     # Native Linux - use systemctl
     sudo systemctl start docker
-    sudo systemctl enable docker
-    sleep 2
+	sudo systemctl enable docker
+	sudo systemctl is-active --wait docker
 fi
 
 # Verify docker is running
@@ -101,7 +103,7 @@ fi
 
 
 # Add hostname to /etc/hosts (if not already present) todo: check if already exists
-echo "127.0.0.1 pekatsar.42.fr" | sudo tee -a /etc/hosts
+#echo "127.0.0.1 pekatsar.42.fr" | sudo tee -a /etc/hosts
 
 # Summary
 echo ""
@@ -118,6 +120,13 @@ if [ "$WSL" = true ]; then
     echo "WSL Note: Docker daemon started in background"
     echo "If docker stops working, run: sudo dockerd &"
     echo ""
+fi
+
+if ! command -v make &> /dev/null; then
+    echo "Installing make..."
+    sudo apt install -y make
+else
+    echo "make already installed"
 fi
 
 if [ "$NEED_RELOGIN" = true ]; then

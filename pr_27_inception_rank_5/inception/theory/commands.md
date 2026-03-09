@@ -113,6 +113,11 @@ docker exec wordpress wp option get siteurl --allow-root
 # Should show: https://pekatsar.42.fr
 
 ---------------------------------------
+
+docker volume rm srcs_db srcs_wp
+
+
+-------------------------------
 ** images **
 # Remove all dangling images (those <none>)
 docker image prune -a -f

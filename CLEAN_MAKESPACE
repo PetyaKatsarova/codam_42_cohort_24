@@ -8,4 +8,13 @@ rm -rf ~/.cache/ccache/*
 rm -rf ~/.cache/*
 
 rm -f ~/core.*
-rm -rf /tmp/*
+
+rm -rf ~/.config/google-chrome/Default/Service\ Worker
+rm -rf ~/.config/google-chrome/Default/IndexedDB
+rm -rf ~/.config/google-chrome/Default/GPUCache
+
+rm -rf ~/.config/Code/CachedExtensionVSIXs
+rm -rf ~/.config/Code/WebStorage
+rm -rf ~/.config/Code/GPUCache
+rm -rf ~/.config/Code/logs
+df -h ~

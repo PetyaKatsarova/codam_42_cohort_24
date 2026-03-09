@@ -28,8 +28,10 @@ The infrastructure must be set up using Docker Compose, with custom Dockerfiles 
 2. **Configure environment variables:**
    - Edit `srcs/.env` with your credentials
    - Update domain name to match your login (e.g., `pekatsar.42.fr`)
-   - create secrets dir with files: db_password.txt and db_root_password.txt and populate
-   example: echo "wordpress_example_987" > secrets/db_password.txt
+   - Create secrets dir with files: `db_password.txt` and `db_root_password.txt` and populate:
+   ```bash
+   echo "wordpress_example_987" > secrets/db_password.txt
+   ```
 
 3. **Set up hosts file (on your local machine):**
    ```bash
@@ -43,19 +45,19 @@ The infrastructure must be set up using Docker Compose, with custom Dockerfiles 
 
 4. **Build and run:**
    ```bash
-   make all
+   make
    ```
 
 ### Usage
 
 **Start the infrastructure:**
 ```bash
-make up
+make
 ```
 
 **Stop the infrastructure:**
 ```bash
-make down
+make clean
 ```
 
 **Clean everything (including volumes):**
@@ -69,7 +71,7 @@ make re
 ```
 
 **Access the website:**
-- In browser: `https://pekatsar.42.fr:8443` (or `https://localhost:8443` if hosts file not configured)
+- In browser: `https://pekatsar.42.fr` (or `https://localhost` if hosts file not configured)
 - Accept the self-signed SSL certificate warning
 
 ### Port Forwarding (for VM setup)
@@ -116,7 +118,7 @@ The project uses three main containers:
    - Base image: Alpine Linux 3.21
    - Stores WordPress database
    - Exposed only to Docker network (not to host)
-   - Uses Docker volumes for data persistence
+   - Uses Docker named volumes for data persistence
 
 2. **WordPress Container**
    - Base image: Alpine Linux 3.21
@@ -145,9 +147,21 @@ The project uses three main containers:
 - No need for IP addresses or external networking
 
 **Data Persistence:**
-- Docker volumes ensure data survives container restarts
-- Bind mounts link host directories to container paths
-- Separate volumes for database and WordPress files
+- Docker named volumes ensure data survives container restarts
+- Volume data is stored under `/home/pekatsar/data/` by redirecting Docker's data root via `/etc/docker/daemon.json`
+- Separate volumes for database (`db`) and WordPress files (`wp`)
+
+**Volume Host Path Configuration:**
+
+Docker's `data-root` is set in `/etc/docker/daemon.json` to point to `/home/pekatsar/data`:
+
+```json
+{
+  "data-root": "/home/pekatsar/data"
+}
+```
+
+This means all named volumes physically reside under `/home/pekatsar/data/volumes/`, satisfying the subject requirement without using bind mounts.
 
 **Why Docker for this project?**
 - Lightweight and fast deployment
@@ -181,33 +195,30 @@ The project uses three main containers:
 - Explicit port exposure control
 - Easier to manage and debug
 
-### Docker Volumes vs Bind Mounts
+### Docker Named Volumes vs Bind Mounts
 
-| Feature | Docker Volumes | Bind Mounts |
-|---------|---------------|-------------|
+| Feature | Docker Named Volumes | Bind Mounts |
+|---------|---------------------|-------------|
 | **Management** | Managed by Docker | Managed by user |
-| **Location** | `/var/lib/docker/volumes/` | Any host path |
+| **Location** | Configured via `data-root` | Any host path |
 | **Portability** | Better (Docker-aware) | Lower (host-specific paths) |
 | **Performance** | Optimized by Docker | Direct filesystem |
 | **Backup** | Docker commands | Standard tools |
 | **Permissions** | Docker handles | Must configure manually |
 
-**This project uses Bind Mounts:**
-- Explicit control over data location (`/home/pekatsar/data/`)
-- Easier to backup and inspect
-- Required by project subject
-- Persistent across Docker system cleanups
+**This project uses Docker Named Volumes:**
+- Required by project subject (bind mounts are not allowed)
+- Data stored under `/home/pekatsar/data/` via `data-root` in `daemon.json`
+- Persistent across container restarts
 
-**Implementation:**
+**Implementation in `docker-compose.yml`:**
 ```yaml
 volumes:
   db:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/pekatsar/data/mariadb
+  wp:
 ```
+
+Docker manages these volumes internally. Their data physically lives under `/home/pekatsar/data/volumes/` due to the `data-root` configuration.
 
 ## Resources
 
@@ -228,23 +239,23 @@ volumes:
 ### AI Usage in This Project
 
 **Tasks where AI was used:**
-1. **Dockerfile optimization** - AI helped identify best practices for multi-stage builds and layer caching
+1. **Dockerfile optimization** - AI helped identify best practices for layer caching
 2. **Nginx configuration** - AI assisted in configuring SSL/TLS settings and FastCGI parameters
-3. **Troubleshooting** - AI helped debug port forwarding issues between VM and host
-4. **Documentation** - AI assisted in structuring this README and explaining technical concepts
+3. **Troubleshooting** - AI helped debug port forwarding and volume path issues
+4. **Documentation** - AI assisted in structuring this README
 5. **Shell scripting** - AI helped create entrypoint scripts for container initialization
 
 **Parts created with AI assistance:**
-- Healthcheck configurations in docker-compose.yml
+- Healthcheck configurations in `docker-compose.yml`
 - Makefile automation rules
 - Nginx SSL certificate generation script
-- WordPress wp-config.php auto-configuration
+- WordPress `wp-config.php` auto-configuration
 - MariaDB initialization script
 
 **Parts created independently:**
 - Overall architecture design
 - Network topology decisions
-- Volume mount configuration
+- Volume and data-root configuration
 - Security decisions (secrets vs env vars)
 - Project structure organization
 
@@ -263,14 +274,18 @@ volumes:
 - Check network connectivity: `docker exec wordpress ping mariadb`
 
 **3. Permission denied on volumes:**
-- Ensure data directories exist: `ls -la ~/data/`
-- Check ownership: `ls -ld ~/data/mariadb ~/data/wordpress`
-- Run `make fclean && make all` to recreate
+- Ensure data directory exists: `ls -la ~/data/`
+- Run `make fclean && make` to recreate
 
 **4. SSL certificate errors:**
 - This is expected with self-signed certificates
 - Click "Advanced" → "Proceed to localhost (unsafe)" in browser
 - For production, use Let's Encrypt
+
+**5. Docker daemon fails to start:**
+- Check `daemon.json` is valid JSON: `sudo cat /etc/docker/daemon.json`
+- Check logs: `sudo journalctl -xeu docker.service | tail -20`
+- Ensure `/home/pekatsar/data/` exists and has correct permissions
 
 ## Project Validation
 
@@ -281,7 +296,8 @@ volumes:
 - Nginx with TLSv1.2/TLSv1.3 only
 - WordPress + PHP-FPM
 - MariaDB
-- Volumes for database and website files
+- Named volumes for database and WordPress files (no bind mounts)
+- Volume data stored under `/home/pekatsar/data/` via `data-root`
 - Docker network for inter-container communication
 - Containers restart on crash
 - Domain name configuration
