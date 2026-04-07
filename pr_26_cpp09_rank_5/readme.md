@@ -1,4 +1,6 @@
 about 40 hrs
+
+https://seriouscomputerist.atariverse.com/media/pdf/book/Art%20of%20Computer%20Programming%20-%20Volume%203%20(Sorting%20&%20Searching).pdf
 ================================================
 https://codam.notion.site/g-o-c-o-d-a-m-n-l-ae4ad699a1654ae892f294e52527428e?p=24e16ae2cc1a8103a2edc3ef8f03d241&pm=s
 =====================================================
