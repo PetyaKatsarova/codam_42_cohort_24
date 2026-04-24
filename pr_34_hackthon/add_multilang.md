@@ -1,3 +1,10 @@
+Vercel gives you a free URL automatically — no payment needed.
+
+When you deploy, you get: ikigai.vercel.app — that's a real public URL, free forever for this kind of project.
+
+You only pay if you want a custom domain like ikigai-app.com (~€10/year from Namecheap or similar). For a hackathon demo, the free .vercel.app URL is completely fine.
+
+
 Add Multilanguage in ~30 Minutes
 Install the library
 
