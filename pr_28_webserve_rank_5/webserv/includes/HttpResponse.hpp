@@ -1,0 +1,48 @@
+#pragma once
+
+#include <string>
+#include <map>
+
+/**
+ *  no need for full canonical form:
+ *  It owns only STL types (std::string, std::map) and an int.
+	No raw pointer ownership, no custom resource management.
+	Compiler-generated copy constructor / assignment / destructor (Rule of Zero).
+ */
+
+ /**
+ * HTTP response to be sent to the client
+ * Stores status code, headers, and body content
+ * Provides setters for building responses and static helpers for common status codes (200, 404, etc)
+ * Used by the server to serialize(convert resp. obj into raw string) and send HTTP responses after request handling.
+ */
+ 
+class HttpResponse {
+public:
+    int                                statusCode;
+    std::map<std::string, std::string> headers;
+    std::string                        body;
+
+    HttpResponse();
+
+    // setters — return *this for chaining
+    HttpResponse &setStatus(int code);
+    HttpResponse &setBody  (const std::string &content, const std::string &contentType = "text/html");
+    HttpResponse &setHeader(const std::string &key, const std::string &value);
+
+    // static builders for common responses
+    static HttpResponse make_200(const std::string &body,
+                                 const std::string &type = "text/html");
+    static HttpResponse make_redirect(int code, const std::string &location); // 301/302: no html body, just a Location header telling the client where to go
+    static HttpResponse make_err_page(const std::string &msg, int code); // generic error page; msg overrides the default reason phrase when non-empty
+
+    // serialize(from httpRes obj) to raw HTTP string — hand this to send()
+    std::string serialize() const;
+
+    // inserts Connection: keep-alive or Connection: close after the status line
+    static void injectConnectionHeader(std::string &response, bool keepAlive);
+
+private:
+    static std::string _reason(int code);
+    static std::string _errorBody(int code, const std::string &reason);
+};

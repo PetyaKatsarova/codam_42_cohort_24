@@ -1,0 +1,169 @@
+#include <cerrno>
+#include <cstring>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <utility>
+
+#include "../includes/HttpResponse.hpp"
+#include "../includes/ConnectionManager.hpp"
+#include "../includes/Listener.hpp"
+#include "../includes/ProcessRequest.hpp"
+
+/*
+ * Constructor: stores references to the shared clients map and epoll callbacks.
+ * epollMod/epollDel are lambdas passed in from Server so ConnectionManager can
+ * change epoll watch mode or remove an fd without holding a pointer to Server.
+ *
+ * EPOLLOUT: socket is writable — send() will not block, safe to write response bytes.
+ * EPOLLRDHUP: peer closed its write side (remote half-close) — client disconnected
+ * or will send no more data. Combined EPOLLOUT | EPOLLRDHUP means: notify when
+ * writable to send the response, but also catch disconnect while waiting.
+ */
+ConnectionManager::ConnectionManager(std::map<int, Client *> &clients,
+					 std::map<int, Listener *> &clientToListener,
+					 std::function<void(int, uint32_t)> epollMod,
+					 std::function<void(int)> epollDel,
+					 std::function<void(Client&)> registerCgiPipes,
+					 std::function<void(Client&)> cleanupCgi)
+	: _clients(clients),
+	  _clientToListener(clientToListener),
+	  _epollMod(std::move(epollMod)), // no longer need the original value and want efficiency
+	  _epollDel(std::move(epollDel)),
+	  _registerCgiPipes(std::move(registerCgiPipes)),
+	  _cleanupCgi(std::move(cleanupCgi)) {}
+
+/**
+ *  One recv() per EPOLLIN event, fed into the incremental HTTP parser. recv <= 0:
+ *  peer closed or error — close. PARSE_INCOMPLETE: return and wait for the next
+ *  EPOLLIN to resume feeding the same client.request. PARSE_ERROR → 400 and close.
+ *  COMPLETE → hand off to the request processor and switch to write mode.
+ */
+void ConnectionManager::readClient(Client &client) {
+	char chunk[4096]; // stack array: no heap allocation, no cleanup, already in CPU cache
+	client.lastTimestamp = std::time(nullptr);
+
+	ssize_t bytes = recv(client.fd, chunk, sizeof(chunk), 0);
+
+	if (bytes <= 0) {
+		closeClient(client.fd);
+		return;
+	}
+
+	ParseResult result = client.request.feed(chunk, static_cast<size_t>(bytes));
+
+	if (result == PARSE_ERROR) {
+		client.writeBuf  = HttpResponse::make_err_page("Bad Request", 400).serialize();
+		client.keep_alive = false;
+		HttpResponse::injectConnectionHeader(client.writeBuf, false);
+		_epollMod(client.fd, EPOLLOUT | EPOLLRDHUP);
+		return;
+	}
+
+	if (result == COMPLETE) {
+		std::map<int, Listener *>::iterator listenerIt = _clientToListener.find(client.fd); //at() throws
+		if (listenerIt == _clientToListener.end()) { closeClient(client.fd); return; }
+		listenerIt->second->processRequest().handle(client);
+		
+		/* If a CGI session was started, register pipes with epoll */
+		if (client.cgi) {
+			if (_registerCgiPipes) {
+				_registerCgiPipes(client);
+			}
+			/* Switch the client socket to EPOLLRDHUP-only (no EPOLLOUT) to detect disconnects. */
+			_epollMod(client.fd, EPOLLRDHUP);
+		} else {
+			/* Normal response path: arm for writing */
+			_epollMod(client.fd, EPOLLOUT | EPOLLRDHUP);
+		}
+		return;
+	}
+	// PARSE_INCOMPLETE: do nothing — level-triggered epoll re-fire EPOLLIN
+	// when more bytes arrive, and we resume feeding the same client.request.
+}
+
+/**
+ *  One send() per EPOLLOUT event. Partial send: keep the rest in writeBuf and
+ *  return — epoll re-fires when the socket drains. Once fully sent: keep-alive
+ *  re-arms EPOLLIN (and parses any pipelined request); otherwise close.
+ */
+void ConnectionManager::writeClient(Client &client) {
+	client.lastTimestamp = std::time(nullptr); // update last activity time on each write
+	// Strip body before sending for HEAD requests (covers all response paths — nginx pattern).
+	// Safe to run at entry: writeBuf holds the full response on first call; on re-entry after
+	// EAGAIN the headers have already been partially sent so find() returns npos → no-op.
+	if (client.request.method == HEAD) {
+		size_t sep = client.writeBuf.find("\r\n\r\n");
+		if (sep != std::string::npos)
+			client.writeBuf.erase(sep + 4);
+	}
+	if (!client.writeBuf.empty()) {
+		ssize_t sent = send(client.fd, client.writeBuf.c_str(), client.writeBuf.size(), 0);
+		if (sent <= 0) {
+			// No errno, we know the kernel buffer has space because this is only called through send in HttpResponse AFTER an EPOLLOUT event (which means the buffer has space).
+			closeClient(client.fd);
+			return;
+		}
+		client.writeBuf.erase(0, static_cast<size_t>(sent));
+	}
+
+	// On a partial write, writeBuf is not empty so we need to wait for next EPOLLOUT.
+	if (!client.writeBuf.empty())
+		return;
+
+	if (client.keep_alive) { // connection stays open for next req
+		client.request.clear();
+		_epollMod(client.fd, EPOLLIN | EPOLLRDHUP);
+
+		ParseResult res = client.request.tryParse();
+		if (res == COMPLETE) {
+			std::map<int, Listener *>::iterator listenerIt = _clientToListener.find(client.fd); // at() throws
+			if (listenerIt == _clientToListener.end()) { closeClient(client.fd); return; }
+			listenerIt->second->processRequest().handle(client);
+			
+			/* If a new CGI session was started, register pipes with epoll */
+			if (client.cgi) {
+				if (_registerCgiPipes) {
+					_registerCgiPipes(client);
+				}
+				_epollMod(client.fd, EPOLLRDHUP);
+			} else {
+				_epollMod(client.fd, EPOLLOUT | EPOLLRDHUP);
+			}
+		} else if (res == PARSE_ERROR) {
+			client.writeBuf = HttpResponse::make_err_page("Bad Request", 400).serialize();
+			client.keep_alive = false;
+			HttpResponse::injectConnectionHeader(client.writeBuf, false);
+			_epollMod(client.fd, EPOLLOUT | EPOLLRDHUP);
+		}
+	} else {
+		closeClient(client.fd);
+	}
+}
+
+/*
+ * closeClient: removes a client cleanly — unregisters fd from epoll, closes the
+ * socket, frees the heap Client object, and erases it from the clients map.
+ * Safe to call if fd is already gone (early return if not found).
+ * _epollDel is a lambda from Server: it calls _epoll.del(fd) without ConnectionManager
+ * needing a direct pointer to EpollLoop.
+ */
+void ConnectionManager::closeClient(int fd) {
+	std::map<int, Client *>::iterator it = _clients.find(fd);
+	if (it == _clients.end()) return; // already closed
+
+	Client *client = it->second;
+
+	/* If there's an active CGI session, clean it up */
+	if (client->cgi) {
+		if (_cleanupCgi) {
+			_cleanupCgi(*client);
+		}
+	}
+
+	_epollDel(fd);
+	close(fd);
+	delete client;
+	_clients.erase(it);
+	_clientToListener.erase(fd);
+}

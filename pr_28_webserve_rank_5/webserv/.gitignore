@@ -1,0 +1,46 @@
+# Compiled object files
+*.o
+src/*.o
+
+# Compiled binary files
+*.out
+*.exe
+
+# Backup files
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# CMake build folders
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Other
+*.tmp
+*.bak
+
+# CGI session demo database (generated at runtime)
+*.db
+www/one/cgi-bin/sessions.db
+webserv
+.env
+uploads/
+CLAUDE.md
+.claude
+tests/execution/__pycache__/
+tester
+cgi_tester
+tests/execution/__pycache__/*
