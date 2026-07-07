@@ -24,7 +24,7 @@ struct Location {
 };
 
 struct ServerConfig {
-    std::string              	host = "0.0.0.0";
+    std::string              	host = "0.0.0.0"; // testing only: for localhost, replace accordingly for prod.
     int                      	port                 = -1;
     long                     	clientMaxBodySize = 1048576;  // 1MB default
     std::vector<std::string> 	server_names; // for Host: header matching in virtual hosting
