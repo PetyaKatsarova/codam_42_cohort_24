@@ -1,67 +1,4 @@
-group abt 175 hrs per person
-(2 to 3 students)
-
-Webserv
-This is when you finally understand why URLs start
-with HTTP
-Summary:
-This project is about writing your own HTTP server.
-You will be able to test it with an actual browser.
-HTTP is one of the most widely used protocols on the internet.
-Understanding its intricacies will be useful, even if you won’t be working on a website.
-
-Introduction
-The Hypertext Transfer Protocol (HTTP) is an application protocol for distributed,
-collaborative, hypermedia information systems.
-HTTP is the foundation of data communication for the World Wide Web, where hypertext documents include hyperlinks to other resources that the user can easily access. For
-example, by clicking a mouse button or tapping the screen on a web browser.
-HTTP was developed to support hypertext functionality and the growth of the World
-Wide Web.
-The primary function of a web server is to store, process, and deliver web pages to clients.
-Client-server communication occurs through the Hypertext Transfer Protocol (HTTP).
-Pages delivered are most frequently HTML documents, which may include images, style
-sheets, and scripts in addition to the text content.
-Multiple web servers may be used for a high-traffic website, splitting traffic between multiple physical machines.
-A user agent, commonly a web browser or web crawler, initiates communication by requesting a specific resource using HTTP, and the server responds with the content of that
-resource or an error message if unable to do so. The resource is typically a real file on
-the server’s storage, or the result of a program. But this is not always the case and can
-actually be many other things.
-Although its primary function is to serve content, HTTP also enables clients to send
-data. This feature is used for submitting web forms, including the uploading of files.
-=========================================================================
-Program name webserv
-Turn in files Makefile, *.{h, hpp}, *.cpp, *.tpp, *.ipp,
-configuration files
-Makefile NAME, all, clean, fclean, re
-Arguments [A configuration file]
-External functs. All functionality must be implemented in C++ 98.
-execve, pipe, strerror, gai_strerror, errno, dup,
-dup2, fork, socketpair, htons, htonl, ntohs, ntohl,
-select, poll, epoll (epoll_create, epoll_ctl,
-epoll_wait), kqueue (kqueue, kevent), socket,
-accept, listen, send, recv, chdir, bind, connect,
-getaddrinfo, freeaddrinfo, setsockopt, getsockname,
-getprotobyname, fcntl, close, read, write, waitpid,
-kill, signal, access, stat, open, opendir, readdir
-and closedir.
-Libft authorized n/a
-Description An HTTP server in C++ 98
-You must write an HTTP server in C++ 98.
-Your executable should be executed as follows:
-./webserv [configuration file]
-Even though poll() is mentioned in the subject and evaluation sheet,
-you can use any equivalent function such as select(), kqueue(), or
-epoll().
-
-Webserv This is when you finally understand why URLs start with HTTP
-Please read the RFCs defining the HTTP protocol, and perform tests
-with telnet and NGINX before starting this project.
-Although you are not required to implement the entire RFCs, reading
-it will help you develop the required features.
-The HTTP 1.0 is suggested as a reference point, but not enforced.
-
-Webserv This is when you finally understand why URLs start with HTTP
-IV.1 Requirements
+Requirements
 • Your program must use a configuration file, provided as an argument on the command line, or available in a default path.
 • You cannot execve another web server.
 • Your server must remain non-blocking at all times and properly handle client disconnections when necessary.
@@ -92,8 +29,7 @@ differences between HTTP versions).
 • You can’t use fork for anything other than CGI (like PHP, or Python, and so forth).
 • You must be able to serve a fully static website.
 • Clients must be able to upload files.
-8
-Webserv This is when you finally understand why URLs start with HTTP
+
 • You need at least the GET, POST, and DELETE methods.
 • Stress test your server to ensure it remains available at all times.
 • Your server must be able to listen to multiple ports to deliver different content (see
@@ -101,8 +37,7 @@ Configuration file).
 We deliberately chose to offer only a subset of the HTTP RFC. In this
 context, the virtual host feature is considered out of scope. But
 you are allowed to implement it if you want.
-9
-Webserv This is when you finally understand why URLs start with HTTP
+
 IV.2 For MacOS only
 Since macOS handles write() differently from other Unix-based OSes,
 you are allowed to use fcntl().
@@ -130,8 +65,7 @@ is rooted to /tmp/www, URL /kapouet/pouic/toto/pouet will search for
 ◦ Default file to serve when the requested resource is a directory.
 ◦ Uploading files from the clients to the server is authorized, and storage location
 is provided.
-10
-Webserv This is when you finally understand why URLs start with HTTP
+
 ◦ Execution of CGI, based on file extension (for example .php). Here are some
 specific remarks regarding CGIs:
 ∗ Do you wonder what a CGI is?
