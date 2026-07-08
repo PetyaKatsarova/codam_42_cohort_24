@@ -2,22 +2,32 @@
 #define BIGINT_HPP
 
 #include <iostream>
+#include <string>
 
 class bigint {
 	private:
-		unsigned int num;
+		std::string val;
+
+		void rmvLeading0s();
 
 	public:
 		bigint();
-		bigint(const unsigned int& n);
+		bigint(unsigned int n);
 		bigint(const bigint& other);
-		bigint& operator=(const bigint& other);
 		~bigint();
 
-		const unsigned int& get_num() const;
-		unsigned int& get_num();
-};
+		bigint& operator=(const bigint& other);
 
-std::ostream& operator<<(std::ostream& os, const bigint& obj);
+		friend std::ostream& operator<<(std::ostream& os, const bigint& obj);
+
+		// addition
+		bigint operator+(const bigint& other) const;
+		bigint operator+(unsigned int n) const;
+		bigint& operator+=(const bigint& other);
+
+		// increment
+		bigint& operator++();
+		bigint  operator++(int);
+};
 
 #endif
