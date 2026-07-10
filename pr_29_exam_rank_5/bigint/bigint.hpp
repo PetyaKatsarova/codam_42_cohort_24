@@ -8,26 +8,32 @@ class bigint {
 	private:
 		std::string val;
 
-		void rmvLeading0s();
-
 	public:
 		bigint();
 		bigint(unsigned int n);
 		bigint(const bigint& other);
 		~bigint();
 
+		const std::string& get_val() const;
+
 		bigint& operator=(const bigint& other);
-
-		friend std::ostream& operator<<(std::ostream& os, const bigint& obj);
-
-		// addition
 		bigint operator+(const bigint& other) const;
-		bigint operator+(unsigned int n) const;
 		bigint& operator+=(const bigint& other);
-
-		// increment
 		bigint& operator++();
-		bigint  operator++(int);
+		bigint operator++(int);
+
+		bigint operator<<(unsigned int n) const;
+		bigint& operator<<=(unsigned int n);
+		bigint& operator>>=(const bigint& other);
+
+		bool operator<(const bigint& other) const;
+		bool operator>(const bigint& other) const;
+		bool operator==(const bigint& other) const;
+		bool operator!=(const bigint& other) const;
+		bool operator >=(const bigint& other) const;
+		bool operator <=(const bigint& other) const;
 };
+
+std::ostream& operator<<(std::ostream& os, const bigint& obj);
 
 #endif

@@ -4,46 +4,36 @@
 #include <iostream>
 #include <string>
 
-class bigint
-{
-private:
-	std::string value;
+class bigint {
+	private:
+		std::string val;
 
-	void removeLeadingZeros();
+	public:
+		bigint();
+		bigint(unsigned int n);
+		bigint(const bigint& other);
+		~bigint();
 
-public:
-	bigint();
-	bigint(unsigned int n);
-	bigint(const bigint& other);
-	~bigint();
+		const std::string& get_val() const;
 
-	bigint& operator=(const bigint& other);
+		bigint& operator=(const bigint& other);
+		bigint operator+(const bigint& other) const;
+		bigint& operator+=(const bigint& other);
+		bigint& operator++();
+		bigint operator++(int);
 
-	// addition
-	bigint operator+(const bigint& other) const;
-	bigint operator+(unsigned int n) const;
-	bigint& operator+=(const bigint& other);
+		bigint operator<<(unsigned int n) const;
+		bigint& operator<<=(unsigned int n);
+		bigint& operator>>=(const bigint& other);
 
-	// increment
-	bigint& operator++();
-	bigint operator++(int);
-
-	// digit shift
-	bigint operator<<(unsigned int shift) const;
-	bigint operator>>(const bigint& shift) const;
-	bigint& operator<<=(unsigned int shift);
-	bigint& operator>>=(const bigint& shift);
-
-	// comparison
-	bool operator<(const bigint& other) const;
-	bool operator>(const bigint& other) const;
-	bool operator<=(const bigint& other) const;
-	bool operator>=(const bigint& other) const;
-	bool operator==(const bigint& other) const;
-	bool operator!=(const bigint& other) const;
-
-	//friend is a C++ keyword that allows a non-member function (or another class) to access a class's private and protected members.
-	friend std::ostream& operator<<(std::ostream& os, const bigint& n);
+		bool operator<(const bigint& other) const;
+		bool operator>(const bigint& other) const;
+		bool operator==(const bigint& other) const;
+		bool operator!=(const bigint& other) const;
+		bool operator >=(const bigint& other) const;
+		bool operator <=(const bigint& other) const;
 };
+
+std::ostream& operator<<(std::ostream& os, const bigint& obj);
 
 #endif
