@@ -1,7 +1,7 @@
 #include "bigint.hpp"
 #include <iostream>
 
-// c++ bigint.cpp main.cpp 
+//g++ -std=c++98 -Wall -Wextra -Werror main.cpp bigint.cpp && ./a.out
 int main()
 {
 	const bigint a(42);
@@ -13,22 +13,48 @@ int main()
 	std::cout << "c = " << c << std::endl;
 	std::cout << "d = " << d << std::endl;
 	std::cout << "e = " << e << std::endl;
-	// std::cout << "a + b = " << a + b << std::endl;
-	// std::cout << "(c += a) = " << (c += a) << std::endl;
-	// std::cout << "b = " << b << std::endl;
-	// std::cout << "++b = " << ++b << std::endl;
-	// std::cout << "b++ = " << b++ << std::endl;
-	// std::cout << "(b << 10) + 42 = " << (b << 10) + 42 << std::endl;
-	// std::cout << "(d <<= 4) = " << (d <<= 4) << std::endl;
-	// std::cout << "(d >>= 2) = " << (d >>= (const bigint)2) << std::endl;
-	// std::cout << "a = " << a << std::endl;
-	// std::cout << "d = " << d << std::endl;
-	// std::cout << "(d < a) = " << (d < a) << std::endl;
-	// std::cout << "(d > a) = " << (d > a) << std::endl;
-	// std::cout << "(d == a) = " << (d == a) << std::endl;
-	// std::cout << "(d != a) = " << (d != a) << std::endl;
-	// std::cout << "(d <= a) = " << (d <= a) << std::endl;
-	// std::cout << "(d >= a) = " << (d >= a) << std::endl;
+	std::cout << "--------------------\n";
+	std::cout << "a + b = " << a + b << std::endl;
+	std::cout << "(c += a) = " << (c += a) << std::endl;
+	std::cout << "b = " << b << std::endl;
+	std::cout << "++b = " << ++b << std::endl;
+	std::cout << "b++ = " << b++ << std::endl;
+	std::cout << "b = " << b << std::endl;
+	std::cout << "(b << 10) + 42 = " << (b << 10) + 42 << std::endl;
+	std::cout << "(d <<= 4) = " << (d <<= 4) << std::endl;
+	std::cout << "d = " << d << std::endl;
+	std::cout << "(d >> 2) = " << (d >>= (const bigint)2) << std::endl;
+	std::cout << "d = " << d << std::endl;
+	std::cout << "(d >>= 2) = " << (d >>= (const bigint)2) << std::endl;
+	std::cout << "a = " << a << std::endl;
+	std::cout << "d = " << d << std::endl;
+	std::cout << "(d < a) = " << (d < a) << std::endl;
+	std::cout << "(d > a) = " << (d > a) << std::endl;
+	std::cout << "(d == a) = " << (d == a) << std::endl;
+	std::cout << "(d != a) = " << (d != a) << std::endl;
+	std::cout << "(d <= a) = " << (d <= a) << std::endl;
+	std::cout << "(d >= a) = " << (d >= a) << std::endl;
+	std::cout << "-------------- edge cases << && <<=---------\n";
+	bigint test(62);
+	std::cout << "test=" << test <<"\n";
+	std::cout << "test<<0 = " << (test<<0) <<"\n";
+	std::cout << "test=" << test <<"\n";
+	std::cout << "test<<=2 = " << (test<<=2) <<"\n";
+	std::cout << "test=" << test <<"\n";
+	std::cout << "-------------- edge cases >> && >>=---------\n";
+	std::cout << "test>>0 = " << (test>>(const bigint)0) <<"\n";
+	std::cout << "test=" << test <<"\n";
+	std::cout << "test>>=2 = " << (test>>=(const bigint)2) <<"\n";
+	std::cout << "test=" << test <<"\n";
+	std::cout << "test>>4 = " << (test>>(const bigint)4) <<"\n";
+	std::cout << "test=" << test <<"\n";
+	std::cout << "-------------- edge cases 2 >> && >>=---------\n";
+	bigint test2(1234);
+	std::cout <<"test2 = " << test2 << std::endl;
+	std::cout << "test2>>1 = " << (test2>>(const bigint)1) <<"\n";
+	std::cout << "test2=" << test2 <<"\n";
+	std::cout << "test2>>=2 = " << (test2>>=(const bigint)2) <<"\n";
+	std::cout << "test2=" << test2 <<"\n";
 }
 
 /*
