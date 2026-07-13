@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 #define BUF	2000
 
@@ -68,12 +70,82 @@ int floodfill(char *buf, int row_i, int col_i, int w, int h)
 
 	if (row_i < 0 || row_i >= h || col_i < 0 || col_i >= w) return 0;
 
-	i = row_i * (w + 1) + col_i;
-	if (buf[i] != 'X') return 0; // staring point is .
+	i = row_i * (w + 1) + col_i; // starting position
+	if (buf[i] != 'X') return 0;
 	buf[i] = 'V'; //change x to v: counted
 	size += floodfill(buf, row_i, col_i + 1, w, h);
 	size += floodfill(buf, row_i, col_i - 1, w, h);
 	size += floodfill(buf, row_i - 1, col_i, w, h);
 	size += floodfill(buf, row_i + 1, col_i, w, h);
 	return size;
+}
+
+/*
+flood fill each unvisited cell 'X' to count islands, starting from 0,0
+*/
+int largest_island(char *buf, int w, int h)
+{
+	int col, size, i;
+
+	int row = 0; // outer arr
+	int largest = 0;
+	while (row < h)
+	{
+		col = 0;
+		while (col < w)
+		{
+			i = row * (w + 1) + col;
+			if (buf[i] == 'X')
+			{
+				size = floodfill(buf, row, col, w, h);
+				if (size > largest)
+					largest = size;
+			}
+			col++;
+		}
+		row++;
+	}
+	return largest;
+}
+
+/*
+Recursion doesn't skip forward — each call pauses, it doesn't disappear
+  When putnbr(123) runs and hits putnbr(n / 10), that current call does
+  not finish. It's paused mid-execution, waiting for the recursive call
+  to return, with its own local variables (n = 123) frozen in place.
+  So calling putnbr(123) creates a stack of paused calls:
+  putnbr(123)   -- paused, waiting, n=123
+    putnbr(12)  -- paused, waiting, n=12
+      putnbr(1) -- n=1, condition false, doesn't recurse further
+*/
+void putnbr(int n)
+{
+	if (n > 9)
+		putnbr(n / 10);
+	char c = (n % 10) + '0';
+	write(1, &c, 1);
+}
+
+int main(int argc, char **argv)
+{
+	int fd, bytes, w, h, largest;
+	char *buf;
+
+	if (argc != 2)
+		return (write(1, "\n", 1), 1);
+	fd = open(argv[1], O_RDONLY);
+	buf = malloc(BUF);
+	if (!buf)
+		return(close(fd), write(1, "\n", 1), 1);
+	bytes = read(fd, buf, BUF-1);
+	if (bytes < 0)
+		return(close(fd), write(1, "\n", 1), 1);
+	close(fd);
+	buf[bytes] = '\0';
+	if (!parse_map(buf, &w, &h))
+		return (free(buf), write(1, "\n", 1), 1);
+	largest = largest_island(buf, w, h);
+	printf("Largest island is: %d\n", largest);
+	free(buf);
+	return 0;
 }

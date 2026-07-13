@@ -5,13 +5,15 @@
 #include <string>
 
 class bigint {
+	private:
+		std::string val;// default is private
 
 	public:
 		bigint();
 		bigint(unsigned int n);
 		bigint(const bigint& other);
 		~bigint();
-		bigint operator=(const bigint& other);
+		bigint& operator=(const bigint& other);
 
 		std::string get_val() const;
 
@@ -31,8 +33,6 @@ class bigint {
 		bool operator<=(const bigint& other) const;
 		bool operator==(const bigint& other) const;
 		bool operator!=(const bigint& other) const;
-
-	std::string val;// default is private
 };
 
 std::ostream& operator<<(std::ostream& os, const bigint& obj);

@@ -13,11 +13,15 @@ bigint::bigint(unsigned int n){
 	val = ss.str();
 }
 
+/*
+Shallow copy: copies the pointer, both objects point to same data.
+  Deep copy: copies the actual data, each object has its own.
+*/
 bigint::bigint(const bigint& other) : val(other.val) {}
 
 bigint::~bigint() {}
 
-bigint bigint::operator=(const bigint& other) {
+bigint& bigint::operator=(const bigint& other) {
 	if (this != &other)
 		val = other.val;
 	return *this;

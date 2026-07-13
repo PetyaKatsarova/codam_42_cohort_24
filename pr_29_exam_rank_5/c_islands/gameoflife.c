@@ -1,3 +1,10 @@
+/* Subject: given a map file of 'X' (alive) and '.' (dead) cells, compute
+   and print the next generation according to Conway's Game of Life rules:
+   - a live cell with 2 or 3 live neighbors survives
+   - a dead cell with exactly 3 live neighbors becomes alive
+   - every other cell dies or stays dead
+   On any read/parse/allocation error, print just a newline and exit 1. */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -12,6 +19,7 @@ typedef struct s_grid
 	char	*cells;
 }	t_grid;
 
+/* Frees the grid's cell buffer and resets the struct to an empty state. */
 static void	grid_free(t_grid *grid)
 {
 	if (grid->cells != NULL)
@@ -21,6 +29,10 @@ static void	grid_free(t_grid *grid)
 	grid->height = 0;
 }
 
+/* Reads all bytes from fd into a heap buffer, growing it in READ_CHUNK
+   steps and nul-terminating it. Stores the number of bytes read (not
+   counting the terminator) in *raw_size. Returns NULL on read/alloc
+   error or if the file was empty. */
 static char	*read_all(int fd, int *raw_size)
 {
 	char	buffer[READ_CHUNK];
@@ -58,6 +70,10 @@ static char	*read_all(int fd, int *raw_size)
 	return (raw);
 }
 
+/* Validates that raw is a rectangular map made only of 'X', '.' and
+   '\n' characters, then fills grid->width/height/cells from it (cells
+   holds the map without newlines, row-major). Returns 1 on success,
+   0 on any parse or allocation error. */
 static int	parse_map(const char *raw, int raw_size, t_grid *grid)
 {
 	int	width;
@@ -122,6 +138,8 @@ static int	parse_map(const char *raw, int raw_size, t_grid *grid)
 	return (1);
 }
 
+/* Counts how many of the 8 neighbors of (row, col) are alive ('X'),
+   ignoring neighbors that fall outside the grid bounds. */
 static int	alive_neighbors(const t_grid *grid, int row, int col)
 {
 	static int	dr[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -147,6 +165,9 @@ static int	alive_neighbors(const t_grid *grid, int row, int col)
 	return (count);
 }
 
+/* Applies Conway's Game of Life rules once to grid, writing the next
+   generation into the caller-allocated next buffer (same dimensions
+   as grid, laid out row-major). */
 static void	game_of_life_step(const t_grid *grid, char *next)
 {
 	int	row;
@@ -179,6 +200,8 @@ static void	game_of_life_step(const t_grid *grid, char *next)
 	}
 }
 
+/* Writes the grid to fd 1, one row per line, each cell as its raw
+   'X'/'.' character. */
 static void	print_grid(const char *cells, int width, int height)
 {
 	int	row;
@@ -200,6 +223,8 @@ static void	print_grid(const char *cells, int width, int height)
 	}
 }
 
+/* Entry point: reads argv[1] as a map file, validates it, advances it
+   one Game of Life generation and prints the result. */
 int	main(int argc, char **argv)
 {
 	t_grid	grid;
