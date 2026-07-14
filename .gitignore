@@ -43,6 +43,9 @@ data/
 # Executables
 *.exe
 *.out
+../*.out
+../../../*.out
+../../../../../*.out
 *.app
 *.i*86
 *.x86_64

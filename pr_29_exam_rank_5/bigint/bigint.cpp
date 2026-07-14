@@ -1,5 +1,47 @@
 #include "bigint.hpp"
 #include <sstream>
+#include <algorithm> // std::reverse(begin, end)
+
+// ------------ helpers ----------------
+/* rmv leading 0s */
+void bigint::normalize() {
+	std::size_t pos = 0;
+	while (pos < val.length() - 1 && val[pos] == '0')
+		pos++; // having min 1 digit
+	if (pos > 0)
+		val = val.substr(pos);
+}
+
+int bigint::compare(const bigint& other) const {
+	if (val.length() < other.val.length()) 
+		return -1;
+
+	if (val.length() > other.val.length()) 
+		return 1;
+
+	for (std::size_t i = 0; i < val.length(); i++) {
+		if (val[i] < other.val[i])
+			return -1;
+		if (val[i] > other.val[i])
+			return 1;
+	}
+	return 0;
+}
+
+std::size_t	bigint::to_size_t () const {
+	std::size_t num = 0;
+	for (std::size_t i = 0; i < val.size(); i++) // size() returns size_t
+		num = num * 10 + (val[i] - '0');
+	return num;
+}
+
+bigint 	operator+(const bigint& lhs,  const bigint& rhs) {
+	bigint temp(lhs);
+	temp += rhs;
+	return temp;
+}
+
+// -------------- end helpers --------------
 
 std::ostream& operator<<(std::ostream& os, const bigint& obj) {
 	return (os << obj.get_val());
@@ -29,12 +71,12 @@ bigint& bigint::operator=(const bigint& other) {
 
 std::string bigint::get_val() const { return val; }
 
-bigint bigint::operator+(const bigint& other) const {
+bigint& bigint::operator+=(const bigint& other) {
 	std::string v1 = val;
 	std::string v2 = other.get_val();
 	std::string result;
-	int size_this = v1.size();
-	int size_other = v2.size();
+	std::size_t size_this = v1.size();
+	std::size_t size_other = v2.size();
 	int carry = 0;
 
 	while (carry || size_this > 0 || size_other > 0) {
@@ -43,16 +85,12 @@ bigint bigint::operator+(const bigint& other) const {
 			sum += v1[--size_this] - '0';
 		if (size_other > 0)
 			sum += v2[--size_other] - '0';
-		result.insert(result.begin(), (sum % 10) + '0');
+		result += char((sum % 10) + '0');
 		carry = sum / 10;
 	}
-	bigint res;
-	res.val = result;
-	return res;
-}
-
-bigint& bigint::operator+=(const bigint& other) {
-	*this = *this + other;
+	std::reverse(result.begin(), result.end());
+	val = result;
+	normalize();
 	return *this;
 }
 
@@ -81,22 +119,13 @@ bigint& bigint::operator<<=(unsigned int n) {
 }
 
 // 1337 >> 2 == 13
-bigint	bigint::operator>>(const bigint& shift) const {
-	unsigned int n = 0;
-	unsigned int len = shift.val.size();
-	std::string result = val;
-
-	for (unsigned int i = 0; i < len; i++)
-		n = n * 10 + (shift.val[i] - '0');
-	
-	if (result == "0" || n >= result.size())
-		result = "0";
-	else
-	 {
-		result.erase(result.size() - n);
-	}
+bigint	bigint::operator>>(const bigint& other) const {
 	bigint temp(*this);
-	temp.val = result;
+	size_t shift = other.to_size_t();
+	if (temp.val == "0" || shift >= temp.val.size())
+		temp.val = "0";	
+	else
+		temp.val.erase(temp.val.size() - shift);
 	return temp;
 }
 	
@@ -106,30 +135,22 @@ bigint& bigint::operator>>=(const bigint& shift) {
 }
 
 bool bigint::operator>(const bigint& other) const {
-	if (val.size() != other.val.size())
-		return val.size() > other.val.size();
-	return (val > other.val);
+	return (compare(other) > 0); 
 }
 
 bool bigint::operator<(const bigint& other) const {
-	if (val.size() != other.val.size())
-		return val.size() < other.val.size();
-	return (val < other.val);
+	return (compare(other) < 0);
 }
 
 bool bigint::operator>=(const bigint& other) const {
-	return (*this == other || *this > other);
+	return (compare(other) >= 0);
 }
 bool bigint::operator<=(const bigint& other) const {
-	return (*this == other || *this < other);
+	return (compare(other) <= 0);
 }
 bool bigint::operator==(const bigint& other) const {
-	if (val.size() != other.val.size())
-		return false;
-	return val == other.val;
+	return (compare(other) == 0);
 }
 bool bigint::operator!=(const bigint& other) const {
-	if (val.size() != other.val.size())
-		return true;
-	return val != other.val;
+	return (compare(other) != 0);
 }

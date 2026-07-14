@@ -1,11 +1,10 @@
 #include "bigint.hpp"
 #include <iostream>
 
-//g++ -std=c++98 -Wall -Wextra -Werror main.cpp bigint.cpp && ./a.out
 int main()
 {
 	const bigint a(42);
-	bigint b(21), c, d(1337), e(d);
+	bigint b(21), c, d(999999999), e(d);
 
 
 	std::cout << "a = " << a << std::endl;
@@ -17,13 +16,14 @@ int main()
 	std::cout << "a + b = " << a + b << std::endl;
 	std::cout << "(c += a) = " << (c += a) << std::endl;
 	std::cout << "b = " << b << std::endl;
+	std::cout << "c = " << c << std::endl;
 	std::cout << "++b = " << ++b << std::endl;
 	std::cout << "b++ = " << b++ << std::endl;
 	std::cout << "b = " << b << std::endl;
 	std::cout << "(b << 10) + 42 = " << (b << 10) + 42 << std::endl;
 	std::cout << "(d <<= 4) = " << (d <<= 4) << std::endl;
 	std::cout << "d = " << d << std::endl;
-	std::cout << "(d >> 2) = " << (d >>= (const bigint)2) << std::endl;
+	std::cout << "(d >> 2) = " << (d >> (const bigint)2) << std::endl;
 	std::cout << "d = " << d << std::endl;
 	std::cout << "(d >>= 2) = " << (d >>= (const bigint)2) << std::endl;
 	std::cout << "a = " << a << std::endl;
@@ -55,6 +55,21 @@ int main()
 	std::cout << "test2=" << test2 <<"\n";
 	std::cout << "test2>>=2 = " << (test2>>=(const bigint)2) <<"\n";
 	std::cout << "test2=" << test2 <<"\n";
+	std::cout << "-------------- carry / normalization test ---------\n";
+	bigint many9(999999999);
+	std::cout << "many9 = " << many9 <<"\n";
+	std::cout << "many9 + 1 = " << (many9 + bigint(1)) <<"\n";
+	std::cout << "many9 += 1 = " << (many9 += bigint(1)) <<"\n";
+	std::cout << "many9 = " << many9 <<"\n";
+	std::cout << "many9 == 1000000000 = " << (many9 == bigint(1000000000)) <<"\n";
+	std::cout << "-------------- 50 nines carry test ----------------\n";
+	bigint fifty_nines(9);
+	for (int i = 0; i < 149; i++)
+		fifty_nines = (fifty_nines << 1) + bigint(9);
+	std::cout << "fifty_nines = " << fifty_nines <<"\n";
+	std::cout << "fifty_nines + 1 = " << (fifty_nines + bigint(1)) <<"\n";
+	std::cout << "fifty_nines += 1 = " << (fifty_nines += bigint(1)) <<"\n";
+	std::cout << "fifty_nines = " << fifty_nines <<"\n";
 }
 
 /*

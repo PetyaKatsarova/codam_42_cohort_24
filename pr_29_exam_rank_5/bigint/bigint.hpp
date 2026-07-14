@@ -3,10 +3,14 @@
 
 #include <ostream>
 #include <string>
+#include <cstddef> // c compatability standard definitions for std:size_t
 
 class bigint {
 	private:
 		std::string val;// default is private
+		void 	normalize();
+		int		compare(const bigint& other) const;
+		size_t	to_size_t() const;
 
 	public:
 		bigint();
@@ -17,7 +21,6 @@ class bigint {
 
 		std::string get_val() const;
 
-		bigint 	operator+(const bigint& other) const;
 		bigint& operator+=(const bigint& other);
 		bigint& operator++();
 		bigint	operator++(int);
@@ -36,5 +39,7 @@ class bigint {
 };
 
 std::ostream& operator<<(std::ostream& os, const bigint& obj);
+
+bigint 	operator+(const bigint& lhs,  const bigint& rhs);
 
 #endif
