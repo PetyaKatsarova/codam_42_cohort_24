@@ -1,11 +1,13 @@
-#include "bigint.hpp"
+// #include "bigint.hpp"
+// #include "bigint1.hpp"
+#include "bigint3.hpp"
 #include <iostream>
 
 int main()
 {
 
 	const bigint a(42);
-	bigint b(21), c, d(999999999), e(d);
+	bigint b(21), c, d(1234), e(d);
 
 	std::cout << "a = " << a << std::endl;
 	std::cout << "b = " << b << std::endl;
@@ -24,8 +26,8 @@ int main()
 	std::cout << "b = " << b << std::endl;
 	std::cout << "(d <<= 4) = " << (d <<= 4) << std::endl;
 	std::cout << "d = " << d << std::endl;
-	//std::cout << "(d >> 2) = " << (d >> (const bigint)2) << std::endl;
-	//std::cout << "d = " << d << std::endl;
+	std::cout << "(d >> 2) = " << (d >> (const bigint)2) << std::endl;
+	std::cout << "d = " << d << std::endl;
 	std::cout << "(d >>= 2) = " << (d >>= (const bigint)2) << std::endl;
 	std::cout << "a = " << a << std::endl;
 	std::cout << "d = " << d << std::endl;
@@ -35,7 +37,7 @@ int main()
 	std::cout << "(d != a) = " << (d != a) << std::endl;
 	std::cout << "(d <= a) = " << (d <= a) << std::endl;
 	std::cout << "(d >= a) = " << (d >= a) << std::endl;
-	//std::cout << "-------------- edge cases << && <<=---------\n";
+	std::cout << "-------------- edge cases << && <<=---------\n";
 	//bigint test(62);
 	//std::cout << "test=" << test <<"\n";
 	//std::cout << "test<<0 = " << (test<<0) <<"\n";
