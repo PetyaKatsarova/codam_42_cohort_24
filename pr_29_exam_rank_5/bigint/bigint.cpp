@@ -1,13 +1,13 @@
 #include "bigint.hpp"
 #include <sstream>
+
 //c++ -Wall -Wextra -Wall main.cpp bigint.cpp && ./a.out
 
-void	bigint::normalize() {
-	std::size_t pos = 0;
-	//err:2: was if,not while
-	while (pos < _val.size() - 1 && _val[pos] == '0')
-		pos++;
-	_val = _val.substr(pos);
+void bigint::normalize() {
+	size_t i = 0;
+	while (_val.size() - 1 > i && _val[i] == '0')
+		i++;
+	_val.erase(i);
 }
 
 int	bigint::compare(const bigint& other) const {
@@ -64,20 +64,19 @@ std::string bigint::get_val() const {
 }
 
 bigint& bigint::operator+=(const bigint& other) {
+	std::string result;
 	std::string v1 = _val;
 	std::string v2 = other.get_val();
-	std::size_t len_v1 = v1.size();
-	std::size_t len_v2 = v2.size();
-	std::string result;
 	int carry = 0;
+	unsigned int len_v1 = v1.size();
+	unsigned int len_v2 = v2.size();
 
-	while (carry || len_v1 > 0 || len_v2 > 0) {
-		std::size_t sum = carry;
+	while (carry > 0 || len_v1 > 0 || len_v2 > 0) {
+		int sum = carry;
 		if (len_v1 > 0)
 			sum += v1[--len_v1] - '0';
 		if (len_v2 > 0)
 			sum += v2[--len_v2] - '0';
-
 		result.insert(result.begin(), (sum % 10) + '0');
 		carry = sum / 10;
 	}
@@ -99,14 +98,14 @@ bigint	bigint::operator++(int) {
 
 //42 << 3 == 42000 todo: had to be param: size_t or unsigned int??
 bigint 	bigint::operator<<(const bigint& other) const {
-	bigint temp(*this);
-	std::size_t shift = other.to_size_t();
-
-	if (other._val == "0" || _val == "0")
-		return temp;
-
-	temp._val.append(shift, '0');
-	return temp;
+	unsigned int shift = 0;
+	bigint res(*this);
+	for (unsigned int i = 0; i < other._val.size(); i++)
+		shift = shift * 10 + (other._val[i] - '0');
+	if (res._val == "0" || shift == 0)
+		return res;
+	res._val.append(shift, '0');
+	return res;
 }
 	
 bigint& bigint::operator<<=(const bigint& other) {
@@ -114,20 +113,27 @@ bigint& bigint::operator<<=(const bigint& other) {
 	return *this;
 }
 
-//bigint 	operator>>(const bigint& other) const {
+//1337 >> 2 == 13; 12345 >> 2 ; erase(5 - 2=3 from i 3)
+bigint 	bigint::operator>>(const bigint& other) const {
+	bigint res(*this);
+	unsigned int shift = 0;
+	unsigned int othersize = other._val.size();
+	unsigned int valsize = res._val.size();
 
-//}
+	if ((other._val) == "0" || res._val == "0")
+		return res;
+	for (unsigned int i = 0; i < othersize; i++)
+		shift = shift * 10 + (other._val[i] - '0');
+	if (shift > valsize)
+		res._val = "0";
+	else
+		res._val.erase(valsize - shift);
+	return res;
+}
 		
 //1337 >> 2 == 13
 bigint& bigint::operator>>=(const bigint& other) {
-	std::size_t shift = other.to_size_t();
-	if (_val == "0") return *this;
-
-	if (_val.size() <= shift)
-		_val = "0";
-	else if (shift > 0){
-		_val.erase(_val.size() - shift);
-	}
+	*this = *this >> other;
 	return *this;
 }
 

@@ -5,7 +5,7 @@
 #include "set.hpp"
 
 
-// c++ tree_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp array_bag.cpp main.cpp
+// c++ tree_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp array_bag.cpp main.cpp set.cpp
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -28,6 +28,10 @@ int main(int ac, char **av)
 	}
 	t->clear();
 	a->clear();
+	/*
+	!!NB!!
+	
+	*/
 	const searchable_array_bag tmp(dynamic_cast<searchable_array_bag &>(*a));
 	tmp.print();
 	tmp.has(1);

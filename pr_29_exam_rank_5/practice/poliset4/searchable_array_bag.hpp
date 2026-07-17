@@ -16,7 +16,7 @@ You have member variables that need special handling
 You need to override the inherited behavior
  */
 
-class searchable_array_bag : virtual public searchable_bag, public array_bag {
+class searchable_array_bag : public searchable_bag, public array_bag {
 	public:
 
 		bool has(int) const;

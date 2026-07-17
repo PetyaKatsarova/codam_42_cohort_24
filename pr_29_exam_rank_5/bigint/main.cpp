@@ -1,8 +1,9 @@
-// #include "bigint.hpp"
+ #include "bigint.hpp"
 // #include "bigint1.hpp"
-#include "bigint3.hpp"
+//#include "bigint3.hpp"
 #include <iostream>
 
+//c++ -Wall -Wextra -Werror main.cpp bigint.cpp
 int main()
 {
 
