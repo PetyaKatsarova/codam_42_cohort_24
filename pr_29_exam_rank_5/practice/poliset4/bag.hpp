@@ -5,22 +5,28 @@
 /*
 theory:
 1. virtual on a function → about behavior (polymorphism):
-cppclass bag {
+class bag {
 public:
     virtual void insert(int) = 0;   // pure virtual → bag is abstract
     virtual ~bag() {}
 };
-= 0 makes a function pure, and a class with at least one pure virtual function is abstract (can't be instantiated). That's the rule you remembered — but it's about functions, not inheritance.
+= 0 makes a function pure, and a class with at least one pure virtual function is abstract (can't be instantiated).
+
 2. virtual in the inheritance list → about memory layout (the diamond):
-cppclass array_bag : virtual public bag { ... };
+class array_bag : virtual public bag { ... };
 This has nothing to do with whether bag is abstract or has pure functions. It says: "if two branches of a hierarchy both contain bag, keep only one shared bag sub-object instead of two copies."
-Without it, searchable_array_bag would contain two separate bags (one via array_bag, one via searchable_bag), and every mention of a bag member would be an ambiguity error.
-Proof they're independent: you could have a diamond of completely non-abstract classes with zero virtual functions and still need virtual inheritance to merge the base. And conversely, an abstract class inherited through a single path needs no virtual inheritance at all.
+Virtual on inheritance solves exactly one problem: the same base class reachable through two+ paths, which would otherwise duplicate it. You add virtual to the middle classes, not the diamond's tip.
 
-here's no virtual class in C++ — the word only attaches to functions or to inheritance, never to the class itself. What you casually call a "virtual class" is either "abstract class" (has a pure virtual function) or "virtual base" (inherited virtually).
+          bag (abstract: insert/print/clear are =0)
+         / |  \
+  arr_b tr_b searchable_bag (abstract: has()=0)
 
-when do I need virtual inheritance?
-Only when a diamond exists (or might exist): the same base reachable through two paths. Your rule at the end is exactly right: two classes inherit from the same base, and I inherit from both of them → those two classes must inherit the base with virtual public. The virtual goes on the middle classes (array_bag, searchable_bag), because they're the ones creating the duplicate paths. It's about memory layout, nothing else.
+  array_bag, tree_bag, searchable_bag each do virtual public bag. Not because bag needs it alone — a single inheritance path never needs virtual —
+  but because you know downstream classes will combine two of these branches.
+
+  searchable_array_bag : virtual public array_bag, virtual public searchable_bag — here's the actual diamond: bag is reachable via array_bag→bag
+  and via searchable_bag→bag. Since both parents already inherited bag virtually, searchable_array_bag gets one shared bag subobject instead of
+  two ambiguous copies. searchable_tree_bag is the identical pattern with tree_bag swapped in.
 
 !!NB!!
 a class with any virtual function should have a virtual destructor. Once one destructor in the chain is virtual, all derived destructors are automatically virtual too — that's why array_bag's plain ~array_bag() would become virtual for free.

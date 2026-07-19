@@ -5,7 +5,7 @@
 #include "set.hpp"
 
 
-// c++ tree_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp array_bag.cpp main.cpp set.cpp
+// c++ -Wall -Wextra -Werror tree_bag.cpp searchable_tree_bag.cpp searchable_array_bag.cpp array_bag.cpp main.cpp set.cpp
 int main(int ac, char **av)
 {
 	if (ac == 1)
@@ -51,6 +51,8 @@ int main(int ac, char **av)
 	sa.insert(arr, 4);
 	delete a;
 	delete t;
+
+	return 0;
 }
 
 // Here's how wikipedia define sets and bags:
