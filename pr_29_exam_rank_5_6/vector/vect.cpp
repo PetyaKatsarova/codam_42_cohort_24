@@ -123,10 +123,8 @@ vect& vect::operator*=(int num) {
 	return *this;
 }
 
-vect& vect::operator-() {
-	vec[0] = -vec[0];
-	vec[1] = -vec[1];
-	return *this;
+vect vect::operator-() const {
+	return (vect(-vec[0], -vec[1]));
 }
 
 bool vect::operator==(const vect& other) const {

@@ -27,7 +27,7 @@ public:
 	vect& operator*=(int num);
 
 	// urinary operator(like - is num = - num)
-	vect& operator-();
+	vect operator-() const;
 	
 	bool operator==(const vect& other) const;
 	bool operator!=(const vect& other) const;
