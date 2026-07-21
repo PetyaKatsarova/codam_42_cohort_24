@@ -5,9 +5,8 @@
 #include "set.hpp"
 
 /*
-need to create searchable_tree and array_bag from searchable_bag;
+need to create searchable_tree and array_bag from searchable_bag and bag;
 need to create set wrapping searchable_bag class
-c++ main.cpp sear
 */
 //c++ main.cpp set.cpp searchable_tree_bag.cpp searchable_array_bag.cpp tree_bag.cpp array_bag.cpp
 
@@ -38,20 +37,22 @@ int main(int ac, char **av)
 	const searchable_array_bag tmp(static_cast<searchable_array_bag &>(*a));
 	tmp.print();
 	tmp.has(1);
-	set sa(*a);
-	set st(*a);
-	for (int i = 1; i < ac; i++)
-	{
-		st.insert(atoi(av[i]));
-		sa.insert(atoi(av[i]));
-	}
-	sa.has(atoi(av[1]));
-	sa.print();
-	sa.get_bag().print();
-	st.print();
-	sa.clear();
- 	int arr[] = {1, 2, 3, 4,};
-	sa.insert(arr, 4);
+	//set sa(*a);
+	//set st(*a);
+	//for (int i = 1; i < ac; i++)
+	//{
+	//	st.insert(atoi(av[i]));
+	//	sa.insert(atoi(av[i]));
+	//}
+	//sa.has(atoi(av[1]));
+	//sa.print();
+	//sa.get_bag().print();
+	//st.print();
+	//sa.clear();
+ 	//int arr[] = {1, 2, 3, 4,};
+	//sa.insert(arr, 4);
+	free(t);
+	free(a);
 	return 0;
 }
 
