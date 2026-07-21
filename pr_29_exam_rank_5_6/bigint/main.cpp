@@ -1,10 +1,10 @@
 //  #include "bigint.hpp"
 // #include "bigint1.hpp"
-//#include "bigint3.hpp"
-#include "bigint4.hpp"
+#include "bigint3.hpp"
+//#include "bigint4.hpp"
 #include <iostream>
 
-//c++ -Wall -Wextra -Werror main.cpp bigint4.cpp
+//c++ -Wall -Wextra -Werror main.cpp bigint3.cpp
 int main()
 {
 
@@ -39,7 +39,7 @@ int main()
 	std::cout << "(d != a) = " << (d != a) << std::endl;
 	std::cout << "(d <= a) = " << (d <= a) << std::endl;
 	std::cout << "(d >= a) = " << (d >= a) << std::endl;
-	// std::cout << "-------------- edge cases << && <<=---------\n";
+	 std::cout << "-------------- edge cases << && <<=---------\n";
 	//bigint test(62);
 	//std::cout << "test=" << test <<"\n";
 	//std::cout << "test<<0 = " << (test<<0) <<"\n";

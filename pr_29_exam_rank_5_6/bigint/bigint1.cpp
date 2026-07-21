@@ -15,7 +15,7 @@ bigint operator+(const bigint& lhs, const bigint& rhs) {
 
 void bigint::normalize() {
     unsigned int i = 0;
-    while (val[i] == '0' && val.size() - 1 > i) 
+    while (val.size() - 1 > i && val[i] == '0') 
         i++;
     val.erase(0, i); // == val = val.susbstr(i);
 }

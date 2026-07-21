@@ -55,6 +55,21 @@ bigint::bigint(unsigned int n){
 	val = ss.str();
 }
 
+// cpp 98
+//bigint::bigint(unsigned int value) : _n() {
+//	if (value == 0) { //we set manually to 0
+//		_n = "0";
+//		return ;
+//	}
+//	_n = "";
+//	while (value > 0)
+//	{
+//		char digit = '0' + (value % 10); //isolate last digit + ascii 48
+//		_n = digit + _n; //this order of adding bc extracting from right-to-left
+//		value /= 10;//chop off last digit for the next to process
+//	}
+//}
+
 /*
 Shallow copy: copies the pointer, both objects point to same data.
   Deep copy: copies the actual data, each object has its own.
