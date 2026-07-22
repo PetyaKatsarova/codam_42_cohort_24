@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 int width_len(char *buf)
 {
@@ -10,6 +11,34 @@ int width_len(char *buf)
         i++;
     return i;
 }
+
+void putnbr(int n)
+{
+    char res;
+    if (n > 9)
+        putnbr(n / 10);
+    res = (n % 10) + '0';
+    write(1, &res, 1);
+}
+
+  void debug_char(int i, char c)
+  {
+      write(1, "i=", 2);
+      putnbr(i);
+      write(1, " val=", 5);
+      putnbr((unsigned char)c);
+      if (c == '\n')
+          write(1, " NEWLINE\n", 9);
+      else if (c == '\r')
+          write(1, " CR\n", 4);
+      else if (c == ' ')
+          write(1, " SPACE\n", 7);
+      else if (c != 'X' && c != '.')
+          write(1, " BAD\n", 5);
+      else
+          write(1, "\n", 1);
+  }
+
 
 /*
 1. validate: only X, . and \n; each line is == width
@@ -25,6 +54,8 @@ int validate_map(char *buf, int *width, int *height)
         return -1;
     while (buf[i])
     {
+		//debug_char(i, buf[i]);
+		//printf("*** %c\n", buf[i]);
         if (buf[i] == '\n')
         {
             if (len != w)
@@ -88,15 +119,6 @@ int get_largest(char *buf, int h, int w)
     return largest;
 }
 
-void putnbr(int n)
-{
-    char res;
-    if (n > 9)
-        putnbr(n / 10);
-    res = (n % 10) + '0';
-    write(1, &res, 1);
-}
-
 int main (int argc, char **argv)
 {
     int fd, bytes, width, height;
@@ -120,7 +142,7 @@ int main (int argc, char **argv)
     close(fd);
     buf[bytes] = '\0';
     if (validate_map(buf, &width, &height) == -1)
-        return (free(buf), write(1, "\n", 1), 1);
+        return (free(buf), write(1, "Erorr Map\n", 10), 1);
     biggest = get_largest(buf, height, width);
     putnbr(biggest);
     write(1, "\n", 1);

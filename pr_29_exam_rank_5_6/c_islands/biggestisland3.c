@@ -1,7 +1,8 @@
 #include <fcntl.h>
-#include <sys/stat.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#define BUF_SIZE 2000
 
 int width_len(char* buf)
 {

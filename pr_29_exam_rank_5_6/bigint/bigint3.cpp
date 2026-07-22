@@ -1,4 +1,4 @@
-#include "bigint3.hpp"
+#include "bigint3_solution.hpp"
 #include <sstream>
 #include <iostream>
 
@@ -20,7 +20,7 @@ bigint::bigint() : val("0") {}
 bigint::bigint(unsigned int n) {
 	std::stringstream ss;
 	ss << n;
-	val = ss.str(); // todo: learn old way!!
+	val = ss.str();
 	normalize();
 }
 
