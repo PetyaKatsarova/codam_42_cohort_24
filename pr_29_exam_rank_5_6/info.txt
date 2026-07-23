@@ -1,0 +1,6 @@
+git clone https://github.com/terminal-42s/42_examshell
+cd 42_examshell
+
+make
+
+bash exam.sh

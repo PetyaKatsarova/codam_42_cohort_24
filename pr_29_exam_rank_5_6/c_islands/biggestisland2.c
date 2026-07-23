@@ -4,6 +4,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+The number: ~131,000 cells
+Frame size is exactly 64 bytes (pushq %rbp = 8, subq $48, %rsp, return address = 8). Against the default 8 MB stack:
+
+8,388,608 / 64 = 131,072 frames
+
+Measured threshold:
+
+   map	cells				  result
+360×360	129,600	         129600
+365×365	133,225          segfault
+
+Dead on 131,072.
+*/
 int width_len(char *buf)
 {
     int i = 0;

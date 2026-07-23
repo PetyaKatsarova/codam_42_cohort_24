@@ -1,327 +1,292 @@
-#include <stdio.h> // stdin, fopen, readline
- #include <stdlib.h>
-/*
-  ┌──────────┬───────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ Function │       Signature       │                                                Returns                                                 │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ fopen    │ FILE *fopen(path,     │ Pointer to the open stream, or NULL on failure (bad path, no permission, etc.) — always check for NULL │
-  │          │ mode)                 │                                                                                                        │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ fclose   │ int fclose(FILE       │ 0 on success, EOF on failure — rarely checked, but exists                                              │
-  │          │ *stream)              │                                                                                                        │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │          │ int fscanf(FILE       │ The count of successfully matched/assigned conversions (e.g. how many of the %d %c %c %c actually got │
-  │ fscanf   │ *stream, format, ...) │  filled in). Returns EOF if it hits end-of-input before converting anything. Always check this equals  │
-  │          │                       │ what is expected — it's the only signal a malformed header was actually read                         │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ fprintf  │ int fprintf(FILE      │ Number of characters written, or negative on error. is basically never check this in practice         │
-  │          │ *stream, format, ...) │                                                                                                        │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ fputs    │ int fputs(const char  │ Non-negative on success, EOF on error. Writes the string as-is — unlike puts, it does not add a        │
-  │          │ *str, FILE *stream)   │ trailing \n for is                                                                                    │
-  ├──────────┼───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ free     │ void free(void *ptr)  │ Nothing — no return value at all                                                                       │
-  └──────────┴───────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
- correctness: fscanf's return value. It's not "did it crash" — it's "how many % conversions actually succeeded,"
- malformed header line detection
-  stdin/stdout/stderr are pre-opened FILE * values (streams) we pass as the first arg to fscanf/fprintf/etc.
+#include "bsq.h"
 
-*/
+int loadElements(FILE* file, t_elements* elements)
+{
+	int ret = fscanf(file, "%d %c %c %c", &(elements->n_lines), &(elements->empty), &(elements->obstacle), &(elements->full));
 
-// 9 . 0 x num of lines, empty char, obstacle, full char
-  void free_map(char **map, int rows)
-  {
-      int i;
+	if((ret != 4))
+		return(-1);
 
-      i = 0;
-      while (i < rows)
-      {
-          free(map[i]);
-          i++;
-      }
-      free(map);
-  }
+	if(elements->n_lines <= 0)
+		return(-1);
+	if(elements->empty == elements->obstacle || elements->empty == elements->full || elements->obstacle == elements->full)
+		return(-1);
+	if(elements->empty < 32 || elements->empty > 126)
+		return(-1);
+	if(elements->obstacle < 32 || elements->obstacle > 126)
+		return(-1);
+	if(elements->full < 32 || elements->full > 126)
+		return(-1);
 
-  int read_map(FILE *fp, int n, char empty_c, char ost_c, char full_c,
-               char ***map_out, int *width_out)
-  {
-      char **map;
-      char *line;
-      size_t cap;
-      ssize_t len;
-      int width;
-      int i, j;
+	return(0);
+}
 
-      map = malloc(n * sizeof(char *));
-      if (!map)
-          return (-1);
-      width = -1;
-      i = 0;
-      while (i < n)
-      {
-          line = NULL;
-          cap = 0;
-          len = getline(&line, &cap, fp);
-          if (len == -1 || line[len - 1] != '\n')
-          {
-              free(line);
-              free_map(map, i);
-              return (-1);
-          }
-          len--;
-          line[len] = '\0';
-          if (width == -1)
-              width = (int)len;
-          else if ((int)len != width)
-          {
-              free(line);
-              free_map(map, i);
-              return (-1);
-          }
-          j = 0;
-          while (j < width)
-          {
-              if (line[j] != empty_c && line[j] != ost_c && line[j] != full_c)
-              {
-                  free(line);
-                  free_map(map, i);
-                  return (-1);
-              }
-              j++;
-          }
-          map[i] = line;
-          i++;
-      }
-      *map_out = map;
-      *width_out = width;
-      return (0);
-  }
+char* ft_substr(char* arr, int start, int len)
+{
+	char* str = (char*)malloc(len + 1);
+	if (!str)
+		return (NULL);
+	int i = 0;
+	int j = 0;
+	while (arr[i])
+	{
+		if ((i >= start) && (j < len))
+		{
+			str[j] = arr[i];
+			j++;
+		}
+		i++;
+	}
+	str[j] = '\0';
+	return(str);
+}
 
-  /*
-    dp[i][j] = size of the largest all-empty square whose bottom-right
-    corner is at (i, j). Classic "maximal square" DP:
-      obstacle          -> dp[i][j] = 0
-      first row/col     -> dp[i][j] = 1
-      otherwise         -> 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
-    We only update best on strict '>' so scanning top-to-bottom,
-    left-to-right naturally gives the topmost-then-leftmost tie-break
-    the subject asks for, with no extra bookkeeping.
-  */
-  void solve_bsq(char **map, int n, int width, char empty_c, char full_c)
-  {
-      int **dp;
-      int i, j, r, c;
-      int best, best_i, best_j, top, left;
+void free_map(char** arr)
+{
+	int	i = 0;
+	if(arr)
+	{
+		while (arr[i] != NULL)
+		{
+			if(arr[i])
+				free(arr[i]);
+			i++;
+		}
+		free(arr);
+	}
+}
 
-      dp = malloc(n * sizeof(int *));
-      if (!dp)
-          return ;
-      i = 0;
-      while (i < n)
-      {
-          dp[i] = malloc(width * sizeof(int));
-          i++;
-      }
-      best = 0;
-      best_i = 0;
-      best_j = 0;
-      i = 0;
-      while (i < n)
-      {
-          j = 0;
-          while (j < width)
-          {
-              if (map[i][j] != empty_c)
-                  dp[i][j] = 0;
-              else if (i == 0 || j == 0)
-                  dp[i][j] = 1;
-              else
-              {
-                  dp[i][j] = dp[i - 1][j];
-                  if (dp[i][j - 1] < dp[i][j])
-                      dp[i][j] = dp[i][j - 1];
-                  if (dp[i - 1][j - 1] < dp[i][j])
-                      dp[i][j] = dp[i - 1][j - 1];
-                  dp[i][j] = dp[i][j] + 1;
-              }
-              if (dp[i][j] > best)
-              {
-                  best = dp[i][j];
-                  best_i = i;
-                  best_j = j;
-              }
-              j++;
-          }
-          i++;
-      }
-      if (best > 0)
-      {
-          top = best_i - best + 1;
-          left = best_j - best + 1;
-          r = top;
-          while (r <= best_i)
-          {
-              c = left;
-              while (c <= best_j)
-              {
-                  map[r][c] = full_c;
-                  c++;
-              }
-              r++;
-          }
-      }
-      i = 0;
-      while (i < n)
-      {
-          free(dp[i]);
-          i++;
-      }
-      free(dp);
-  }
+void print(char** arr)
+{
+	int i = 0;
+	while(arr[i])
+	{
+		printf("%s\n", arr[i]);
+		i++;
+	}
+	printf("\n");
+}
 
-  void print_map(char **map, int n)
-  {
-      int i;
+int element_control(char** map, char c1, char c2)
+{
+	int i = 0;
+	while(map[i])
+	{
+		int j = 0;
+		while(map[i][j] != '\0')
+		{
+			if((map[i][j] != c1) && (map[i][j] != c2))
+				return(-1);
+			j++;
+		}
+		i++;
+	}
+	return(0);
+}
 
-      i = 0;
-      while (i < n)
-      {
-          fputs(map[i], stdout);
-          fputs("\n", stdout);
-          i++;
-      }
-  }
+int loadMap(FILE* file, t_map* map, t_elements* elements)
+{
+	map->height = elements->n_lines;
+	map->grid = (char**)calloc(map->height + 1, sizeof(char*));
+	map->grid[map->height] = NULL;
 
-  int process_map(FILE *fp)
-  {
-      int n, width;
-      char empty_c, ost_c, full_c;
-      char **map;
-      char *junk;
-      size_t jcap;
+	char* line = NULL;
+	size_t len = 0;
 
-      if (fscanf(fp, "%d %c %c %c", &n, &empty_c, &ost_c, &full_c) != 4)
-          return (-1);
-      if (empty_c == ost_c || empty_c == full_c || ost_c == full_c)
-          return (-1);
-      if (n < 1)
-          return (-1);
-      junk = NULL;
-      jcap = 0;
-      getline(&junk, &jcap, fp);   /* consume rest of header line (its own \n) */
-      free(junk);
-      if (read_map(fp, n, empty_c, ost_c, full_c, &map, &width) == -1)
-          return (-1);
-      /* fprintf(stderr, "parsed OK: n=%d width=%d\n", n, width); */
-      solve_bsq(map, n, width, empty_c, full_c);
-      print_map(map, n);
-      free_map(map, n);
-      return (0);
-  }
+	if(getline(&line, &len, file) == -1) {
+		free_map(map->grid);
+		return(-1);
+	}
 
-  /*
- ./a.out "  9 . o x
-   ...........................
-   ....o......................
-   ............o..............
-   ...........................
-   ....o......................
-   ...............o...........
-   ...........................
-   ......o..............o.....
-   ..o.......o................
-   EOF
-" 
-  */
-  int main(int argc, char **argv)
-  {
-      FILE *fp;
-      int i;
+	//int i = 0;
+	//while(i < elements->n_lines)
+	for(int i = 0; i < map->height; i++)
+	{
+		int read = getline(&line, &len, file);
+		if(read == -1) {
+			free(line);
+			free_map(map->grid);
+			return(-1);
+		}
+		if(line[read - 1] == '\n')
+			read--;
+		else{
+			free(line);
+			free_map(map->grid);
+			return(-1);
+		}
+		map->grid[i] = ft_substr(line, 0, read);
+		if(!(map->grid[i]))
+		{
+			free(line);
+			free_map(map->grid);
+			return(-1);
+		}
 
-      if (argc == 1)
-      {
-          if (process_map(stdin) == -1)
-              fprintf(stderr, "map error\n");
-      }
-      else
-      {
-          for (i = 1; i < argc; i++)
-          {
-              fp = fopen(argv[i], "r");
-              if (!fp)
-                  fprintf(stderr, "map error\n");
-              else
-              {
-                  if (process_map(fp) == -1)
-                      fprintf(stderr, "map error\n");
-                  fclose(fp);
-              }
-              if (argc > 2 && i < argc - 1)
-                  fprintf(stdout, "\n");
-          }
-      }
-      return (0);
-  }
-  /**
-   * Assignment name              : bsq
-Expected files               : *.c *.h
-Allowed functions and globals: malloc, calloc, realloc, free, fopen, fclose,
-getline, fscanf, fputs, fprintf, stderr, stdout, stdin, errno
---------------------------------------------------------------------------------
+		if(i == 0)
+			map->width = read;
+		else{
+			if(map->width != read){
+				free(line);
+				free_map(map->grid);
+				return(-1);
+			}
+		}
+		//i++;
+	}
 
-The aim of this program is to find the biggest square on a map, avoiding obstacles.
-A file containing the map will be provided. It'll have to be passed as an argument for the program.
-The first line of the map contains information on how to read the map (space separated) :
- - The number of lines on the map;
- - The "empty" character;
- - The "obstacle" character;
- - The "full" character.
-The map is made up of '"empty" characters', lines and '"obstacle" characters'.
-The aim of the program is to replace '"empty" characters' by '"full" characters' in order to represent the biggest square possible.
-In the case that more than one solution exists, we'll choose to represent the square that's closest to the top of the map, then the one that's most to the left.
-When the program receives more than one map in argument, each solution or "map error" must be followed by a line break.
-Should there be no passed arguments, the program must be able to read on the standard input.
+	/*
+	ssize_t extra = getline(&line, &len, file);
+	if(extra != -1) {  // Fazladan satır var!
+		free(line);
+		free_map(map->grid);
+		return(-1);
+	}
+	// gerek var mı bilmiyorum??
+	*/
 
-Definition of a valid map :
- - All lines must have the same length.
- - There's at least one line of at least one box.
- - At each end of line, there's a line break.
- - The characters on the map can only be those introduced in the first line.
- - The map is invalid if a character is missing from the first line, or if two characters (of empty, full and obstacle) are identical.
- - The characters can be any printable character, even numbers.
- - In case of an invalid map, the program should display "map error" on the error output followed by a line break. the program will then move on to the next map.
+	if(element_control(map->grid, elements->empty, elements->obstacle) == -1) {
+		free(line);
+		free_map(map->grid);
+		return(-1);
+	}
 
-example:
-%>cat example_file
-9 . o x
-...........................
-....o......................
-............o..............
-...........................
-....o......................
-...............o...........
-...........................
-......o..............o.....
-..o.......o................
-%>./bsq example_file
-.....xxxxxxx...............
-....oxxxxxxx...............
-.....xxxxxxxo..............
-.....xxxxxxx...............
-....oxxxxxxx...............
-.....xxxxxxx...o...........
-.....xxxxxxx...............
-......o..............o.....
-..o.......o................
-%>
- The spec says "each solution or map error must be followed by a line break" when there's more than one map. My implementation puts the blank
-  line between maps, not trailing after the last one — that's the standard interpretation and matches how most bsq graders expect it, but the
-  wording alone doesn't 100% rule out "also after the last." I can't verify which the specific evaluator/moulinette expects without seeing it. If
-  is want, I can add it after the last map too — cheap change, but could just as easily be wrong in the other direction, so I'd rather is
-  confirm which behavior the peer evaluator's reference expects before I touch it.
+	free(line);
 
-  Bottom line: based on everything I can test against the written spec, this passes. The multi-map trailing-newline question is the one thing
-  outside what the spec text alone can settle.
+	return (0);
+}
 
-   */
+int find_min(int n1, int n2, int n3)
+{
+	int min = n1;
+
+	if(n2 < min)
+		min = n2;
+	if(n3 < min)
+		min = n3;
+	return(min);
+}
+
+void find_big_square(t_map* map, t_square* square, t_elements* elements)
+{
+	// matrix init
+	int matrix[map->height][map->width];
+	for(int i = 0; i < map->height; i++)
+	{
+		for(int j = 0; j < map->width; j++)
+			matrix[i][j] = 0;
+	}
+
+	for(int i = 0; i < map->height; i++)
+	{
+		for(int j = 0; j < map->width; j++)
+		{
+			if(map->grid[i][j] == elements->obstacle)
+				matrix[i][j] = 0;
+			else if(i == 0 || j == 0)
+				matrix[i][j] = 1;
+			else {
+				int min = find_min(matrix[i - 1][j],matrix[i - 1][j - 1], matrix[i][j - 1]);
+				matrix[i][j] = min + 1;
+			}
+
+			if(matrix[i][j] > square->size)
+			{
+				square->size = matrix[i][j];
+				square->i = i - matrix[i][j] + 1;
+				square->j = j - matrix[i][j] + 1;
+			}
+		}
+	}
+	/** matrix print
+	for(int i = 0; i < map->height; i++)
+	{
+		for(int j = 0; j < map->width; j++)
+		{
+			printf("%d", matrix[i][j]);
+		}
+		printf("\n");
+	}
+	*/
+
+}
+
+void print_filled_square(t_map* map, t_square* square, t_elements* elements)
+{
+
+	for(int i = square->i; i < square->i + square->size; i++)
+	{
+		for(int j = square->j; j < square->j + square->size; j++)
+		{
+			if((i < map->height) && (j < map->width))
+				map->grid[i][j] = elements->full;
+		}
+	}
+
+	for(int i = 0; i < map->height; i++)
+	{
+		fprintf(stdout, "%s\n", map->grid[i]);
+	}
+}
+
+int execute_bsq(FILE* file)
+{
+	t_elements elements;
+	if(loadElements(file, &elements) == -1)
+		return(-1);
+
+	t_map map;
+	if(loadMap(file, &map, &elements) == -1)
+		return(-1);
+
+	//print(map.grid);
+
+	t_square square;
+	square.size = 0; square.i = 0; square.j = 0;
+	find_big_square(&map, &square, &elements);
+	// printf("size: %d, i: %d, j: %d", square.size, square.i, square.j);
+	print_filled_square(&map, &square, &elements);
+	free_map(map.grid);
+	return(0);
+}
+
+int convert_file_pointer(char* name)
+{
+	FILE* file = fopen(name, "r");
+	if(!file)
+		return(-1);
+	int ret = 0;
+	ret = execute_bsq(file);
+	fclose(file);
+	return(ret);
+}
+
+#include "bsq.h"
+
+#include "bsq.h"
+
+int main(int argc, char** argv)
+{
+	if (argc < 2)
+	{
+		if (execute_bsq(stdin) == -1)
+		{
+			fflush(stdout);
+			fprintf(stderr, "map error\n");
+		}
+		return (0);
+	}
+
+	for (int i = 1; i < argc; i++)
+	{
+		if (convert_file_pointer(argv[i]) == -1)
+		{
+			fflush(stdout);
+			fprintf(stderr, "map error\n");
+		}
+		if (argc > 2)
+			fprintf(stdout, "\n");
+	}
+	return (0);
+}
