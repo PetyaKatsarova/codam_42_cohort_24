@@ -59,7 +59,7 @@ int read_map(FILE *fp, int rows, char empty, char obstacle, char ***out, int *w)
 		if (len < 1 || line[len - 1] != '\n')
 			return (free(line), free_map(map, i), -1);
 		len--;
-		line[len] = '\n'; // \n\0
+		line[len] = '\0'; // \n\0
 		if (*w == -1)
 			*w = (int)len;
 		if ((int)len != *w || *w < 1)
