@@ -5,16 +5,6 @@
 #define DEAD_CH ' '
 #define ALIVE_CH 'O'
 
-int ft_atoi(char *val)
-{
-	int i = 0, res = 0;
-	while (val[i])
-	{
-		res = res * 10 + (val[i] - '0');
-		i++;
-	}
-	return res;
-}
 
 /* read all into mem in one gulp
 return what was read from stdin, and update out_len
@@ -113,9 +103,9 @@ int main(int argc, char **argv)
 	unsigned char *cur, *next, *tmp; // cur, next board, swap slot
 
 	if (argc != 4) return (putchar('\n'), 1);
-	w = ft_atoi(argv[1]);
-	h = ft_atoi(argv[2]);
-	iter = ft_atoi(argv[3]);
+	w = atoi(argv[1]);
+	h = atoi(argv[2]);
+	iter = atoi(argv[3]);
 
 	if (w <= 0 || h <= 0) // our atoi doesnt work with sign:  || iter < 0
 		return 1;
