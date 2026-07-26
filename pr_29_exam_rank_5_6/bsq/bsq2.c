@@ -106,7 +106,6 @@
       otherwise         -> 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
     We only update best on strict '>' so scanning top-to-bottom,
     left-to-right naturally gives the topmost-then-leftmost tie-break
-    the subject asks for, with no extra bookkeeping.
   */
   void solve_bsq(char **map, int n, int width, char empty_c, char full_c)
   {
