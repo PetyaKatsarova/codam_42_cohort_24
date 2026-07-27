@@ -81,25 +81,13 @@ int count_islands(char *buf, int w, int h)
             {
                 floodfill(buf, w, h, i, j, fill);
                 count++;
-                // if (count < 10) not sure if > 9 what is requested
+                // if over 9 continue next ascii char
                     fill++;
             }
         }
     }
     return count;
 }
-
-// static void print_islands(char *buf, int w, int h)
-// {
-//     for (int i =0; i < h; i++)
-//     {
-//         for (int j = 0; j < w; j++)
-//         {
-//             write(1, &buf[i * w + j], 1);
-//         }
-//     }
-//     write(1, "\n", 1);
-// }
 
 static void put_nbr(int num)
 {
