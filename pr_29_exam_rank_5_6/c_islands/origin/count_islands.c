@@ -51,28 +51,26 @@ int validate_map(char *buf, int *width, int *height)
 /* floodfill: recursivly from each cell to find a island and returns the size
 returns: 0 on err, size of island on success: + num
 */
-int floodfill(char *buf, int w, int h, int row_i, int col_i)
+void floodfill(char *buf, int w, int h, int row_i, int col_i, char fill)
 {
-    int size = 1;
-    int idx = -1;
-
     if (row_i < 0 || row_i >= h || col_i < 0 || col_i >= w)
-        return (0);
+        return;
     
-    idx = row_i * (w + 1) + col_i;
-    if (!buf[idx] || buf[idx] != 'X') return 0;
-    buf[idx] = 'V';
-    size += floodfill(buf, w, h, row_i, col_i + 1);
-    size += floodfill(buf, w, h, row_i, col_i - 1);
-    size += floodfill(buf, w, h, row_i + 1, col_i);
-    size += floodfill(buf, w, h, row_i - 1, col_i);
-    return size;
+    int idx = row_i * (w + 1) + col_i;
+    if (!buf[idx] || buf[idx] != 'X') return;
+    buf[idx] = fill;
+    floodfill(buf, w, h, row_i, col_i + 1, fill);
+    floodfill(buf, w, h, row_i, col_i - 1, fill);
+    floodfill(buf, w, h, row_i + 1, col_i, fill);
+    floodfill(buf, w, h, row_i - 1, col_i, fill);
+    return;
 }
 
 // count islands
 int count_islands(char *buf, int w, int h)
 {
-    int count = 0, size = -1;
+    int count = 0;
+    char fill = '1';
 
     for (int i = 0; i < h; i++)
     {
@@ -81,39 +79,35 @@ int count_islands(char *buf, int w, int h)
             int idx = i * (w + 1) + j;
             if (buf[idx] == 'X')
             {
-                size = floodfill(buf, w, h, i, j);
-                if (size > 0) count++;
+                floodfill(buf, w, h, i, j, fill);
+                count++;
+                // if (count < 10) not sure if > 9 what is requested
+                    fill++;
             }
         }
     }
     return count;
 }
 
-/* returns size of largest num or -1 on err*/
-int largest_island(char *buf, int w, int h)
+// static void print_islands(char *buf, int w, int h)
+// {
+//     for (int i =0; i < h; i++)
+//     {
+//         for (int j = 0; j < w; j++)
+//         {
+//             write(1, &buf[i * w + j], 1);
+//         }
+//     }
+//     write(1, "\n", 1);
+// }
+
+static void put_nbr(int num)
 {
-    int largest = 0, size = -1, idx = -1;
-
-    for (int i = 0; i < h; i++)
-    {
-
-        for (int j = 0; j < w; j++)
-        {
-            idx = i * (w + 1) + j;
-            if (buf[idx] == 'X')
-            {
-                // can optimize and run floodfill only on 'X' cell like: but dont need to :only floodfill with i and j works
-                int idx = i * (w + 1) + j;
-                if (buf[idx] == 'X')
-                {
-                    size = floodfill(buf, w, h, i, j);
-                    if (size > largest)
-                        largest = size;
-                } 
-            }
-        }
-    }
-    return largest;
+    char c;
+    if (num > 9)
+        put_nbr(num/10);
+    c = num % 10 + '0';
+    write(1, &c, 1);
 }
 
 int main(int argc, char **argv)
@@ -139,12 +133,11 @@ int main(int argc, char **argv)
     if (validate_map(buf, &width, &height) == -1)
         return(printf("Not valid map\n"), 1);
     
-    // we change map X to V: so only 1 check at a run
-    // int count = count_islands(buf, width, height);
-    // printf("Number of islands are: (at least 1X) %d\n", count);
-
-    int li = largest_island(buf, width, height);
-    printf("Largest island is %d\n", li);
+    int count = count_islands(buf, width, height);
+    write(1, buf, bytes);
+    write(1, "\n", 1);
+    put_nbr(count);
+    write(1, "\n", 1);
     free(buf);
     return 0;
 }
