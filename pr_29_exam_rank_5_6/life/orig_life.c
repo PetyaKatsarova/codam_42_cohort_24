@@ -80,23 +80,23 @@ static char *slurp_stdin(size_t *out_len)
 ** is down -- including right after an x lowers it, so the pen leaves a
 ** mark where it touches down.
 */
-static void	draw(unsigned char *g, int w, int h, const char *in, size_t len)
+static void	draw(unsigned char *g, int w, int h, const char *cmds, size_t cmds_len)
 {
-	int		x = 0;
-	int		y = 0;
-	int		pen = 0;
+int		x = 0;
+int		y = 0;
+int		pen = 0;
 
-	for (size_t i = 0; i < len; i++)
+	for (size_t i = 0; i < cmds_len; i++)
 	{
-		if (in[i] == 'w' && y > 0)
+		if (cmds[i] == 'w' && y > 0)
 			y--;
-		else if (in[i] == 's' && y < h - 1)
+		else if (cmds[i] == 's' && y < h - 1)
 			y++;
-		else if (in[i] == 'a' && x > 0)
+		else if (cmds[i] == 'a' && x > 0)
 			x--;
-		else if (in[i] == 'd' && x < w - 1)
+		else if (cmds[i] == 'd' && x < w - 1)
 			x++;
-		else if (in[i] == 'x')
+		else if (cmds[i] == 'x')
 			pen = !pen;
 		if (pen)
 			g[y * w + x] = 1;
@@ -117,18 +117,16 @@ static void	draw(unsigned char *g, int w, int h, const char *in, size_t len)
 static int	neighbours(const unsigned char *g, int w, int h, int x, int y)
 {
 	int	n = 0;
-	int	step_x;
-	int	step_y;
 
-	for (step_y = -1; step_y <= 1; step_y++)
+	for (int i = -1; i <= 1; i++)
 	{
-		for (step_x = -1; step_x <= 1; step_x++)
+		for (int j = -1; j <= 1; j++)
 		{
-			if (step_x == 0 && step_y == 0)
+			if (j == 0 && i == 0)
 				continue ;
-			if (y + step_y < 0 || y + step_y >= h || x + step_x < 0 || x + step_x >= w)
+			if (y + i < 0 || y + i >= h || x + j < 0 || x + j >= w)
 				continue ;
-			n += g[(y + step_y) * w + (x + step_x)];
+			n += g[(y + i) * w + (x + j)];
 		}
 	}
 	return (n);
@@ -173,7 +171,7 @@ int	main(int argc, char **argv)
 	int				h;
 	int				iter;
 	size_t			len = 0;
-	char			*in;
+	char			*cmds;
 	unsigned char	*cur;
 	unsigned char	*next;
 	unsigned char	*tmp;
@@ -187,10 +185,10 @@ int	main(int argc, char **argv)
 		return (1);
 	cur = calloc((size_t)w * h, 1);
 	next = calloc((size_t)w * h, 1);
-	in = slurp_stdin(&len);
-	if (!cur || !next || !in)
-		return (free(cur), free(next), free(in), 1);
-	draw(cur, w, h, in, len);
+	cmds = slurp_stdin(&len);
+	if (!cur || !next || !cmds)
+		return (free(cur), free(next), free(cmds), 1);
+	draw(cur, w, h, cmds, len);
 	while (iter-- > 0)
 	{
 		step(cur, next, w, h);
@@ -201,6 +199,6 @@ int	main(int argc, char **argv)
 	print_board(cur, w, h);
 	free(cur);
 	free(next);
-	free(in);
+	free(cmds);
 	return (0);
 }

@@ -5,7 +5,6 @@
 #define DEAD_CH ' '
 #define ALIVE_CH 'O'
 
-
 /* read all into mem in one gulp
 return what was read from stdin, and update out_len
 */

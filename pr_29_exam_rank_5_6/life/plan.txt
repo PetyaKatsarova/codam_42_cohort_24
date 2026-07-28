@@ -1,0 +1,52 @@
+top to btm:
+------
+1. main
+------
+a) char *cmds, unsigned char *cur, *next, *tmp
+calloc
+size_t len
+b)  cmds = get_cmds(&len);
+c) draw(cur, w, h, cmds, len);
+d) while (iter-->0)
+	step(cur, next, w, h);
+	tmp = cur;
+	cur = next;
+	next = tmp;
+e) print_board
+f) free cur, next, get_cmds
+=========================
+2. static char *get_cmds(size_t *len)
+-----
+a) *buf = malloc(cap) // 4096
+b) while ((ssize_t n = read(0, buf+len, cap-len)) > 0)
+	size_t	l+=(size_t)n;
+	if (l == cap) realloc(buf, cap * 2)..
+	*len = l;
+	return (buf);
+=========================
+3. void draw(unsigned char *g, w, h, const char *cmds, str_len)
+---
+int		x = 0;
+int		y = 0;
+int		pen = 0;
+a)we know it: if (pen)g[y*w+x] = 1;
+======================
+4. int neighb(const unsigned char *g, w, h, x, y)
+----
+for (int i = -1; i <= 1; i++)
+	for (int j = -1; ..)
+		if (j == 0 && i == 0) continue;
+		if (out of bounds y+i || x+j) continue;
+		n += g[(y+i)*w + (x+j)]; return n;
+		// if n == 0 from calloc all are 0, but in draw we add 1 on drawn cells
+===========
+5. void step(*cur, *next, w, h)
+----
+2d loop: n = neighb(cur, w, h, x, y); 
+next[y*w + x] = (n == 3 ||(n == 2 && cur[y*w+x]))
+=============
+6. print_board(*g, w, h)
+	2d loop: putchar[g*w+x] ? alivech : deadch;
+	putchar('\n');
+=============
+

@@ -5,126 +5,137 @@
 #define DEAD_CH ' '
 #define ALIVE_CH 'P'
 
-/* step 1 get complete stdin str*/
-static char *get_cmds(size_t *cmds_len)
+/* fun fact: ^@ is null byte*0x00*, real space ' '90x20 */
+/*
+int n = 0;                          // neighbour count
+for (int i = -1; i <= 1; i++)       // row offset: above(-1), same(0), below(+1)
+  for (int j = -1; j <= 1; j++)     // col offset: left(-1), same(0), right(+1)
+    if (j == 0 && i == 0) continue; // skip the cell itself (0,0 offset)
+    if (y+i<0 || y+i>=h || x+j<0 || x+j>=w) continue; // skip out-of-bounds
+    n += g[(y + i) * w + (x + j)];  // add neighbour's value (1 if alive)
+return n;
+*/
+char* get_cmds(size_t *cmds_len)
 {
-	size_t cap = 4096;
-	size_t len = 0;
-	char *str_cmds = malloc(cap);
-	ssize_t n;
+	size_t cap = 4096, l = 0;
+	char* buf = malloc(cap);
+	ssize_t bytes;
 
-	if (!str_cmds) return NULL;
-	while ((n = read(0, str_cmds + len, cap - len)) > 0) {
-		if (n < 0)
+	if (!buf) return NULL;
+	while ((bytes = read(0, buf+l, cap-l)) > 0)
+	{
+		l += (size_t)bytes;
+		if (l == cap)
 		{
-			// if (errno == EINTR) continue;
-			free(str_cmds); return NULL;
-		}
-		len += (size_t)n;
-		if (len == cap)
-		{
-			char *tmp = realloc(str_cmds, cap * 2);
-			if (!tmp) return (free(str_cmds), NULL);
+			char *tmp = realloc(buf, cap * 2);
+			if (!tmp) return (free(buf), NULL); // rem freebuf!!
+			buf = tmp;
 			cap *= 2;
-			str_cmds = tmp;
 		}
 	}
-	*cmds_len = len;
-	return str_cmds;
+	if (bytes < 0) // read err rem!!
+		return (free(buf), NULL);
+	buf[l] = '\0'; // rem!! again!!!
+	*cmds_len = l;
+	return buf;
 }
 
-static void draw_map(unsigned char *map, const char *str_cmds, int w, int h, size_t cmds_len) {
-	int x = 0, y = 0, pen = 0;
+static void draw_board(char *cur, char *cmds, int w, int h, size_t cmds_len)
+{
+	int pen = 0, x = 0, y = 0;
 
 	for (size_t i = 0; i < cmds_len; i++)
 	{
-		if (str_cmds[i] == 'w' && y > 0)
+		if (cmds[i] == 'w' && y > 0)
 			y--;
-		else if (str_cmds[i] == 's' && y < h - 1)
+		else if (cmds[i] == 's' && y < h - 1)
 			y++;
-		else if (str_cmds[i] == 'a' && x > 0)
+		else if (cmds[i] == 'a' && x > 0)
 			x--;
-		else if (str_cmds[i] == 'd' && x < w - 1)
+		else if (cmds[i] == 'd' && x < w - 1)
 			x++;
-		else if (str_cmds[i] == 'x')
+		else if (cmds[i] == 'x')
 			pen = !pen;
 		if (pen)
-			map[y * w + x] = 1;
+			cur[y*w+x] = 1;
 	}
 }
-
-static int neighbours (const unsigned char *map, int w, int h, int x, int y)
+// x, y curr pos, + j + j: neighbrs: -1, 0, 1
+static int neighbours(char *curr, int w, int h, int x, int y)
 {
 	int n = 0;
 
-	for (int step_y = -1; step_y <= 1; step_y++)
+	for (int i = -1; i <= 1; i++)
 	{
-		for (int step_x = -1; step_x <= 1; step_x++)
+		for (int j = -1; j <= 1; j++)
 		{
-			if (step_x == 0 && step_y == 0)
+			if (i == 0 && j == 0) // self, no n
 				continue;
-			if (step_x + x < 0 || step_x + x >= w || step_y + y < 0 || step_y + y >=h )
-				continue;
-			n += map[(y + step_y) * w + (x + step_x)];
+			if (y + i < 0 || y + i >= h || j + x < 0 || j + x >= w) continue;
+			n += curr[(y+i)*w + (x + j)];
 		}
 	}
 	return n;
 }
-
-static void step(const unsigned char *cur, unsigned char *next, int w, int h)
+// for each cell, find neighbrs, write in next[idx] = 1 || 0: depending on how many ns
+static void step(char *cur, char *next, int w, int h)
 {
-	for (int y = 0; y < h; y++)
+	int n;
+	for (int i = 0; i < h; i++)
 	{
-		for (int x = 0; x < w; x++)
+		for (int j = 0; j < w; j++)
 		{
-			int n = neighbours(cur, w, h, x, y);
-			next[y * w + x] = (n == 3 || (n == 2 && cur[y * w + x])); // if 3 neighb or 2 and cell alive(1)
+			n = neighbours(cur, w, h, j, i);
+			next[i*w+j] = (n == 3 || (n == 2 && cur[i*w+j]));
 		}
 	}
 }
 
-static void print_board(const unsigned char *cur, int w, int h)
+static void print_board(char *cur, int w, int h)
 {
-	for (int y = 0; y < h; y++)
+	for (int i = 0; i < h; i++)
 	{
-		for (int x = 0; x < w; x++)
-			putchar(cur[y * w + x] ? ALIVE_CH : DEAD_CH);
+		for (int j = 0; j < w; j++)
+		{
+			putchar(cur[i*w+j] ? ALIVE_CH : DEAD_CH); // !!remem alive and dead!!
+		}
 		putchar('\n');
 	}
 }
 
-/*
-flow: 1.slurp stdin, 2. draw map, 3. steps, 4. print_borad
-*/
+//./life width height iterations: remem: 8 vars!!
 int main(int argc, char **argv)
 {
-	char 			*str_cmds;
-	unsigned char 	*cur, *next, *temp;
-	size_t			cmds_len;
-	int				w, h, iter, i = 0;
-	
-	if (argc != 4)
-		return (putchar('\n'), 1);
+	char *cmds;
+	char *cur, *next, *tmp = NULL;
+	size_t cmds_len = 0;
+	int w, h, iter;
+
+	(void)iter;
+	(void)tmp;
+	if (argc != 4) return 1;
 	w = atoi(argv[1]);
 	h = atoi(argv[2]);
 	iter = atoi(argv[3]);
-	if (w <= 0 || h <= 0 || iter < 0) return (1);
-	cur = calloc((size_t)w * h, 1);
-	next = calloc((size_t)w * h, 1);
-	str_cmds = get_cmds(&cmds_len);
-	if (!cur || !next || !str_cmds) return (free(str_cmds), free(cur), free(next), 1);
-	draw_map(cur, str_cmds, w, h, cmds_len);
-	while (i-- < iter)
+	// remem checks!!
+	if (w <= 0 || h <=0 || iter < 0) return 1;
+	cur = calloc(w * h + 1, 1);
+	next = calloc(w * h + 1, 1);
+	cmds = get_cmds(&cmds_len);
+	if (!cur || !next || ! cmds)
+		return(free(cur), free(cmds), free(next), 1);
+	//printf("cmds: %s\n", cmds); //for debug
+	draw_board(cur, cmds, w, h, cmds_len);
+	while (iter-- > 0)
 	{
-		step(cur, next, w, h);
-		temp = cur; // not changed
-		cur = next; // changed
-		next = temp; // original, not changed
-		i++;
+		step(cur, next, w, h); // on each step update from old
+		tmp = cur;
+		cur = next;
+		next = tmp;
 	}
 	print_board(cur, w, h);
 	free(cur);
 	free(next);
-	free(str_cmds);
+	free(cmds);
 	return 0;
 }
