@@ -1,0 +1,36 @@
+---
+life
+---
+/*
+plan:
+main: calloc cur, next; step->tmp=cur,cur=n, n= tmp
+getstr()
+draw_map(cur, cmds): wsadx
+neighbours(x=-1;  x<=1: loop): return n
+step(cur, next)next[i*w + j] = (n==3 ||(n==2 && cur[..]))
+printboard
+*/
+
+=================================
+bsq
+=================================
+main fopen(FILE* fp)->process
+---------------------------
+process()
+read_header, read_map(in loop: line = NULL, line[--len]='\0'), solve->
+print_grid, free_grid
+------------------
+solve()
+int *dp; calloc
+2d loop: follow grid:
+ *get_lowest(dp, m, i, j)->best: bi, bj,; fill_square
+---------------
+get_lowest(dp, m)
+if m->g[ij] == m->o return 0
+i == 0 || j == 0 ret 1
+v = dp[i*m->w+j-1]left, if v < top, top left
+ret v+1
+------------------
+fill_sq(m, bi, bj, best)
+--------------------
+

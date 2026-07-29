@@ -72,7 +72,9 @@ static int  read_grid(FILE *fp, t_map *m)
     return (0);
 }
 
-/* side of the biggest empty square whose bottom-right corner is (i, j) */
+/* side of the biggest empty square whose bottom-right corner is (i, j)
+!!NB!! u only give 0 and 1 and when u keep going the num grows for dp! map needed only for checking obstacle
+*/
 static int  get_lowest(int *dp, t_map *m, int i, int j)
 {
     int v;
@@ -101,7 +103,7 @@ static int  solve(t_map *m)
     int *dp;
     int best = 0, bi = 0, bj = 0;
 
-    dp = calloc((size_t)m->h * (size_t)m->w, sizeof(int *)); // remmeber * for int!!! typo
+    dp = calloc((size_t)m->h * (size_t)m->w, sizeof(int)); // remmeber * for int!!! typo
     if (!dp)
         return (-1);
     for (int i = 0; i < m->h; i++)
