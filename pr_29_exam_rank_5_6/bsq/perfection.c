@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
-plan:
-main->fopen fp
-readheader, map, solve, print_board, free_board
-solve->dp: find_lowest, fill_square
-*/
-
 typedef struct s_map
 {
 	char 	**grid;

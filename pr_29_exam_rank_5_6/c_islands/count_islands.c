@@ -16,7 +16,7 @@ int validate_map(char *buf, int *width, int *height)
     int i = 0, len = 0, h= 0;
     int w = width_len(buf);
 
-    if (w == 0) return 1; // remember
+    if (w == 0) return 1;
     while (buf[i])
     {
         if (buf[i] == '\n')
@@ -32,7 +32,7 @@ int validate_map(char *buf, int *width, int *height)
             len++;
         i++;
     }
-    if (len != 0 && len != w) return (1); // remember
+    if (len != 0 && len != w) return (1);
     if (len == w) h++;
     if (h == 0) return 1;
     *width = w;
