@@ -1,0 +1,8 @@
+bsq:
+read_header: check for readable 32, 126
+len != 1 || junk[0] != '\n'
+h < 1, e!=o!=f
+------
+read_map: validline(only o, e); len < 1, line[len-1] !='\n', line[--len]='\0', under loop: if more getline;
+-----
+solve: dp

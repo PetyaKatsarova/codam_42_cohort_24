@@ -1,0 +1,126 @@
+single-threaded chat server that must handle many client sockets and the listening socket at the same time,
+  without blocking on any one of them. If we called recv() directly on a socket with no data, our whole program would freeze waiting for that
+  one client while everyone else sits idle.
+
+  select() lets we ask the kernel: "of all these file descriptors I care about, which ones are ready right now?" — and it blocks only until at 
+  least one is ready, not on any specific one.
+
+  The core API
+
+  #include <sys/select.h>
+
+  int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+
+  - nfds — highest fd number we're watching, +1. Kernel scans 0..nfds-1.
+  - readfds — set of fds to watch for "readable" (data waiting, or a new connection pending on a listening socket, or a disconnect).
+  - writefds — set of fds to watch for "writable" (send buffer has room).
+  - exceptfds — exceptional conditions; almost nobody uses this (we pass NULL).
+  - timeout — NULL = block forever until something's ready. {0,0} = poll and return immediately.
+
+  Critical behavior: select() mutates readfds/writefds in place. On input they're "what to watch"; on output they're "what's actually ready" —
+  everything else gets cleared. This is why we can't reuse the same fd_set across loop iterations without resetting it first.
+
+  The fd_set macros
+
+  FD_ZERO(&set);        // clear the whole set
+  FD_SET(fd, &set);      // add fd to the set
+  FD_CLR(fd, &set);      // remove fd from the set
+  FD_ISSET(fd, &set);    // is fd currently in the set? (used to test results after select())
+
+  An fd_set is really just a bitmap under the hood (size FD_SETSIZE, typically 1024 bits on Linux). we never manipulate the bits directly —
+  always through these macros.
+
+  The canonical loop shape
+
+  fd_set master;              // fds we ALWAYS care about
+  FD_ZERO(&master);
+  FD_SET(listen_fd, &master);
+
+  while (1)
+  {
+      fd_set read_copy = master;      // select() will destroy this copy — must be fresh every time
+      select(maxfd + 1, &read_copy, NULL, NULL, NULL);
+
+      for (int fd = 0; fd <= maxfd; fd++)
+          if (FD_ISSET(fd, &read_copy))
+              handle(fd);              // this fd has something to read
+  }
+
+  ---
+   The persistent sets (solution.c)
+
+  fd_set        g_active;   // the "master" list: every fd we're currently tracking (server + clients)
+  fd_set        g_read;      // scratch copy passed to select() as the read-interest set
+  fd_set        g_write;     // scratch copy passed to select() as the write-interest set
+
+  g_active is our source of truth — it never gets touched by select() itself. we only add to it (FD_SET in accept_client) or remove from it
+  (FD_CLR in handle_client on disconnect).
+
+  The loop (solution.c:215-233)
+
+  while (1)
+  {
+      g_read = g_active;      // fresh copy every iteration — select() will clobber this
+      g_write = g_active;      // same fd set, but asking "who's writable" this time
+      if (select(g_maxfd + 1, &g_read, &g_write, NULL, NULL) < 0)
+          continue;            // interrupted syscall etc. — just retry
+      fd = 0;
+      while (fd <= g_maxfd)
+      {
+          if (FD_ISSET(fd, &g_read))          // this fd has data to read (or accept, or disconnect)
+          {
+              if (fd == g_serv)
+                  accept_client();             // it's the listening socket → new connection
+              else
+                  handle_client(fd);           // it's a client → data ready (or they hung up)
+          }
+          fd++;
+      }
+  }
+
+  This is exactly the canonical shape above, doubled up: we ask select() about readability and writability in the same call, because broadcast()
+  later needs to know who's currently writable.
+
+  Why we check g_write inside broadcast(), not select()'s return
+
+  void broadcast(int except, char *s)
+  {
+        ...
+        while (i <= g_maxfd)
+        {
+                if (i != g_serv && i != except && FD_ISSET(i, &g_write))
+                        send(i, s, len, 0);
+                i++;
+        }
+  }
+
+  g_write was populated by the same select() call that gave we g_read. So FD_ISSET(i, &g_write) here answers "was fd i writable as of this
+  iteration's select() call?" — a cheap, correct way to avoid send() blocking on a client whose kernel buffer is currently full. This is a nice
+  detail in our implementation: we're using both bitmasks from one syscall instead of calling select() twice.
+
+  accept_client() — the listening socket case (solution.c:139-156)
+
+  When g_serv (the listening socket) shows up readable in g_read, it doesn't mean "data to read" — for a listening socket, readable means a 
+  connection is waiting to be accepted. accept() pulls it off the kernel's backlog queue and gives you a new fd for that specific client, which
+  you then add to g_active so future select() calls watch it too.
+
+  handle_client() — the client-data case (solution.c:164-195)
+
+  Readable on a normal socket means either data arrived, or the peer closed the connection (recv() returns 0) or errored (recv() returns <0).
+  That's why the very first thing you do is check ret <= 0 and treat it as a disconnect — you must FD_CLR it from g_active and close() it, or
+  select() will keep reporting it as "ready" forever (readable-due-to-EOF is sticky) and you'll spin forever.
+
+  ---
+  Things worth knowing / watching for
+
+  1. select() scans all nfds slots, even unused ones — it's O(highest fd), not O(fds actually set). This is the main reason select() is considered
+  dated versus poll()/epoll(), but it's fine and expected for this exercise.
+  2. FD_SETSIZE is usually 1024. Your global arrays g_id/g_buf are sized 65536, but the fd_set bitmaps underneath g_active/g_read/g_write are only
+  guaranteed to safely hold fds 0..1023 per POSIX. In practice on Linux glibc lets you FD_SET higher values (the macro just does raw bit math
+  into whatever memory you gave it), but you never allocated more memory for the fd_set — it's a fixed-size struct. If you ever got more than
+  ~1024 concurrent clients, FD_SET/FD_ISSET on the high fds would write/read out of bounds. Not a bug you'll hit in the exam's test scope, but
+  worth knowing why real-world servers move to poll/epoll.
+  3. Always re-copy g_active into g_read/g_write before every select() call — you're already doing this correctly at solution.c:217-218.
+  Forgetting it is the #1 select() bug: your watch set silently degrades to whatever select() last wrote into it.
+  4. select() < 0 on EINTR — you continue on error (solution.c:219-220), which is a reasonable blanket handling for a signal interrupting the
+  blocking call.

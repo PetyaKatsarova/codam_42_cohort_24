@@ -1,0 +1,119 @@
+1. socket() — create an endpoint
+2. bind() — attach an address to the socket
+3. listen() — start accepting connections
+4. accept() — pull a pending connection off the queue
+5. recv() — read bytes from a connected sock
+6. send() — write bytes to a connected socket
+7. close() — release the fd
+=============================================================
+The chain  
+  
+  socket()  →  bind()  →  listen()          [once, at startup — setup_server()]
+                              │
+                              ▼
+                          accept()            [once per new client — accept_client()]
+                              │
+                              ▼
+                     recv() / send()          [repeatedly, per client — handle_client()/broadcast()]
+                              │
+                              ▼
+                          close()             [once per client, on disconnect]
+
+  select() is the glue that tells when to call accept() vs recv() vs nothing — without it whole'd have to call these in a busy-loop or block on one fd at a time.
+  ===========================================================
+  TCP stands for Transmission Control Protocol.
+SOCK_STREAM
+  guarantees reliable, ordered,
+  byte-stream delivery between two endpoints (retransmits lost packets, reassembles out-of-order ones, no built-in message boundaries). That's
+  contrasted with UDP (User Datagram Protocol, SOCK_DGRAM), which is connectionless and gives unreliable, unordered individual packets with no
+  automatic retries.
+  ===========================================================
+  This server is built from a handful of syscalls that form the classic TCP server pattern: socket → bind → listen → accept → recv/send → close.
+  -------------
+1. socket() — create an endpoint
+  int socket(int domain, int type, int protocol);
+  g_serv = socket(AF_INET, SOCK_STREAM, 0);
+
+- AF_INET = IPv4. SOCK_STREAM = TCP (reliable, ordered byte stream — as opposed to SOCK_DGRAM for UDP). protocol = 0 lets the kernel pick the
+default for that domain/type pair (TCP).
+- Returns a file descriptor — just an integer handle, same kind of thing as one from open(). That's why it slots straight into select()/FD_SET
+alongside client fds.
+- Returns -1 on error.
+  -------------
+2. bind() — attach an address to the socket
+
+  int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
+  servaddr.sin_family = AF_INET;
+  servaddr.sin_addr.s_addr = htonl(2130706433);   // 127.0.0.1 in host byte order, network-ordered
+  servaddr.sin_port = htons(port);                // port, network-ordered
+  bind(g_serv, (const struct sockaddr *)&servaddr, sizeof(servaddr));   // solution.c:127
+
+  - Tells the kernel "this socket should own IP X port Y" — before this, the socket has no address, like a phone with no number.
+  - struct sockaddr_in is the IPv4-specific address struct; bind()'s signature wants the generic struct sockaddr *, hence the cast.
+  - htons/htonl convert host byte order → network byte order (big-endian) for the port/IP fields — network protocols always use big-endian on the
+  wire, so this matters on little-endian machines.
+  - Returns 0 on success, -1 on error (e.g. port already in use → EADDRINUSE).
+
+  3. listen() — start accepting connections
+
+  int listen(int sockfd, int backlog);
+
+  listen(g_serv, 128);   // solution.c:129
+
+  - Switches the socket from "just bound" to "actively willing to accept incoming TCP connections."
+  - backlog (128 here) is the max number of fully-established connections the kernel will queue up before you call accept() — if clients connect
+  faster than you accept(), extras wait in this queue (or get refused once it's full).
+  - Returns 0 on success, -1 on error.
+
+  4. accept() — pull a pending connection off the queue
+
+  int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+
+  connfd = accept(g_serv, (struct sockaddr *)&cli, &len);   // solution.c:146
+
+  - Called on the listening socket. Dequeues one waiting connection from the backlog and hands you a brand-new fd dedicated to that one client —
+  the listening socket itself keeps listening, unaffected.
+  - Fills cli with the client's address (IP/port) — you ignore its contents here beyond needing the struct/len to pass in.
+  - This is exactly why select() reporting the listening socket as "readable" means "a connection is waiting," not "there's data" — for a
+  listening socket those are the same underlying kernel signal.
+  - Returns the new client fd (≥0) on success, -1 on error (e.g. if the connecting client already disappeared).
+
+  5. recv() — read bytes from a connected socket
+
+  ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+
+  ret = recv(fd, recv_buf, 100000, 0);   // solution.c:171
+
+  - Copies up to len bytes currently sitting in the socket's receive buffer into buf. It's read()'s socket-flavored cousin (flags = 0 behaves the
+  same as read()).
+  - Only returns what's already arrived — never assumes a full "message," since TCP is just a byte stream with no framing. That's the whole reason
+  your code buffers partial data (g_buf) and manually splits on \n in extract_message.
+  - Return value is three-way, not just success/error:
+    - > 0 → number of bytes actually read.
+    - 0 → peer performed an orderly shutdown (they closed their end / disconnected).
+    - -1 → error.
+    - (Your code lumps 0 and -1 together with ret <= 0 since both mean "treat this client as gone.")
+
+  6. send() — write bytes to a connected socket
+
+  ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+
+  send(i, s, len, 0);   // solution.c:103, inside broadcast()
+
+  - Socket-flavored write(). Queues len bytes of buf into the kernel's send buffer for that connection to transmit.
+  - Can send fewer bytes than requested (return value tells you how many actually got queued) if the buffer's nearly full — a detail your code
+  doesn't handle (short writes are ignored), acceptable for the exam's scope but worth knowing for production code.
+  - Returns bytes sent (≥0) on success, -1 on error.
+
+  7. close() — release the fd
+
+  int close(int fd);
+
+  close(fd);   // solution.c:179
+
+  - Tells the kernel you're done with this fd. For a TCP socket this triggers the connection teardown (FIN) toward the peer and frees the fd
+  number for reuse by a future socket()/accept() call.
+  - Returns 0 on success, -1 on error — errors here are rare and usually ignorable.
+
+

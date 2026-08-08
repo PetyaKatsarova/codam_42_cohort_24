@@ -1,0 +1,39 @@
+- Compile:
+  gcc -Wall -Wextra -Werror solution.c -o server
+  - Run (pick a port, e.g. 8080):
+  ./server 8080
+  - Connect as client 1 (new terminal):
+  nc localhost 8080
+  - Connect as client 2 (another terminal):
+  nc localhost 8080
+  - Type a message in client 1, press Enter → should appear in client 2 as client <id>: <message>.
+  - Check client 2 saw server: client X just arrived when client 1/2 connected.
+  - Close client 1 (Ctrl+D or Ctrl+C) → client 2 should see server: client X just left.
+  - Test no-arg error: run ./server (no port) → should print error and exit.
+  - Test many clients: open 3-4 nc terminals, message from one, confirm all others (except sender) receive it.
+  - Test partial/multi-line send: in nc, paste multiple lines at once → each line should broadcast separately.
+==========================================
+● Server terminal:
+  ./server 8080
+
+  Client 1 terminal:
+  nc localhost 8080
+
+  Client 2 terminal:
+  nc localhost 8080
+
+  Test A (multi-line) — Client 1:
+  line1
+  line2
+  line3
+  (one Enter at end) → check Client 2 output
+
+  Test B (partial line) — Client 1:
+  hel
+  (no Enter) → check Client 2 (nothing yet)
+  lo
+  (Enter) → check Client 2 → client 0: hello
+
+  Test C (partial + disconnect) — Client 1:
+  hel
+  (no Enter) then Ctrl+C → check Client 2 → only "just left", no partial text
