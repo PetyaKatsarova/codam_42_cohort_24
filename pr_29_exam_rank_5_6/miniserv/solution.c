@@ -12,7 +12,7 @@
 // constant, normally 1024. Sizing these arrays (and the accept_client() guard
 // below) to it keeps every fd we track inside what FD_SET/FD_ISSET can
 // safely address.
-int		g_id[FD_SETSIZE];
+int		g_id[FD_SETSIZE]; //max number of FDs a fd_set can hold
 char	*g_buf[FD_SETSIZE];
 int		g_maxfd;
 int		g_next;
@@ -122,14 +122,14 @@ void broadcast(int except, char *s)
 */
 void setup_server(int port)
 {
-	struct sockaddr_in	servaddr;
+	struct sockaddr_in	servaddr; //struct for IPv4 socket addresses.
 
 	g_serv = socket(AF_INET, SOCK_STREAM, 0);
 	if (g_serv < 0)
 		fatal();
 	g_maxfd = g_serv;
-	FD_ZERO(&g_active);
-	FD_SET(g_serv, &g_active);
+	FD_ZERO(&g_active); // clear all fds
+	FD_SET(g_serv, &g_active); // add a fd
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(2130706433);
