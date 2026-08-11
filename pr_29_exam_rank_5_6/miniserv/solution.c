@@ -15,9 +15,8 @@
 int		g_id[FD_SETSIZE]; //max number of FDs a fd_set can hold
 char	*g_buf[FD_SETSIZE];
 char	*g_out[FD_SETSIZE];
-int		g_maxfd;
-int		g_next;
-int		g_serv;
+int		g_maxfd, g_next, g_serv;
+
 // fd_set: an opaque bitmap type from <sys/select.h>, fixed at FD_SETSIZE bits
 // (one bit per possible fd). Never touch the bits directly -- always go
 // through FD_ZERO/FD_SET/FD_CLR/FD_ISSET. select() reads it as "which fds to
@@ -163,8 +162,25 @@ void setup_server(int port)
 	FD_SET(g_serv, &g_active); // add a fd
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = htonl(2130706433);
-	servaddr.sin_port = htons(port);
+	/*
+	** htonl/htons aren't in the allowed-functions list, so this is built by hand.
+	**
+	** A 32-bit field is 4 bytes in memory. The network sends them in address
+	** order: byte0, byte1, byte2, byte3. For 127.0.0.1 that order must read
+	** 127, 0, 0, 1.
+	**
+	** This CPU is little-endian: for an int, byte0 (lowest address) holds the
+	** smallest place-value slice of the number (value % 256), byte3 (highest
+	** address) holds the biggest slice (value / 2^24).
+	**
+	** So: byte0 = 127  -> add 127
+	**     byte3 = 1    -> add 1 << 24 (2^24 = 16777216)
+	**     byte1, byte2 = 0 -> nothing added
+	** (1 << 24) | 127 = 16777343.
+	*/
+	servaddr.sin_addr.s_addr = (1 << 24) | 127;
+	// same trick for the 16-bit port: swap its 2 bytes by hand instead of htons.
+	servaddr.sin_port = (port << 8) | (port >> 8);
 	if (bind(g_serv, (const struct sockaddr *)&servaddr, sizeof(servaddr)) != 0)
 		fatal();
 	if (listen(g_serv, 128) != 0)
@@ -260,15 +276,16 @@ int main(int argc, char **argv)
 		write(2, "Wrong number of arguments\n", 26);
 		exit(1);
 	}
+	 // setupserver sets it to the listening socket fd, acceptclient()inreases it
 	g_maxfd = 0;
 	g_next = 0;
 	setup_server(atoi(argv[1]));
 	while (1)
 	{
-		g_read = g_active;		// fresh copy every iteration — select() will clobber this
-		g_write = g_active;		// same fd set, but asking "who's writable" this time
+		g_read = g_active;
+		g_write = g_active;	
 		if (select(g_maxfd + 1, &g_read, &g_write, NULL, NULL) < 0)
-			continue;			// interrupted syscall etc. — just retry
+			continue;
 		fd = 0;
 		while (fd <= g_maxfd)
 		{
