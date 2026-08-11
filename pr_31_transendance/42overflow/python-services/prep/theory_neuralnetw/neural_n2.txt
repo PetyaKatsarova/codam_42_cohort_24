@@ -1,0 +1,20 @@
+12-Layer Neural Network Breakdown:
+
+Input Layer: This layer receives the initial data – typically word embeddings (numerical representations of words) – that form the input sequence. It doesn't perform any computation itself, simply passing the data on to the next layer. Its role is to prepare the information for the network to process.
+Hidden Layer 1: This layer performs the initial feature extraction, transforming the input embeddings into a more abstract representation. It applies a linear transformation (matrix multiplication) followed by a non-linear activation function (like ReLU) to introduce complexity and allow the network to learn non-linear relationships.
+Hidden Layer 2: This layer builds upon Layer 1, learning more complex patterns by combining the features extracted in Layer 1. The process continues with many layers to gradually represent the input in a more abstract manner for comprehension.
+Hidden Layer 3-7: These layers progressively extract increasingly abstract and hierarchical features. They learn to detect intricate relationships between words and concepts, crucial for understanding the nuances of language. Each layer contributes to the overall representation of the input sequence.
+Hidden Layer 8: This layer begins to integrate information across different parts of the sequence, capturing longer-range dependencies between words. It’s becoming more aware of the context and the relationships between phrases.
+Hidden Layer 9: Focuses on further refining the contextual understanding of the sequence, building towards the final representation. This layer is essential for capturing complex syntactic and semantic relationships.
+Hidden Layer 10: This layer represents a distillation of the information learned in the previous layers, emphasizing the most relevant aspects of the input sequence. It’s preparing the representation for the final output layer.
+Hidden Layer 11: Further refines the representation, integrating all the layers' outputs to produce a highly contextualized representation of the entire input sequence. The network is now ready for output.
+Hidden Layer 12: This layer combines the features extracted across all preceding layers, and generates the final representation that’s used for prediction. It's the last stage of feature extraction.
+Cosine Similarity:
+
+Cosine similarity is frequently used in LLMs, particularly during attention mechanisms within the transformer architecture. It measures the angle between two vectors, indicating how aligned their directions are. In the context of LLMs, it's used to assess the relevance of different parts of the input sequence when predicting the next token. Higher cosine similarity suggests the words are more semantically related, allowing the model to focus on the most relevant parts of the input.
+
+RAG-Like Functionality Under the Hood:
+
+Yes, there are layers analogous to RAG (Retrieval-Augmented Generation) built into the architecture of modern LLMs, especially transformers. The “Retrieval” component is often implemented through:
+
+Cross-Attention Layers: These layers allow the model to attend to external knowledge sources (like a retrieved document) while generating text. This is done by creating a representation of the retrieved knowledge and integrating it into the LLM's internal state. This mimics the retrieval step by allowing the LLM to focus on the relevant parts of the external source.

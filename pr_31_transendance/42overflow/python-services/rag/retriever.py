@@ -1,23 +1,27 @@
+#Corotines:Concurrency: Run multiple I/O operations without blocking (network, file read, database)
+#Corotines:Efficiency: Single thread handles many tasks while waiting
+#Corotines:Lightweight: Cheaper than threads
+
 """
 Hybrid retrieval: dense (numpy cosine) + sparse (BM25+) merged with RRF.
 Topic-aware: centroid similarity narrows search to the detected topic first.
 
 Flow:
   1. Embed question (fastembed, CPU-bound, runs in thread pool).
-  2. Detect topic via centroid similarity (numpy, ~0.01ms).
+  2. Detect topic via centroid similarity (numpy, takes ~0.01ms to do).
   3. If confident topic detected: filter both numpy and BM25 to that topic.
   4. If filtered results < MIN_FILTERED: fall back to full corpus.
   5. RRF merge: combine ranked lists by position, not score magnitude.
 
 Why numpy instead of ChromaDB for dense search:
   ChromaDB runs in a separate container — every query_dense call was a
-  network roundtrip (~50–150ms). NumpyIndex does the same cosine similarity
+  network roundtrip (~50-150ms). NumpyIndex does the same cosine similarity
   in ~0.05ms in-process with a single matrix-vector multiply. At 200 docs,
   brute-force beats HNSW even ignoring the network overhead.
 
 Pros of this approach:
   - No network dependency at query time
-  - Exact nearest neighbours (HNSW approximates)
+  - Exact nearest neighbours (HNSW(Hierarchical Navigable Small World): uses a hierarchical graph structure, clever approximate nearest neighbor algorithm used by systems like ChromaDB)
   - Safe for concurrent async reads (matrix is immutable after build)
 
 Edge cases handled:
@@ -81,7 +85,7 @@ async def hybrid_search(
     except Exception as exc:
         print(f"[retriever] WARNING: embedding failed — falling back to BM25-only: {exc}")
 
-    # 1b. Gate signal: best cosine against the FULL corpus (no topic filter).
+    # 1. Gate signal: best cosine against the FULL corpus (no topic filter).
     #     Only meaningful when embeddings are available.
     full_hits: list[dict] = []
     has_embeddings = False
@@ -148,7 +152,7 @@ async def hybrid_search(
     #    NumpyIndex.search() returns "document" field, but id_to_text is the
     #    authoritative source — covers BM25-only hits not in dense results.
     dense_text: dict[str, str] = {hit["id"]: hit["document"] for hit in dense_hits}
-    top_ids = sorted(rrf_scores, key=rrf_scores.__getitem__, reverse=True)[:top_k] # keys, ordered by value
+    top_ids = sorted(rrf_scores, key=rrf_scores.__getitem__, reverse=True)[:top_k] # keys, ordered by highest val
 
     results: list[dict] = []
     for id_ in top_ids:

@@ -1,0 +1,20 @@
+Simplified Neural Network Layers (12 Layers Overview)
+
+Neural networks (specifically deep learning networks like those used in LLMs) are made of layers of interconnected "neurons." Here’s a simplified breakdown of 12 layers, focusing on the core concepts:
+
+Input Layer: Receives the initial data (e.g., a sentence).
+Hidden Layer 1: Performs initial feature extraction from the input.
+Hidden Layer 2: Learns more complex patterns, potentially combining features from Layer 1.
+Hidden Layer 3: Continues to extract and combine features.
+Hidden Layer 4: Further abstraction of data.
+Hidden Layer 5: More abstract representations.
+Hidden Layer 6: Building up the complexity.
+Hidden Layer 7: More complex patterns.
+Hidden Layer 8: Advanced Feature extraction.
+Hidden Layer 9: Further abstractions.
+Hidden Layer 10: Refined Features
+Output Layer: Produces the final prediction (e.g., sentiment analysis, text generation).
+Neurons: Each layer consists of neurons that perform mathematical operations (weighted sums and activation functions) on the inputs.
+Weights and Biases: Connections between neurons have associated weights, representing the strength of the connection. Biases are added to the weighted sum.
+Activation Functions: Introduce non-linearity, allowing the network to learn complex relationships. (ReLU is common)
+Backpropagation: The network adjusts the weights and biases based on the error between the prediction and the actual value during training.

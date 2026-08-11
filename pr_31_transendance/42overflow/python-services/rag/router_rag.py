@@ -40,6 +40,7 @@ class RetrieveResponse(BaseModel):
 #      ...
 #  } Starlette wraps that scope in a Request object, not to work with raw dicts.
 #  It's a lazy wrapper — it doesn't read the body until the await request.body()
+# numpy: library for numerical and scientific computing.
 @router.post("/rag/retrieve", response_model=RetrieveResponse)
 async def retrieve(body: AskRequest, request: Request, _: None = Depends(require_admin)) -> RetrieveResponse:
     """
