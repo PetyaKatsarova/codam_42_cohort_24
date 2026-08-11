@@ -9,19 +9,23 @@ Browser → Caddy :8080 → SvelteKit :5173 → llm-server / python-stt (interna
   SvelteKit handles all routing and auth.
 
 ===============
+- Compression (gzip/zstd) : server compresses static responses (e.g., JS/CSS/images) before sending them; reduces payload size, speeds page loads, and saves bandwidth. Client negotiates via Accept-Encoding; server responds with Content-Encoding: gzip or Content-Encoding: zstd. Doing this at the proxy (Caddy) offloads CPU from the app.
+================
+
   Pros of keeping Caddy
 
   ┌─────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────┐
   │                     │                                                                                                        │
   ├─────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ TLS in production   │ Caddy auto-renews Let's Encrypt certs. SvelteKit/Node cannot do this.                                  │
+  │ TLS in production   │ Caddy auto-renews Let's Encrypt certs. SvelteKit/Node cannot do this.(Transport Layer Security)        │
   ├─────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ Static file serving │ In production build, Caddy serves /assets/* directly from disk — Node never touched. Faster, less CPU. │
   ├─────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ Compression at edge │ Offloads gzip from Node's single thread                                                                │
   ├─────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ Future flexibility  │ Add rate limiting, security headers, DDoS protection at one place without touching app code            │
+  │ Future flexibility  │ Add rate limiting, security headers, DDoS* protection at one place without touching app code           │
   └─────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  *DDoS stands for Distributed Denial of Service — many distributed hosts flood a target with traffic or requests to overwhelm resources and make the service unavailable.
   ==================
  Cons of keeping Caddy
 

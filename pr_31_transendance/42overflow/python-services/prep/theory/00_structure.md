@@ -1,57 +1,51 @@
   python-services/rag/
   ├── main.py          # FastAPI app, startup sync, route wiring
-  ├── config.py        # env vars (OLLAMA_URL,
-  CHROMA_URL, etc.)
+  ├── config.py        # env vars (OLLAMA_URL, CHROMA_URL, etc.)
   ├── seed.py          # 40 hardcoded Q&A pairs + load_seed() function
-  ├── db.py            # PostgreSQL client — read QAPairs via raw
-  asyncpg queries
-  │                    #   (no ORM, no Prisma client — Python service
-  talks directly)
+  ├── db.py            # PostgreSQL client — read QAPairs via raw asyncpg queries
+  │                    #   (no ORM, no Prisma client — Python service talks directly)
   ├── embedder.py      # embed_texts(texts) → calls Ollama /api/embed
   ├── store.py         # ChromaDB client — upsert_qa(), query_dense()
-  ├── bm25_index.py    # BM25 wrapper — build(docs), search(query, n) →
-  ranked list
-  ├── retriever.py     # hybrid_search(question, top_k) — runs
-  dense+BM25, applies RRF
+  ├── bm25_index.py    # BM25 wrapper — build(docs), search(query, n) → ranked list
+  ├── retriever.py     # hybrid_search(question, top_k) — runs dense+BM25, applies RRF
   ├── generator.py     # ask_ollama(prompt) → answer string
-  ├── router.py        # /rag/index, /rag/ask, /healthz, /admin/sync
-  endpoints
+  ├── router.py        # /rag/index, /rag/ask, /healthz, /admin/sync endpoints
   └── pyproject.toml   # add: asyncpg, chromadb-client, rank_bm25, httpx
 
   Each module's single responsibility:
 
   File: seed.py
-  Does exactly one thing: Owns the 40 Q&A pairs. Nothing else.
+  Owns the 40 Q&A pairs. Nothing else.
   ────────────────────────────────────────
   File: db.py
-  Does exactly one thing: Reads QAPair rows from Postgres. No business
+  Reads QAPair rows from Postgres. No business
     logic.
   ────────────────────────────────────────
   File: embedder.py
-  Does exactly one thing: HTTP call to Ollama embed. Returns
+  HTTP call to Ollama embed. Returns
     list[list[float]].
   ────────────────────────────────────────
   File: store.py
-  Does exactly one thing: CRUD on ChromaDB. Knows nothing about BM25 or
+  CRUD on ChromaDB. Knows nothing about BM25 or
     the LLM.
   ────────────────────────────────────────
   File: bm25_index.py
-  Does exactly one thing: Pure BM25 math. No I/O. Accepts plain strings.
+  Pure BM25 math. No I/O. Accepts plain strings.
   ────────────────────────────────────────
   File: retriever.py
-  Does exactly one thing: Orchestrates dense + sparse + RRF. Calls
+  Orchestrates dense + sparse + RRF. Calls
     embedder, store, bm25.
   ────────────────────────────────────────
   File: generator.py
-  Does exactly one thing: One function: sends prompt to Ollama chat,
+  One function: sends prompt to Ollama chat,
     returns answer string.
   ────────────────────────────────────────
   File: router.py
-  Does exactly one thing: FastAPI routes only. Calls retriever +
+  FastAPI routes only. Calls retriever +
     generator. No business logic.
   ────────────────────────────────────────
   File: main.py
-  Does exactly one thing: Wires everything at startup. Runs the sync.
+  Wires everything at startup. Runs the sync.
     Mounts the router.
 
     Startup sequence in main.py:
