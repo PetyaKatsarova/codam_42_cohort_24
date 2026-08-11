@@ -4,7 +4,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-// is this file given on start?? 
+
 int extract_message(char **buf, char **msg)
 {
 	char	*newbuf;

@@ -1,0 +1,110 @@
+[
+  {
+    "question": "What is RAG-against-the-machine and what system must you build?",
+    "answer": "RAG-against-the-machine is a 42 school project where you build a Retrieval-Augmented Generation system that answers questions about the vLLM 0.10.1 open-source codebase. RAG (Retrieval-Augmented Generation) works by first indexing a knowledge base, then for each question retrieving the most relevant chunks of that knowledge base, and finally passing those chunks as context to an LLM (Qwen3-0.6B) which generates an answer. You must implement: a chunking and indexing pipeline (BM25 or TF-IDF), a retrieval system (returning top-k chunks with file path and character indices), an answer generation system (Qwen3 with retrieved context), an evaluation system (recall@k metric), and a Python Fire CLI with commands: index, search, search_dataset, answer, answer_dataset, evaluate. The project teaches the full RAG pipeline including the tricky details of semantic indexing, retrieval evaluation, and context management.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "intro",
+      "overview",
+      "RAG",
+      "vLLM",
+      "pipeline"
+    ]
+  },
+  {
+    "question": "What are the recall@k performance requirements and how is the metric computed?",
+    "answer": "Minimum requirements: Recall@5 ≥ 55% for documentation questions and ≥ 45% for code questions. Recall@k per question is computed as: number of ground-truth sources found in top-k retrieved chunks divided by total ground-truth sources for that question. A ground-truth source is 'found' if any retrieved chunk overlaps it by at least 5%. The overall Recall@k is the average per-question score across all questions in the dataset. The 5% overlap formula: overlap_chars = intersection of retrieved [first_char, last_char] range and ground-truth [first_char, last_char] range; found = (overlap_chars / min(retrieved_length, groundtruth_length)) >= 0.05. Using Jaccard (intersection/union) instead of min() makes the metric stricter and will undercount relative to the moulinette. The character indices in MinimalSource must be absolute positions in the original file — not offsets relative to the chunk.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "recall-at-k",
+      "performance",
+      "5-percent-overlap",
+      "evaluation",
+      "character-indices"
+    ]
+  },
+  {
+    "question": "What are the latency requirements for RAG-against-the-machine and how do you meet them?",
+    "answer": "Three latency requirements: (1) Indexing time ≤ 5 minutes (build and serialize the entire BM25/TF-IDF index from the vLLM repository). (2) Cold start latency ≤ 60 seconds (time from process start to first retrieval result, including model loading and index deserialization). (3) Warm retrieval throughput: 1000 questions in ≤ 90 seconds after cold start (≤ 90ms per question). Meeting these requires: pre-serializing the index to disk during 'index' so 'search' only loads it; loading the index once at process start not per-query; using bm25s or rank_bm25 which are pre-compiled C extensions; skipping binary files, __pycache__, .git, and large non-text files during indexing; using batch querying if the BM25 library supports it. Warm retrieval at 90ms/question means zero disk I/O per query — the entire index must be in RAM.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "latency",
+      "performance",
+      "cold-start",
+      "warm-retrieval",
+      "indexing-time"
+    ]
+  },
+  {
+    "question": "How do you chunk Python code using the AST module to respect function and class boundaries?",
+    "answer": "Character-boundary splitting cuts functions in the middle, producing incoherent chunks. Use Python's ast module: ast.parse(source_code) gives you a tree; ast.walk() yields all nodes; filter for ast.FunctionDef, ast.AsyncFunctionDef, and ast.ClassDef; use node.lineno and node.end_lineno to find each function/class's line span; convert line spans to character spans using cumulative line lengths. Chunk at these AST boundaries: each function/class body becomes one chunk if under max_chunk_size (2000 chars); if larger, split at inner nested function/method boundaries. Track character offsets: for each chunk, first_character_index = sum of all characters before this chunk's start line, last_character_index = first + len(chunk_text). Store these as MinimalSource indices. Files that fail ast.parse() (syntax errors, encoding issues) fall back to text chunking. This AST-aware approach typically improves code recall@5 by 15–20% over character splitting.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "chunking",
+      "AST",
+      "Python-code",
+      "character-indices",
+      "function-boundary"
+    ]
+  },
+  {
+    "question": "How do you implement and persist a BM25 index for fast warm retrieval?",
+    "answer": "Use the bm25s library (recommended) or rank_bm25. After chunking all files, build the index: import bm25s; corpus = [chunk.text for chunk in all_chunks]; retriever = bm25s.BM25(); retriever.index(bm25s.tokenize(corpus)). Serialize to disk using retriever.save('data/processed/bm25_index/'). The 'search' command loads it: retriever = bm25s.BM25.load('data/processed/bm25_index/', load_corpus=True). Store the chunk metadata (file paths, character indices) separately as a JSON file alongside the index — BM25 returns integer positions, and you need the metadata to construct MinimalSource objects. For code recall improvement, implement a custom tokenizer that splits snake_case (get_next_line → get, next, line) and camelCase (BaseModel → Base, Model): pass tokenizer=your_tokenize_fn to bm25s.tokenize(). Pre-tokenize the corpus during indexing and store the tokenized form so warm queries only tokenize the query, not re-tokenize all chunks.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "BM25",
+      "serialization",
+      "bm25s",
+      "warm-retrieval",
+      "custom-tokenizer"
+    ]
+  },
+  {
+    "question": "How must the Pydantic model hierarchy be implemented for RAG-against-the-machine output?",
+    "answer": "The required models: MinimalSource(file_path: str, first_character_index: int, last_character_index: int). MinimalSearchResults(question_id: str, question: str, retrieved_sources: List[MinimalSource]). MinimalAnswer(MinimalSearchResults + answer: str). StudentSearchResults(search_results: List[MinimalSearchResults], k: int). StudentSearchResultsAndAnswer(StudentSearchResults with search_results: List[MinimalAnswer]). All classes use Pydantic v2 (pydantic.BaseModel). Use Field(default_factory=lambda: str(uuid.uuid4())) for question_id when not provided. All classes must pass mypy with --disallow-untyped-defs. For Fire CLI commands that return these models, serialize to JSON with model.model_dump_json(indent=2) and write to the save_directory. Validate input datasets by loading them into RagDataset(rag_questions: List[AnsweredQuestion | UnansweredQuestion]) — Pydantic's union type handles both answered and unanswered questions in the same file.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "pydantic",
+      "models",
+      "MinimalSource",
+      "StudentSearchResults",
+      "type-safety"
+    ]
+  },
+  {
+    "question": "How does the RAG-against-the-machine answer_dataset command work correctly?",
+    "answer": "The answer_dataset command reads previously saved search results (from search_dataset), adds LLM-generated answers, and writes the augmented results. Usage: python -m student answer_dataset --student_search_results_path data/output/search_results/dataset.json --save_directory data/output/answers/. The command must NOT re-run search — it reads exactly the retrieved_sources from the input file and only calls the LLM. For each MinimalSearchResults entry: load the retrieved chunks' text by reading the file at file_path and extracting characters [first_character_index:last_character_index]; concatenate chunks up to --max_context_length total characters; build prompt: 'Using this context:\\n{context}\\nAnswer: {question}'; call Qwen3-0.6B generate(); store answer. Output is StudentSearchResultsAndAnswer with each MinimalSearchResults promoted to MinimalAnswer (adding the answer field). This design keeps retrieval evaluation and answer evaluation separate — if you re-run search in answer_dataset, the retrieved_sources in your output may differ from the evaluated search results, breaking the end-to-end evaluation chain.",
+    "topic": "rag-against-machine",
+    "tags": [
+      "answer_dataset",
+      "pipeline",
+      "context-building",
+      "Qwen3",
+      "evaluation-chain"
+    ]
+  },
+  {
+    "question": "What is RAG (Retrieval-Augmented Generation) and why is it used?",
+    "answer": "RAG is an architecture that improves LLM answers by grounding them in retrieved documents rather than relying solely on training-time knowledge. The pipeline has three stages: (1) Indexing — split the knowledge base into chunks, embed or index each chunk for fast lookup. (2) Retrieval — for a given question, search the index for the most relevant chunks using keyword matching (BM25) or semantic similarity (vector embeddings). (3) Generation — pass the retrieved chunks as context to the LLM and instruct it to answer using only that context. RAG solves two fundamental LLM problems: hallucination (the model invents facts it doesn't know) and knowledge cutoff (the model knows nothing about events after its training date). In RAG-against-the-machine, the knowledge base is the vLLM codebase — the LLM answers questions about source code and documentation it was never trained on, because the relevant chunks are retrieved and injected at query time. Without RAG, a small 0.6B model would have no chance of answering questions about a specific codebase.",
+    "topic": "rag-against-machine",
+    "tags": ["concept", "RAG", "retrieval-augmented-generation", "grounding", "fundamentals"]
+  },
+  {
+    "question": "What is BM25 and how does it score document relevance?",
+    "answer": "BM25 (Best Match 25) is a term-frequency-based ranking function that scores documents by how well their keywords match a query. The score for a document d given query q: sum over query terms t of IDF(t) × (tf(t,d) × (k1+1)) / (tf(t,d) + k1 × (1 - b + b × |d|/avgdl)). IDF (inverse document frequency) rewards rare terms — a term appearing in 90% of documents is nearly meaningless, while a term in 1% of documents is highly discriminative. tf (term frequency) counts occurrences of the term in the document, but is saturation-capped by k1 (typically 1.2–2.0) so a document repeating a keyword 100 times doesn't dominate over one repeating it 5 times. |d|/avgdl normalizes by document length controlled by b (typically 0.75) to prevent long documents from winning by sheer volume. BM25 excels at exact keyword matches, making it ideal for code retrieval where function names, error messages, and parameter names are precise strings. BM25+ (the variant in call-me-maybe) adds a floor term to prevent zero scores for rare-but-present terms.",
+    "topic": "rag-against-machine",
+    "tags": ["concept", "BM25", "term-frequency", "IDF", "keyword-search", "fundamentals"]
+  },
+  {
+    "question": "What are vector embeddings and how do they enable semantic search?",
+    "answer": "Vector embeddings are dense numerical representations of text — each piece of text is converted to a vector (e.g., 768 floating-point numbers) by a neural embedding model. The key property: semantically similar texts produce vectors that are close together in the high-dimensional space, measured by cosine similarity. Unlike BM25 (which requires keyword overlap), embeddings capture meaning: 'what does malloc do' and 'how to allocate heap memory in C' produce similar vectors even with no shared words. Semantic search: embed the query, then find the stored document vectors with the highest cosine similarity using approximate nearest-neighbor search (HNSW in ChromaDB, or exact brute-force with numpy for small corpora). The trade-off vs BM25: embeddings catch paraphrases and synonyms but miss exact code identifiers ('pthread_cond_timedwait'); BM25 catches exact terms but misses synonyms. Hybrid search (BM25 + embeddings merged by RRF) combines both strengths — this is what the community RAG system uses.",
+    "topic": "rag-against-machine",
+    "tags": ["concept", "vector-embeddings", "semantic-search", "cosine-similarity", "dense-retrieval", "fundamentals"]
+  },
+  {
+    "question": "What is chunking in a RAG system and what makes a good chunk strategy?",
+    "answer": "Chunking splits the knowledge base into retrievable pieces before indexing. The LLM's context window is limited, so you can't inject the entire codebase — you retrieve only the most relevant chunks. Chunk size is the core trade-off: small chunks (50–100 tokens) are precise but may lack context (a function signature without its body); large chunks (500–1000 tokens) include more context but the embedding becomes a noisy average of many concepts, reducing retrieval precision. For RAG-against-the-machine (a code codebase), the correct chunking strategy respects code boundaries: use Python's AST module to split at function and class boundaries, never cut a function in half. This preserves semantic units — a chunk is a complete, meaningful piece of code with its full docstring and logic. For documentation, split at section or paragraph boundaries. Store absolute character indices (first_char, last_char) for each chunk in the original file — the evaluation metric uses character overlap to check if the ground-truth source was retrieved.",
+    "topic": "rag-against-machine",
+    "tags": ["concept", "chunking", "chunk-size", "AST", "character-indices", "fundamentals"]
+  }
+]

@@ -1,0 +1,29 @@
+FROM node:20-slim
+
+# Use Debian-slim to ensure compatibility with Prisma's native binaries
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Create app directory
+WORKDIR /app
+
+# Install runtime dependencies required by Prisma (OpenSSL, ca-certificates)
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends ca-certificates openssl libssl-dev && \
+	rm -rf /var/lib/apt/lists/*
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --prefer-offline
+
+# Copy source
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+ENV NODE_ENV=development
+EXPOSE 5173
+
+# Vite needs --host so it's reachable from host machine; db push needs a live DB so it stays at runtime
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npm run dev -- --host"]

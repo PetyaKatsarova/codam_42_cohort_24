@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /api/
+Disallow: /settings
+Disallow: /edit-profile
+Disallow: /logout
+Disallow: /users
+Disallow: /s/*/manage

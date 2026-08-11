@@ -14,6 +14,7 @@
 // safely address.
 int		g_id[FD_SETSIZE]; //max number of FDs a fd_set can hold
 char	*g_buf[FD_SETSIZE];
+char	*g_out[FD_SETSIZE];
 int		g_maxfd;
 int		g_next;
 int		g_serv;
@@ -103,16 +104,46 @@ void fatal(void)
 void broadcast(int except, char *s)
 {
 	int	i;
-	int	len;
 
-	len = strlen(s);
 	i = 0;
 	while (i <= g_maxfd)
 	{
-		if (i != g_serv && i != except && FD_ISSET(i, &g_write))
-			send(i, s, len, 0);
+		if (i != g_serv && i != except && FD_ISSET(i, &g_active))
+		{
+			g_out[i] = str_join(g_out[i], s);
+			if (g_out[i] == NULL)
+				fatal();
+		}
 		i++;
 	}
+}
+
+/*
+** Sends as much of fd's queued output as fits right now; keeps the rest
+** for the next writable round instead of dropping it.
+*/
+void flush_client(int fd)
+{
+	int		ret;
+	char	*rest;
+
+	if (g_out[fd] == NULL)
+		return ;
+	ret = send(fd, g_out[fd], strlen(g_out[fd]), 0);
+	if (ret <= 0)
+		return ;
+	if (g_out[fd][ret] == 0)
+	{
+		free(g_out[fd]);
+		g_out[fd] = NULL;
+		return ;
+	}
+	rest = malloc(strlen(g_out[fd] + ret) + 1);
+	if (rest == NULL)
+		fatal();
+	strcpy(rest, g_out[fd] + ret);
+	free(g_out[fd]);
+	g_out[fd] = rest;
 }
 
 /*
@@ -167,6 +198,7 @@ void accept_client(void)
 		g_maxfd = connfd;
 	g_id[connfd] = g_next++;
 	g_buf[connfd] = NULL;
+	g_out[connfd] = NULL;
 	FD_SET(connfd, &g_active);
 	sprintf(g_head, "server: client %d just arrived\n", g_id[connfd]);
 	broadcast(connfd, g_head);
@@ -192,6 +224,8 @@ void handle_client(int fd)
 		broadcast(fd, g_head);
 		free(g_buf[fd]);
 		g_buf[fd] = NULL;
+		free(g_out[fd]);
+		g_out[fd] = NULL;
 		FD_CLR(fd, &g_active);
 		close(fd);
 		return ;
@@ -238,6 +272,8 @@ int main(int argc, char **argv)
 		fd = 0;
 		while (fd <= g_maxfd)
 		{
+			if (fd != g_serv && FD_ISSET(fd, &g_write))
+				flush_client(fd);		// this fd can take more output -> send queued data
 			if (FD_ISSET(fd, &g_read))	// this fd has data to read (or accept, or disconnect)
 			{
 				if (fd == g_serv)

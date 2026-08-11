@@ -1,0 +1,203 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum SubjectRole {
+  MEMBER
+  CURATOR
+  OWNER
+}
+
+// ─── better-auth required tables ─────────────────────────────────────────────
+
+model User {
+  id            String  @id @default(cuid())
+  email         String  @unique
+  emailVerified Boolean @default(false)
+
+  name       String? @unique // Username
+  first_name String?
+  last_name  String?
+
+  image     String?
+  biography String?
+  interests String?
+
+  last_seen DateTime?
+
+  anonymize_at DateTime?
+  deleted_at   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  role         Role      @default(USER)
+
+  followers   Follow[]  @relation("Follower")
+  following   Follow[]  @relation("Following")
+  memberships SubjectMember[]
+  posts       Post[]
+  comments    Comment[]
+
+  sessions Session[]
+  accounts Account[]
+  Like     Like[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id           String    @id @default(cuid())
+  userId       String
+  accountId    String
+  providerId   String
+  accessToken  String?
+  refreshToken String?
+  idToken      String?
+  expiresAt    DateTime?
+  password     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ─── your app models ──────────────────────────────────────────────────────────
+
+model Follow {
+  id          Int    @id @default(autoincrement())
+  followerId  String
+  followingId String
+
+  follower  User @relation("Follower", fields: [followerId], references: [id])
+  following User @relation("Following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model Post {
+  id      Int     @id @default(autoincrement())
+  title   String
+  content String
+  image   String?
+
+  userId    String
+  subjectId Int
+  isEdited  Boolean @default(false)
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  deleted_at DateTime?
+
+  likes    Like[]
+  user      User      @relation(fields: [userId], references: [id])
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+  comments  Comment[]
+}
+
+model Like {
+  id        Int    @id @default(autoincrement())
+  userId    String
+  postId    Int?
+  commentId Int?
+
+  user    User     @relation(fields: [userId], references: [id])
+  post    Post?    @relation(fields: [postId], references: [id])
+  comment Comment? @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, postId, commentId])
+}
+
+model Comment {
+  id      Int     @id @default(autoincrement())
+  content String
+  image   String?
+
+  parentId Int?
+  postId   Int
+  userId   String
+  isEdited  Boolean @default(false)
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  deleted_at DateTime?
+
+  post     Post      @relation(fields: [postId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  likes    Like[]
+  parent   Comment?  @relation("CommentThread", fields: [parentId], references: [id])
+  children Comment[] @relation("CommentThread")
+}
+
+model Subject {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
+
+  memberships SubjectMember[]
+  posts       Post[]
+}
+
+model SubjectMember {
+  id        Int         @id @default(autoincrement())
+  userId    String
+  subjectId Int
+  role      SubjectRole @default(MEMBER)
+  joined_at DateTime    @default(now())
+
+  user      User    @relation(fields: [userId], references: [id])
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  @@unique([userId, subjectId])
+}
+
+// ─── RAG knowledge base ───────────────────────────────────────────────────────
+
+// source is not consumed by the RAG pipeline today — it is stored for future
+// admin tooling (e.g. "show all QA pairs added by users vs imported from seed").
+model QAPair {
+  id        Int      @id @default(autoincrement())
+  question  String   @unique
+  answer    String
+  topic     String
+  tags      String[]
+  source    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
