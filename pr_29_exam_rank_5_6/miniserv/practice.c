@@ -10,9 +10,52 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/*data type used with select() to represent a set of file descriptors, allows to mark which descriptors to watch for read, write, or error readiness.*/
-int gmaxfd, gnextfd, gservfd;
-fd_set gmainset, greadset, gwriteset;
+int extract_message(char **buf, char **msg)
+{
+	char	*newbuf;
+	int	i;
+
+	*msg = 0;
+	if (*buf == 0)
+		return (0);
+	i = 0;
+	while ((*buf)[i])
+	{
+		if ((*buf)[i] == '\n')
+		{
+			newbuf = calloc(1, sizeof(*newbuf) * (strlen(*buf + i + 1) + 1));
+			if (newbuf == 0)
+				return (-1);
+			strcpy(newbuf, *buf + i + 1);
+			*msg = *buf;
+			(*msg)[i + 1] = 0;
+			*buf = newbuf;
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+char *str_join(char *buf, char *add)
+{
+	char	*newbuf;
+	int		len;
+
+	if (buf == 0)
+		len = 0;
+	else
+		len = strlen(buf);
+	newbuf = malloc(sizeof(*newbuf) * (len + strlen(add) + 1));
+	if (newbuf == 0)
+		return (0);
+	newbuf[0] = 0;
+	if (buf != 0)
+		strcat(newbuf, buf);
+	free(buf);
+	strcat(newbuf, add);
+	return (newbuf);
+}
 
 void fatal()
 {
@@ -20,64 +63,64 @@ void fatal()
 	exit(1);
 }
 
+int g_maxfd, g_next, g_serv;
+fd_set g_active, g_read, g_write;
+char *g_out;
+
+/*write, close, select, socket, accept, listen, send, recv, bind, strstr, malloc, realloc, free, calloc, bzero, atoi, sprintf, strlen, exit, strcpy, strcat, memset*/
 void setup_server(int port)
 {
 	struct sockaddr_in servaddr;
 
-	gservfd = socket(AF_INET, SOCK_STREAM, 0);    
-    if (gservfd < 0)
+	g_serv = socket(AF_INET, SOCK_STREAM, 0);  // prot
+	if (g_serv < 0) fatal();
+	g_maxfd = g_serv;
+	FD_ZERO(&g_active);
+	FD_SET(g_serv, &g_active);
+	bzero(&servaddr, sizeof(servaddr)); //protect?
+
+	servaddr.sin_family = AF_INET; 
+	servaddr.sin_addr.s_addr = (1 << 24 | 127); 
+	servaddr.sin_port = (port << 8 | port >> 8);
+
+	if ((bind(g_serv, (const struct sockaddr *)&servaddr, sizeof(servaddr))) != 0) 
 		fatal();
-	//!!
-	gmaxfd = gservfd;
-	FD_ZERO(&gmainset); //clear all fds
-	FD_SET(gservfd, &gmainset);
-	bzero(&servaddr, sizeof(servaddr));
-	//!!
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(port);
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    
-    if (bind(gservfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
+	if (listen(g_serv, 10) != 0)
 		fatal();
-    
-    if (listen(gservfd, 128) < 0)
-		fatal();
-    
-    printf("ready\n");
-    close(gservfd);	
+}
+
+void flush_client(int fd)
+{
+	int ret;
+	char *rest;
+
+
 }
 
 int main(int argc, char **argv)
 {
 	int fd;
-
+	
 	if (argc != 2)
 	{
 		write(2, "Wrong number of arguments\n", 26);
 		exit(1);
 	}
-	gmaxfd = 0;
-	gnextfd = 0;
-	setupserver(atoi(argv[1]));
+	g_maxfd = 0;
+	g_next = 0;
+	setup_server(atoi(argv[1]));
 	while (1)
 	{
-		greadset = gmainset;
-		gwriteset = gmainset;
-		if (select(gmaxfd + 1, &greadset, &gwriteset, NULL, NULL) < 0) continue;	
+		g_read = g_active;
+		g_write = g_active;
+		if (select(g_maxfd + 1, &g_read, &g_write, NULL, NULL) < 0) continue;
 		fd = 0;
-		while (fd <= gmaxfd)
+		while (fd <= g_maxfd)
 		{
-			if (fd != gservfd && FD_ISSET(fd, &gwriteset))
-				flush_client(fd); //todo
-			if (FD_ISSET(fd, &greadset))
-			{
-				if (fd == gservfd)
-					accept_client(fd); //todo
-				else
-					handle_client(fd); //todo
-			}
-			fd++;
+			if (fd != g_serv && FD_ISSET(fd, &g_write))
+				flush_client();
 		}
+
 	}
 	return 0;
 }

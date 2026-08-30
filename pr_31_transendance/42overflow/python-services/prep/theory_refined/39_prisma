@@ -1,0 +1,10 @@
+Prisma is a modern ORM (Object-Relational Mapping) toolkit for Node.js and TypeScript. It lets backend code interact with databases through a type-safe JavaScript API instead of writing most SQL manually.
+
+Its main parts are:
+
+Prisma Schema: Defines database tables, fields, relationships, and connection settings.
+Prisma Client: Generates a typed API for querying and updating data.
+Prisma Migrate: Creates and applies database schema migrations.
+Prisma Studio: Provides a graphical interface for viewing and editing records.
+
+Prisma is commonly used with PostgreSQL, MySQL, SQLite, SQL Server, MongoDB, and frameworks such as Next.js, Express, and NestJS. It is particularly useful when you want strong type safety, autocomplete, declarative data models, and integrated migrations.

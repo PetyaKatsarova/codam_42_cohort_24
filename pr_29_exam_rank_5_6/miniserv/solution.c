@@ -120,6 +120,8 @@ void broadcast(int except, char *s)
 /*
 ** Sends as much of fd's queued output as fits right now; keeps the rest
 ** for the next writable round instead of dropping it.
+whenever the server hears "hey, this person's ready to receive more data" — so no message ever gets lost or sent twice, even if it has
+  to go out in small chunks.
 */
 void flush_client(int fd)
 {
@@ -149,20 +151,7 @@ void flush_client(int fd)
 ** Creates the listening socket bound to localhost:port and starts listening.
 ** Takes: the port number to listen on.
 ** Returns: nothing (calls fatal() on any socket/bind/listen failure).
-*/
-void setup_server(int port)
-{
-	struct sockaddr_in	servaddr; //struct for IPv4 socket addresses.
 
-	g_serv = socket(AF_INET, SOCK_STREAM, 0);
-	if (g_serv < 0)
-		fatal();
-	g_maxfd = g_serv;
-	FD_ZERO(&g_active); // clear all fds
-	FD_SET(g_serv, &g_active); // add a fd
-	bzero(&servaddr, sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	/*
 	** htonl/htons aren't in the allowed-functions list, so this is built by hand.
 	**
 	** A 32-bit field is 4 bytes in memory. The network sends them in address
@@ -177,8 +166,22 @@ void setup_server(int port)
 	**     byte3 = 1    -> add 1 << 24 (2^24 = 16777216)
 	**     byte1, byte2 = 0 -> nothing added
 	** (1 << 24) | 127 = 16777343.
-	*/
-	servaddr.sin_addr.s_addr = (1 << 24) | 127;
+	move 1 24 places to the right, add 127:binary
+	
+*/
+void setup_server(int port)
+{
+	struct sockaddr_in	servaddr; //struct for IPv4 socket addresses.
+
+	g_serv = socket(AF_INET, SOCK_STREAM, 0);
+	if (g_serv < 0)
+		fatal();
+	g_maxfd = g_serv;
+	FD_ZERO(&g_active); // clear all fds
+	FD_SET(g_serv, &g_active); // add a fd
+	bzero(&servaddr, sizeof(servaddr));
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = (1 << 24 | 127);
 	// same trick for the 16-bit port: swap its 2 bytes by hand instead of htons.
 	servaddr.sin_port = (port << 8) | (port >> 8);
 	if (bind(g_serv, (const struct sockaddr *)&servaddr, sizeof(servaddr)) != 0)

@@ -59,6 +59,7 @@ data/
 
 # Kernel Module Compile Results
 *.mod*
+!llm-system-interface/go.mod
 *.cmd
 .tmp_versions/
 modules.order

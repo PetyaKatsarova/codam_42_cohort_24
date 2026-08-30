@@ -1,0 +1,18 @@
+#include <stdlib.h>
+#include <unistd.h>
+
+/*
+plan: islands
+main: open, read &map, validatemapa(&w, &h),
+floodfill: if m[idx] != x exit, m[idx]=v
+largest/count: 2dloop; m[i][j]floodfill if 'x'
+*/
+
+/*
+life: echo 'sdxdd' | ./a.out w, h, iter
+fp, fopen; getcmds, drawmap(cmds, w, h):x,y=0sif (w, y-1>=0 y--; if pen m[y*w+x]=1, m is calloc)
+*/
+
+/*
+bsq: fopen, 
+*/
