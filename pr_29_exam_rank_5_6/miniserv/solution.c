@@ -14,7 +14,8 @@
 // safely address.
 int		g_id[FD_SETSIZE]; //max number of FDs a fd_set can hold
 char	*g_buf[FD_SETSIZE];
-char	*g_out[FD_SETSIZE];
+char	*g_out[FD_SETSIZE]; //From the server to the client — data queued to be send()'d out over the client's socket fd.
+
 int		g_maxfd, g_next, g_serv;
 
 // fd_set: an opaque bitmap type from <sys/select.h>, fixed at FD_SETSIZE bits
@@ -130,7 +131,7 @@ void flush_client(int fd)
 
 	if (g_out[fd] == NULL)
 		return ;
-	ret = send(fd, g_out[fd], strlen(g_out[fd]), 0);
+	ret = send(fd, g_out[fd], strlen(g_out[fd]), 0);// transmit msg to another socket; on success ret num of bytes sent r -1
 	if (ret <= 0)
 		return ;
 	if (g_out[fd][ret] == 0)
@@ -203,13 +204,12 @@ void accept_client(void)
 	int					connfd;
 
 	len = sizeof(cli);
+	//creates new fd for a new client
 	connfd = accept(g_serv, (struct sockaddr *)&cli, &len);
 	if (connfd < 0)
 		return ;
 	if (connfd >= FD_SETSIZE)
 	{
-		// fd_set can't safely represent this fd (FD_SET/FD_ISSET would read/write
-		// past the bitmap) -- drop the connection instead of corrupting memory.
 		close(connfd);
 		return ;
 	}

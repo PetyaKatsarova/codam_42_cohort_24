@@ -63,11 +63,24 @@ void fatal()
 	exit(1);
 }
 
-int g_maxfd, g_next, g_serv;
-fd_set g_active, g_read, g_write;
-char *g_out;
+int 		g_maxfd, g_next, g_serv;
+fd_set 		g_active, g_read, g_write;
+char 		*g_out[FD_SETSIZE], *g_buf[FD_SETSIZE], g_head[128];
+int 		g_id[FD_SETSIZE]; //max num fds
 
-/*write, close, select, socket, accept, listen, send, recv, bind, strstr, malloc, realloc, free, calloc, bzero, atoi, sprintf, strlen, exit, strcpy, strcat, memset*/
+/*write, close, select, socket, accept, listen, send, recv, bind, strstr, malloc, realloc, free, calloc, bzero, atoi, sprintf, strlen, exit, strcpy, strcat, memset
+
+  fd_set g_active, g_read, g_write;
+  No constructor call needed. It's just memory (a struct wrapping a bit array internally) — declaring it reserves the bits, all garbage until you
+  initialize them.
+
+  You initialize/manipulate it with 4 macros (not real functions, they're bit-twiddling macros):
+  - FD_ZERO(&set) — clear all bits (set all to 0)
+  - FD_SET(fd, &set) — turn bit fd on
+  - FD_CLR(fd, &set) — turn bit fd off
+  - FD_ISSET(fd, &set) — test if bit fd is on
+
+*/
 void setup_server(int port)
 {
 	struct sockaddr_in servaddr;
@@ -91,10 +104,73 @@ void setup_server(int port)
 
 void flush_client(int fd)
 {
-	int ret;
+	int ret_bytes;
 	char *rest;
 
+	if (g_out[fd] == NULL) return;
+	ret_bytes = send(fd, g_out[fd], strlen(g_out[fd]), 0);
+	if (ret_bytes <= 0) return;
+	if (g_out[fd][ret_bytes] == 0)
+	{
+		free(g_out[fd]);
+		g_out[fd] = NULL;
+		return;
+	}
+	rest = malloc(strlen(g_out[fd] + ret_bytes) + 1);
+	if (rest == NULL) return;
+	free(g_out[fd]);
+	g_out[fd] = rest;
+}
 
+void broadcast(int except, char *str)
+{
+	for (int i = 0; i <= g_maxfd; i++)
+	{
+		if (i != g_serv && i != except && FD_ISSET(i, &g_active))
+		{
+			g_out[i] = str_join(g_out[i], str);
+			if (g_out[i] == NULL) fatal();
+		}
+	}
+}
+void accept_client()
+{
+	struct sockaddr_in  cli;
+	socklen_t			len;
+	int					connfd;
+
+	len = sizeof(cli);
+	connfd = accept(g_serv, (struct sockaddr *)&cli, &len);
+	if (connfd < 0) return;
+	if (connfd > FD_SETSIZE) return (close(connfd));
+	if (connfd > g_maxfd)
+		g_maxfd = connfd;
+	g_id[connfd] = g_next++;// assign each client id: from 0
+	g_buf[connfd] = NULL;
+	g_out[connfd] = NULL;
+	sprintf(g_head, "server: client %d just arrived\n", g_id[connfd]);
+	broadcast(connfd, g_head);
+}
+
+void handle_client(int fd)
+{
+	int r_bytes, r;
+	char *msg, recv_buf[10001];
+
+	r_bytes = recv(fd, recv_buf, 100000, 0);
+	if (r_bytes <= 0)
+	{
+		sprintf(g_head, "server: client %fd just left\n", g_id[fd]);
+		broadcast(fd, g_head);
+		free(g_buf[fd]);
+		g_buf[fd] = NULL;
+		free(g_out[fd]);
+		g_out[fd] = NULL;
+		FD_CLR(fd, &g_active);//rmv fd from sellect
+		return (close(fd));
+	}
+	recv_buf[r_bytes] = 0;
+	g_buf
 }
 
 int main(int argc, char **argv)
@@ -118,7 +194,16 @@ int main(int argc, char **argv)
 		while (fd <= g_maxfd)
 		{
 			if (fd != g_serv && FD_ISSET(fd, &g_write))
-				flush_client();
+				flush_client(fd);
+			if (FD_ISSET(fd, &g_read))
+			{
+				if (fd == g_serv)
+					accept_client();
+				else
+					handle_client(fd);
+			}
+
+			fd++;
 		}
 
 	}

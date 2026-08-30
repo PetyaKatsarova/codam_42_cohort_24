@@ -1,0 +1,21 @@
+  1. Listening socket setup — setup_server (solution.c:173): one socket g_serv is created, bind()ed to the port, and put into listen() mode. This fd is only a "doorbell" — it never carries actual message bytes. It's added to g_active so select() watches it.
+
+  2. A client connects (new browser tab / nc / whatever) — the OS TCP stack completes the handshake and queues the pending connection on g_serv. select() reports g_serv as readable (FD_ISSET(fd, &g_read) true for fd == g_serv, main.c:296-301).
+
+  3. Accepting it — accept_client (solution.c:200): accept(g_serv, ...) doesn't read the message; it creates a brand-new socket fd (connfd) representing that one specific client's connection. g_serv keeps listening for more new connections; connfd is the dedicated pipe to this client. connfd gets added to g_active too (line 222).
+
+  So now you have N+1 fds in g_active: g_serv (doorbell) + one fd per connected client.
+
+  4. Client sends bytes — the client writes to its end of the socket. select() reports that client's connfd as readable (not g_serv — g_serv only lights up for new connection attempts).
+
+  5. Server receives — handle_client(fd) (solution.c:233): recv(fd, recv_buf, ...) reads bytes off that client's own connfd into the server's  memory. The server buffers it (g_buf[fd]), and once a full \n-terminated line is assembled, it's turned into an outgoing message.
+
+  6. Server sends to others — broadcast(fd, msg) (solution.c:104): for every other client fd in g_active, the message text gets appended to that client's own output buffer, g_out[i].
+
+  7. Server transmits it — later, when select() says a given client fd is writable, flush_client(fd) (solution.c:127) calls send(fd, g_out[fd], ...) — pushing those queued bytes down that client's own connfd to that client's machine.
+
+  So the actual "from → to" per step:
+  - recv(fd, ...): from the client on the other end of fd → into server memory.
+  - send(fd, ...): from server memory (g_out[fd]) → to the client on the other end of that same fd.
+
+  Each client has its own fd/socket for its whole session — g_serv is never used to talk to any client, only to mint new connfds via accept().
