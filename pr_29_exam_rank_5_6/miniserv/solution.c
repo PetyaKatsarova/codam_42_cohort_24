@@ -25,7 +25,7 @@ int		g_maxfd, g_next, g_serv;
 // select() must be rebuilt before every call.
 fd_set	g_active;	// the "master" list: every fd we're currently tracking (server + clients)
 fd_set	g_read;		// scratch copy passed to select() as the read-interest set
-fd_set	g_write;	// scratch copy passed to select() as the write-interest set
+fd_set	g_write;	// server can write/send data to those sockets.
 char	g_head[128];
 
 /*
@@ -119,10 +119,8 @@ void broadcast(int except, char *s)
 }
 
 /*
-** Sends as much of fd's queued output as fits right now; keeps the rest
-** for the next writable round instead of dropping it.
-whenever the server hears "hey, this person's ready to receive more data" — so no message ever gets lost or sent twice, even if it has
-  to go out in small chunks.
+server writes/sends data(g_out[fd]) on fd socket
+keeps left over info in g_out[fd] (cuts out the sent data)
 */
 void flush_client(int fd)
 {
@@ -131,6 +129,10 @@ void flush_client(int fd)
 
 	if (g_out[fd] == NULL)
 		return ;
+	/*
+	NB!!
+	sends g_out[fd] from server process through socket fd to the client connected on socket 5fd.
+	*/
 	ret = send(fd, g_out[fd], strlen(g_out[fd]), 0);// transmit msg to another socket; on success ret num of bytes sent r -1
 	if (ret <= 0)
 		return ;
@@ -231,13 +233,13 @@ void accept_client(void)
 */
 void handle_client(int fd)
 {
-	int		ret;
+	int		bytes;
 	int		r;
 	char	*msg;
 	char	recv_buf[100001];
 
-	ret = recv(fd, recv_buf, 100000, 0);
-	if (ret <= 0)
+	bytes = recv(fd, recv_buf, 100000, 0);
+	if (bytes <= 0)
 	{
 		sprintf(g_head, "server: client %d just left\n", g_id[fd]);
 		broadcast(fd, g_head);
@@ -249,7 +251,7 @@ void handle_client(int fd)
 		close(fd);
 		return ;
 	}
-	recv_buf[ret] = 0;
+	recv_buf[bytes] = 0;
 	g_buf[fd] = str_join(g_buf[fd], recv_buf);
 	if (g_buf[fd] == NULL)
 		fatal();

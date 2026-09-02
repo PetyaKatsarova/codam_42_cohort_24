@@ -94,11 +94,11 @@ void setup_server(int port)
 
 	servaddr.sin_family = AF_INET; 
 	servaddr.sin_addr.s_addr = (1 << 24 | 127); 
-	servaddr.sin_port = (port << 8 | port >> 8);
+	servaddr.sin_port = (port << 8) | (port >> 8); //!!
 
 	if ((bind(g_serv, (const struct sockaddr *)&servaddr, sizeof(servaddr))) != 0) 
 		fatal();
-	if (listen(g_serv, 10) != 0)
+	if (listen(g_serv, 128) != 0)
 		fatal();
 }
 
@@ -118,6 +118,7 @@ void flush_client(int fd)
 	}
 	rest = malloc(strlen(g_out[fd] + ret_bytes) + 1);
 	if (rest == NULL) return;
+	strcpy(rest, g_out[fd] + ret_bytes); // !!
 	free(g_out[fd]);
 	g_out[fd] = rest;
 }
@@ -142,35 +143,50 @@ void accept_client()
 	len = sizeof(cli);
 	connfd = accept(g_serv, (struct sockaddr *)&cli, &len);
 	if (connfd < 0) return;
-	if (connfd > FD_SETSIZE) return (close(connfd));
+	if (connfd >= FD_SETSIZE) //!!
+	{
+		close(connfd);
+		return;
+	}
 	if (connfd > g_maxfd)
 		g_maxfd = connfd;
 	g_id[connfd] = g_next++;// assign each client id: from 0
 	g_buf[connfd] = NULL;
 	g_out[connfd] = NULL;
+	FD_SET(connfd, &g_active);
 	sprintf(g_head, "server: client %d just arrived\n", g_id[connfd]);
 	broadcast(connfd, g_head);
 }
 
 void handle_client(int fd)
 {
-	int r_bytes, r;
-	char *msg, recv_buf[10001];
+	int bytes, r;
+	char *msg, recv_buf[100001];
 
-	r_bytes = recv(fd, recv_buf, 100000, 0);
-	if (r_bytes <= 0)
+	bytes = recv(fd, recv_buf, 100000, 0); // num of bytes received
+	if (bytes <= 0)
 	{
-		sprintf(g_head, "server: client %fd just left\n", g_id[fd]);
+		sprintf(g_head, "server: client %d just left\n", g_id[fd]);
 		broadcast(fd, g_head);
 		free(g_buf[fd]);
 		g_buf[fd] = NULL;
 		free(g_out[fd]);
 		g_out[fd] = NULL;
-		FD_CLR(fd, &g_active);//rmv fd from sellect
-		return (close(fd));
+		FD_CLR(fd, &g_active); //removes fd fd from set
+		close(fd);
+		return;
 	}
-	recv_buf[r_bytes] = 0;
-	g_buf
+	recv_buf[bytes] = 0;
+	g_buf[fd] = str_join(g_buf[fd], recv_buf); // add to gbuf[fd] recvd msg
+	if (g_buf[fd] == NULL) fatal();
+	while ((r = extract_message(&g_buf[fd], &msg)) > 0)
+	{
+		sprintf(g_head, "client %d: ", g_id[fd]);
+		broadcast(fd, g_head);
+		broadcast(fd, msg);
+		free(msg);
+	}
+	if (r < 0) fatal();
 }
 
 int main(int argc, char **argv)
@@ -183,12 +199,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	g_maxfd = 0;
-	g_next = 0;
+	g_serv = 0;
 	setup_server(atoi(argv[1]));
 	while (1)
 	{
-		g_read = g_active;
 		g_write = g_active;
+		g_read = g_active;
 		if (select(g_maxfd + 1, &g_read, &g_write, NULL, NULL) < 0) continue;
 		fd = 0;
 		while (fd <= g_maxfd)
@@ -202,10 +218,9 @@ int main(int argc, char **argv)
 				else
 					handle_client(fd);
 			}
-
 			fd++;
 		}
-
 	}
+				
 	return 0;
 }
