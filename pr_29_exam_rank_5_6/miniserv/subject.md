@@ -30,7 +30,7 @@ clients must be able to send messages to your program.
 When a client disconnect from the server:
 - a message is sent to all the client that was connected to the server: "server: client %d just left\n"
 
-Memory or fd leaks are forbidden
+Memory or fd leaks are forbidden. test
 
 To help you, you will find the file main.c with the beginning of a server and maybe some useful functions. (Beware this file use forbidden functions or write things that must not be there in your final program)
 
